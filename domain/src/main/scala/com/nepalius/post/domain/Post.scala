@@ -12,7 +12,6 @@ case class Post(
     message: String,
     targetState: State,
     targetZipCode: String,
-    createdBy: UserId,
     createdAt: LocalDateTime,
 )
 

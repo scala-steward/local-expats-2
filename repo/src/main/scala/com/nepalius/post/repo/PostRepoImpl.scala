@@ -24,6 +24,6 @@ private object PostSql:
 
   def insert(post: Post): Update0 =
     sql"""
-         INSERT INTO post (id, message, target_state, target_zip_code, created_by)
-         VALUES (${post.id}, ${post.message}, ${post.targetState}, ${post.targetZipCode}, ${post.createdBy});
+         INSERT INTO post (id, message, target_state, target_zip_code)
+         VALUES (${post.id}, ${post.message}, ${post.targetState}, ${post.targetZipCode});
        """.update

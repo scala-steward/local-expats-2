@@ -26,7 +26,6 @@ object PostService:
             post.message,
             post.targetState,
             post.targetZipCode,
-            user.id,
             now,
           )
           created <- postRepo.create(p)
