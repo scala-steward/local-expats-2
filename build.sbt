@@ -14,6 +14,9 @@ val V = new {
   val Logback = "1.4.1"
   val Postgres = "42.5.0"
   val TSec = "0.4.0"
+  val Zio = "2.0.2"
+  val ZioHttp = "2.0.0-RC11"
+  val ZioJson = "0.3.0"
 }
 
 lazy val domain = project
@@ -23,6 +26,7 @@ lazy val domain = project
       "ch.qos.logback" % "logback-classic" % V.Logback,
       "org.typelevel" %% "cats-effect" % V.CatsEffect,
       "io.chrisdavenport" %% "cats-effect-time" % V.CatsEffectTime,
+      "dev.zio" %% "zio" % V.Zio,
     ),
   )
 
@@ -52,6 +56,8 @@ lazy val api = project
       "io.github.jmcardon" %% "tsec-common" % V.TSec,
       "io.github.jmcardon" %% "tsec-password" % V.TSec,
       "io.github.jmcardon" %% "tsec-http4s" % V.TSec,
+      "io.d11" %% "zhttp" % V.ZioHttp,
+      "dev.zio" %% "zio-json" % V.ZioJson,
     ),
   )
 
