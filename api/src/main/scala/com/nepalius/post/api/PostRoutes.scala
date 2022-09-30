@@ -32,7 +32,7 @@ object PostDto {
 
 }
 
-class PostRoutes(postService: PostService):
+final case class PostRoutes(postService: PostService):
 
   val routes: Http[Any, Throwable, Request, Response] =
     collectZIO[Request] { case Method.GET -> !! / "posts" => getAll }
@@ -43,4 +43,4 @@ class PostRoutes(postService: PostService):
 
 object PostRoutes:
   val layer: ZLayer[PostService, Nothing, PostRoutes] =
-    ZLayer.fromFunction(PostRoutes(_))
+    ZLayer.fromFunction(PostRoutes.apply)

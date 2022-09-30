@@ -1,5 +1,4 @@
 package com.nepalius.post.repo
-import com.nepalius.config.QuillContext
 import com.nepalius.config.QuillContext.*
 import com.nepalius.location.StateDbCodec.given
 import com.nepalius.post.domain.{Post, PostRepo}
@@ -9,12 +8,11 @@ import zio.*
 import java.sql.SQLException
 import javax.sql.DataSource
 
-class PostRepoLive(dataSource: DataSource) extends PostRepo:
+final case class PostRepoLive(dataSource: DataSource) extends PostRepo:
   override def getAll: ZIO[Any, SQLException, List[Post]] =
-    QuillContext
-      .run(query[Post])
+    run(query[Post])
       .provideEnvironment(ZEnvironment(dataSource))
 
 object PostRepoLive:
   val layer: ZLayer[DataSource, Nothing, PostRepo] =
-    ZLayer.fromFunction(PostRepoLive(_))
+    ZLayer.fromFunction(PostRepoLive.apply)

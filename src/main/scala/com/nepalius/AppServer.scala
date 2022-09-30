@@ -6,7 +6,7 @@ import zhttp.http.{Http, Method, Request, Response, *}
 import zhttp.service.Server
 import zio.*
 
-class AppServer(
+final case class AppServer(
     serverConfig: ServerConfig,
     postRoutes: PostRoutes,
 ):
@@ -17,4 +17,4 @@ class AppServer(
 
 object AppServer:
   val layer: ZLayer[ServerConfig & PostRoutes, Nothing, AppServer] =
-    ZLayer.fromFunction(AppServer(_, _))
+    ZLayer.fromFunction(AppServer.apply)

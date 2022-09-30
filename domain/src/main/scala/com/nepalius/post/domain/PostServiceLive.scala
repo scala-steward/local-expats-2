@@ -6,9 +6,9 @@ import zio.*
 
 import javax.sql.DataSource
 
-class PostServiceLive(postRepo: PostRepo) extends PostService:
+final case class PostServiceLive(postRepo: PostRepo) extends PostService:
   override def getAll: Task[List[Post]] = postRepo.getAll
 
 object PostServiceLive:
   val layer: ZLayer[PostRepo, Nothing, PostService] =
-    ZLayer.fromFunction(PostServiceLive(_))
+    ZLayer.fromFunction(PostServiceLive.apply)
