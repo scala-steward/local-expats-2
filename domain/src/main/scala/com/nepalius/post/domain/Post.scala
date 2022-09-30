@@ -10,7 +10,7 @@ import java.util.UUID
 case class Post(
     id: PostId,
     message: String,
-    targetState: State,
+//    targetState: State,
     targetZipCode: String,
     createdAt: LocalDateTime,
 )

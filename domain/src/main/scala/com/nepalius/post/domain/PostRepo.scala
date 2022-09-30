@@ -1,4 +1,6 @@
 package com.nepalius.post.domain
 
-trait PostRepo[F[_]]:
-  def create(post: Post): F[Post]
+import zio.*
+
+trait PostRepo:
+  def getAll: Task[List[Post]]

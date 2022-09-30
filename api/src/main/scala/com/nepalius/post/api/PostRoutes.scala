@@ -1,24 +1,45 @@
 package com.nepalius.post.api
 
+import com.nepalius.location.State
+import com.nepalius.post.domain.Post.PostId
+import com.nepalius.post.domain.{Post, PostService}
 import zhttp.http.*
+import zhttp.http.Http.collectZIO
 import zio.*
 import zio.json.*
 
-case class Post(id: String, message: String)
+import java.time.LocalDateTime
 
-object Post {
-  given JsonCodec[Post] = DeriveJsonCodec.gen[Post]
+case class PostDto(
+    id: PostId,
+    message: String,
+//    targetState: State,
+    targetZipCode: String,
+    createdAt: LocalDateTime,
+)
+object PostDto {
+  given JsonCodec[PostDto] = DeriveJsonCodec.gen[PostDto]
+
+  def make(post: Post): PostDto =
+    PostDto(
+      post.id,
+      post.message,
+//      post.targetState,
+      post.targetZipCode,
+      post.createdAt,
+    )
+
 }
 
-class PostRoutes() {
+class PostRoutes(postService: PostService):
 
   val routes: Http[Any, Throwable, Request, Response] =
-    Http.collectZIO[Request] { case Method.GET -> !! / "posts" =>
-      ZIO.succeed(Response.json(List(Post("3", "Three")).toJson))
-    }
-}
+    collectZIO[Request] { case Method.GET -> !! / "posts" => getAll }
 
-object PostRoutes {
-  val layer: ZLayer[Any, Nothing, PostRoutes] =
-    ZLayer.fromFunction(() => PostRoutes())
-}
+  private def getAll =
+    postService.getAll
+      .map(posts => Response.json(posts.map(PostDto.make).toJson))
+
+object PostRoutes:
+  val layer: ZLayer[PostService, Nothing, PostRoutes] =
+    ZLayer.fromFunction(PostRoutes(_))

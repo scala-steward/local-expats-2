@@ -13,6 +13,7 @@ val V = new {
   val Jansi = "1.18"
   val Logback = "1.4.1"
   val Postgres = "42.5.0"
+  val Quill = "4.4.0"
   val TSec = "0.4.0"
   val Zio = "2.0.2"
   val ZioHttp = "2.0.0-RC11"
@@ -41,6 +42,7 @@ lazy val repo = project
       "org.tpolecat" %% "doobie-postgres" % V.Doobie,
       "org.tpolecat" %% "doobie-hikari" % V.Doobie,
       "org.flywaydb" % "flyway-core" % V.Flyway,
+      "io.getquill" %% "quill-jdbc-zio" % V.Quill,
     ),
   )
 
