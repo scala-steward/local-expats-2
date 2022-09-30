@@ -7,7 +7,7 @@ import zio.UIO
 import zio.Console.*
 
 import java.io.IOException
-import com.nepalius.config.QuillContext
+import com.nepalius.config.{AppConfig, QuillContext}
 import com.nepalius.post.domain.PostServiceLive
 import com.nepalius.post.repo.PostRepoLive
 
@@ -18,6 +18,8 @@ object App extends ZIOAppDefault {
     .provide(
       AppServer.layer,
       PostRoutes.layer,
+      AppConfig.databaseConfigLayer,
+      AppConfig.serverConfigLayer,
       QuillContext.dataSourceLayer,
       PostServiceLive.layer,
       PostRepoLive.layer,

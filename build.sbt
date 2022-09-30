@@ -16,6 +16,7 @@ val V = new {
   val Quill = "4.5.0"
   val TSec = "0.4.0"
   val Zio = "2.0.2"
+  val ZioConfig = "3.0.2"
   val ZioHttp = "2.0.0-RC11"
   val ZioJson = "0.3.0"
 }
@@ -72,6 +73,9 @@ lazy val root = (project in file("."))
     libraryDependencies ++= Seq(
       "com.hunorkovacs" %% "circe-config" % V.CirceConfig,
       "org.fusesource.jansi" % "jansi" % V.Jansi,
+      "dev.zio" %% "zio-config" % V.ZioConfig,
+      "dev.zio" %% "zio-config-typesafe" % V.ZioConfig,
+      "dev.zio" %% "zio-config-magnolia" % V.ZioConfig,
     ),
   )
   .dependsOn(domain, api, repo)
