@@ -1,6 +1,7 @@
 package com.nepalius.post.api
 
 import com.nepalius.location.State
+import com.nepalius.location.StateJsonCodec.given
 import com.nepalius.post.domain.Post.PostId
 import com.nepalius.post.domain.{Post, PostService}
 import zhttp.http.*
@@ -13,7 +14,7 @@ import java.time.LocalDateTime
 case class PostDto(
     id: PostId,
     message: String,
-//    targetState: State,
+    targetState: State,
     targetZipCode: String,
     createdAt: LocalDateTime,
 )
@@ -24,7 +25,7 @@ object PostDto {
     PostDto(
       post.id,
       post.message,
-//      post.targetState,
+      post.targetState,
       post.targetZipCode,
       post.createdAt,
     )
