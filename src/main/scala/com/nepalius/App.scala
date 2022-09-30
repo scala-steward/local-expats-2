@@ -18,8 +18,7 @@ object App extends ZIOAppDefault {
     .provide(
       AppServer.layer,
       PostRoutes.layer,
-      AppConfig.databaseConfigLayer,
-      AppConfig.serverConfigLayer,
+      AppConfig.appConfigLayer,
       QuillContext.dataSourceLayer,
       PostServiceLive.layer,
       PostRepoLive.layer,

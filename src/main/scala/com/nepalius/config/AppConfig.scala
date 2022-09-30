@@ -9,25 +9,17 @@ final case class AppConfig(server: ServerConfig, db: DatabaseConfig)
 final case class ServerConfig(host: String, port: Int)
 
 object AppConfig:
+  private val readAppConfig: IO[ReadError[String], AppConfig] = read {
+    descriptor[AppConfig].from(
+      TypesafeConfigSource.fromResourcePath.at(
+        PropertyTreePath.$("nepalius"),
+      ),
+    )
+  }
 
-  val databaseConfigLayer: ZLayer[Any, ReadError[String], DatabaseConfig] =
+  val appConfigLayer
+      : ZLayer[Any, ReadError[String], DatabaseConfig & ServerConfig] =
     ZLayer {
-      read {
-        descriptor[DatabaseConfig].from(
-          TypesafeConfigSource.fromResourcePath.at(
-            PropertyTreePath.$("nepalius.db"),
-          ),
-        )
-      }
-    }
-
-  val serverConfigLayer: ZLayer[Any, ReadError[String], ServerConfig] =
-    ZLayer {
-      read {
-        descriptor[ServerConfig].from(
-          TypesafeConfigSource.fromResourcePath.at(
-            PropertyTreePath.$("nepalius.server"),
-          ),
-        )
-      }
-    }
+      for appConfig <- readAppConfig
+      yield ZLayer.succeed(appConfig.db) ++ ZLayer.succeed(appConfig.server)
+    }.flatten
