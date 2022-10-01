@@ -1,5 +1,5 @@
 package com.nepalius.post.repo
-import com.nepalius.config.QuillContext.*
+import com.nepalius.config.DatabaseContext.*
 import com.nepalius.location.StateDbCodec.given
 import com.nepalius.post.domain.{Post, PostRepo}
 import io.getquill.*

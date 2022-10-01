@@ -13,8 +13,8 @@ import io.getquill.jdbczio.Quill
 import javax.sql.DataSource
 import scala.language.adhocExtensions
 
-object QuillContext extends PostgresZioJdbcContext(SnakeCase) {
-  val dataSourceLayer: ZLayer[DatabaseConfig, Throwable, DataSource] =
+object DatabaseContext extends PostgresZioJdbcContext(SnakeCase):
+  val layer: ZLayer[DatabaseConfig, Throwable, DataSource] =
     ZLayer {
       for config <- ZIO.service[DatabaseConfig]
       yield Quill.DataSource.fromConfig(
@@ -27,4 +27,3 @@ object QuillContext extends PostgresZioJdbcContext(SnakeCase) {
         ),
       )
     }.flatten
-}

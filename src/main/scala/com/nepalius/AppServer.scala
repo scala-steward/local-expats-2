@@ -2,6 +2,7 @@ package com.nepalius
 
 import com.nepalius.config.ServerConfig
 import com.nepalius.post.api.PostRoutes
+import com.nepalius.post.domain.PostRepo
 import zhttp.http.{Http, Method, Request, Response, *}
 import zhttp.service.Server
 import zio.*
