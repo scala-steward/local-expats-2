@@ -10,6 +10,7 @@ import java.io.IOException
 import com.nepalius.config.{AppConfig, DatabaseContext}
 import com.nepalius.post.domain.PostServiceLive
 import com.nepalius.post.repo.PostRepoLive
+import com.nepalius.config.DatabaseMigration
 
 object App extends ZIOAppDefault {
 
@@ -21,6 +22,7 @@ object App extends ZIOAppDefault {
         AppConfig.layer,
         PostRoutes.layer,
         PostRepoLive.layer >>> PostServiceLive.layer,
+        DatabaseMigration.layer,
         DatabaseContext.layer,
       )
 }

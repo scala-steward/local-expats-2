@@ -1,5 +1,5 @@
 CREATE TABLE post (
-    id              UUID PRIMARY KEY,
+    id              UUID PRIMARY KEY   DEFAULT gen_random_uuid(),
     message         VARCHAR   NOT NULL,
     target_state    VARCHAR   NOT NULL,
     target_zip_code VARCHAR   NOT NULL,

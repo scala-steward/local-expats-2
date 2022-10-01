@@ -46,6 +46,12 @@ lazy val repo = project
       "io.getquill" %% "quill-jdbc-zio" % V.Quill,
     ),
   )
+  .enablePlugins(FlywayPlugin)
+  .settings(
+    flywayUrl := "jdbc:postgresql://localhost:5432/nepalius",
+    flywayUser := "postgres",
+    flywayPassword := "postgres",
+  )
 
 lazy val api = project
   .dependsOn(domain)
