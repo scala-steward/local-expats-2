@@ -17,8 +17,9 @@ final case class PostRoutes(postService: PostService):
 
   val routes: Http[Any, Throwable, Request, Response] =
     collectZIO[Request] {
-      case GET -> !! / "api" / "posts"        => getAll
-      case req @ POST -> !! / "api" / "posts" => createPost(req)
+      case GET -> !! / "api" / "posts"                  => getAll
+      case req @ GET -> !! / "api" / "posts" / long(id) => getOne(id)
+      case req @ POST -> !! / "api" / "posts"           => createPost(req)
     }
 
   private def createPost(req: Request) = {
@@ -35,6 +36,14 @@ final case class PostRoutes(postService: PostService):
       posts <- postService.getAll
       dtos = posts.map(PostDto.make)
     yield Response.json(dtos.toJson)
+
+  private def getOne(id: PostId) =
+    for
+      post <- postService.getOne(id)
+      dto = post.map(PostDto.make)
+    yield dto
+      .map(d => Response.json(d.toJson))
+      .getOrElse(Response.status(Status.NotFound))
 
 object PostRoutes:
   val layer: ZLayer[PostService, Nothing, PostRoutes] =

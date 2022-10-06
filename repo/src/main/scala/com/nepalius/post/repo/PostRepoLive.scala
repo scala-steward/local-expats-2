@@ -1,6 +1,7 @@
 package com.nepalius.post.repo
 import com.nepalius.config.DatabaseContext.*
 import com.nepalius.location.StateDbCodec.given
+import com.nepalius.post.domain.Post.PostId
 import com.nepalius.post.domain.{CreatePost, Post, PostRepo}
 
 import java.sql.SQLException
@@ -11,6 +12,15 @@ import io.getquill.*
 import zio.*
 
 final case class PostRepoLive(dataSource: DataSource) extends PostRepo:
+
+  override def getOne(id: PostId): ZIO[Any, SQLException, Option[Post]] =
+    run {
+      query[Post]
+        .filter(_.id == lift(id))
+    }
+      .provideEnvironment(ZEnvironment(dataSource))
+      .map(_.headOption)
+
   override def getAll: ZIO[Any, SQLException, List[Post]] =
     run {
       query[Post]
