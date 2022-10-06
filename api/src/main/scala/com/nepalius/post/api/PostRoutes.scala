@@ -7,6 +7,7 @@ import com.nepalius.post.domain.Post.PostId
 import com.nepalius.post.domain.{Post, PostService}
 import zhttp.http.*
 import zhttp.http.Http.collectZIO
+import zhttp.http.Method.{GET, POST}
 import zio.*
 import zio.json.*
 
@@ -16,8 +17,8 @@ final case class PostRoutes(postService: PostService):
 
   val routes: Http[Any, Throwable, Request, Response] =
     collectZIO[Request] {
-      case Method.GET -> !! / "api" / "posts"        => getAll
-      case req @ Method.POST -> !! / "api" / "posts" => createPost(req)
+      case GET -> !! / "api" / "posts"        => getAll
+      case req @ POST -> !! / "api" / "posts" => createPost(req)
     }
 
   private def createPost(req: Request) = {

@@ -17,7 +17,7 @@ final case class AppServer(
 
   def start: ZIO[Any, Throwable, Unit] =
     for
-      _ <- databaseMigration.migrate
+      _ <- databaseMigration.migrate()
       _ <- Server.start(serverConfig.port, allRoutes)
     yield ()
 

@@ -12,7 +12,10 @@ import zio.*
 
 final case class PostRepoLive(dataSource: DataSource) extends PostRepo:
   override def getAll: ZIO[Any, SQLException, List[Post]] =
-    run(query[Post])
+    run {
+      query[Post]
+        .sortBy(_.id)(Ord.desc)
+    }
       .provideEnvironment(ZEnvironment(dataSource))
 
   override def create(post: CreatePost): ZIO[Any, SQLException, Post] =
