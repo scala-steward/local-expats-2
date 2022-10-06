@@ -5,3 +5,5 @@ import zio.*
 
 trait PostService:
   def getAll: zio.Task[List[Post]]
+
+  def create(postRequest: CreatePost): zio.Task[Post]
