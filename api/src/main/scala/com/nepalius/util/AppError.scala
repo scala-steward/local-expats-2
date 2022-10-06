@@ -1,4 +1,4 @@
-package com.nepalius.api
+package com.nepalius.util
 
 sealed trait AppError extends Throwable
 

@@ -1,5 +1,6 @@
 package com.nepalius.post.domain
 
+import com.nepalius.util.Pageable
 import com.nepalius.post.domain.Post.PostId
 import com.nepalius.post.domain.PostService
 import com.nepalius.user.domain.User
@@ -11,7 +12,7 @@ import javax.sql.DataSource
 
 final case class PostServiceLive(postRepo: PostRepo) extends PostService:
   override def getOne(id: PostId): Task[Option[Post]] = postRepo.getOne(id)
-  override def getAll: Task[List[Post]] = postRepo.getAll
+  override def getAll(pageable: Pageable): Task[List[Post]] = postRepo.getAll(pageable)
   override def create(createPost: CreatePost): Task[Post] =
     postRepo.create(createPost)
 

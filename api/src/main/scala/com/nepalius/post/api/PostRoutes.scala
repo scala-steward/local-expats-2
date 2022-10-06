@@ -1,7 +1,8 @@
 package com.nepalius.post.api
 
-import com.nepalius.api.ApiUtils
-import com.nepalius.api.ApiUtils.parseBody
+import com.nepalius.util.ApiUtils
+import com.nepalius.util.ApiUtils.parseBody
+import com.nepalius.util.Pageable
 import com.nepalius.location.State
 import com.nepalius.post.domain.Post.PostId
 import com.nepalius.post.domain.{Post, PostService}
@@ -17,9 +18,9 @@ final case class PostRoutes(postService: PostService):
 
   val routes: Http[Any, Throwable, Request, Response] =
     collectZIO[Request] {
-      case GET -> !! / "api" / "posts"                  => getAll
-      case req @ GET -> !! / "api" / "posts" / long(id) => getOne(id)
-      case req @ POST -> !! / "api" / "posts"           => createPost(req)
+      case req @ GET -> !! / "api" / "posts"      => getAll(req)
+      case GET -> !! / "api" / "posts" / long(id) => getOne(id)
+      case req @ POST -> !! / "api" / "posts"     => createPost(req)
     }
 
   private def createPost(req: Request) = {
@@ -31,9 +32,9 @@ final case class PostRoutes(postService: PostService):
     yield Response.json(postDto.toJson)
   }
 
-  private def getAll =
+  private def getAll(req: Request) =
     for
-      posts <- postService.getAll
+      posts <- postService.getAll(ApiUtils.parsePageable(req))
       dtos = posts.map(PostDto.make)
     yield Response.json(dtos.toJson)
 
