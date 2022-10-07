@@ -15,10 +15,8 @@ export default function MyApp({Component, pageProps}: AppProps) {
                 <meta name="viewport" content="initial-scale=1, width=device-width"/>
             </Head>
             <CssBaseline/>
-            <AuthProvider>
-                <NavBar/>
-                <Component {...pageProps} />
-            </AuthProvider>
+            <NavBar/>
+            <Component {...pageProps} />
         </ThemeProvider>
     );
 }
