@@ -27,7 +27,7 @@ final case class PostRepoLive(dataSource: DataSource) extends PostRepo:
       query[Post]
         .sortBy(_.id)(Ord.desc)
         .take(lift(pageable.pageSize))
-        .filter(p => lift(pageable.lastId).forall(_ > p.id))
+        .filter(p => lift(pageable.lastId) > p.id)
     }
       .provideEnvironment(ZEnvironment(dataSource))
 
@@ -35,6 +35,7 @@ final case class PostRepoLive(dataSource: DataSource) extends PostRepo:
     run {
       query[Post]
         .insert(
+          _.title -> lift(post.title),
           _.message -> lift(post.message),
           _.targetState -> lift(post.targetState),
           _.targetZipCode -> lift(post.targetZipCode),
@@ -43,7 +44,14 @@ final case class PostRepoLive(dataSource: DataSource) extends PostRepo:
     }
       .provideEnvironment(ZEnvironment(dataSource))
       .map((id, createdAt) =>
-        Post(id, post.message, post.targetState, post.targetZipCode, createdAt),
+        Post(
+          id,
+          post.title,
+          post.message,
+          post.targetState,
+          post.targetZipCode,
+          createdAt,
+        ),
       )
 
 object PostRepoLive:

@@ -19,6 +19,6 @@ object ApiUtils:
     val params = req.url.queryParams
     Pageable(
       params.get("pageSize").flatMap(_.headOption).map(_.toInt).getOrElse(20),
-      params.get("lastId").flatMap(_.headOption).map(_.toLong),
+      params.get("lastId").flatMap(_.headOption).map(_.toLong).getOrElse(Long.MaxValue),
     )
   }

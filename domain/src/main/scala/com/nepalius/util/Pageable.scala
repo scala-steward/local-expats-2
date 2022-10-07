@@ -1,3 +1,3 @@
 package com.nepalius.util
 
-case class Pageable(pageSize: Int, lastId: Option[Long])
+case class Pageable(pageSize: Int, lastId: Long)
