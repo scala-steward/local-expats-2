@@ -11,6 +11,7 @@ import com.nepalius.config.{AppConfig, DatabaseContext}
 import com.nepalius.post.domain.PostServiceLive
 import com.nepalius.post.repo.PostRepoLive
 import com.nepalius.config.DatabaseMigration
+import zio.logging.backend.SLF4J
 
 object App extends ZIOAppDefault {
 
@@ -24,5 +25,6 @@ object App extends ZIOAppDefault {
         PostRepoLive.layer >>> PostServiceLive.layer,
         DatabaseMigration.layer,
         DatabaseContext.layer,
+        Runtime.removeDefaultLoggers >>> SLF4J.slf4j,
       )
 }

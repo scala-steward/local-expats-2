@@ -10,22 +10,21 @@ val V = new {
   val Doobie = "1.0.0-RC2"
   val Flyway = "9.4.0"
   val Http4s = "0.23.16"
-  val Jansi = "1.18"
-  val Logback = "1.4.3"
   val Postgres = "42.5.0"
   val Quill = "4.5.0"
+  val slf4j = "2.0.3"
   val TSec = "0.4.0"
   val Zio = "2.0.2"
   val ZioConfig = "3.0.2"
   val ZioHttp = "2.0.0-RC11"
   val ZioJson = "0.3.0"
+  val ZioLogging = "2.1.2"
 }
 
 lazy val domain = project
   .settings(commonSettings)
   .settings(
     libraryDependencies ++= Seq(
-      "ch.qos.logback" % "logback-classic" % V.Logback,
       "org.typelevel" %% "cats-effect" % V.CatsEffect,
       "io.chrisdavenport" %% "cats-effect-time" % V.CatsEffectTime,
       "dev.zio" %% "zio" % V.Zio,
@@ -78,10 +77,12 @@ lazy val root = (project in file("."))
   .settings(
     libraryDependencies ++= Seq(
       "com.hunorkovacs" %% "circe-config" % V.CirceConfig,
-      "org.fusesource.jansi" % "jansi" % V.Jansi,
       "dev.zio" %% "zio-config" % V.ZioConfig,
       "dev.zio" %% "zio-config-typesafe" % V.ZioConfig,
       "dev.zio" %% "zio-config-magnolia" % V.ZioConfig,
+      "dev.zio" %% "zio-logging-slf4j" % V.ZioLogging,
+      "org.slf4j" % "slf4j-api" % V.slf4j,
+      "org.slf4j" % "slf4j-simple" % V.slf4j,
     ),
   )
   .dependsOn(domain, api, repo)
