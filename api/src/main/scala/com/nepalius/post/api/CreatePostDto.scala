@@ -6,11 +6,13 @@ import zio.*
 import zio.json.*
 
 case class CreatePostDto(
+    title: String,
     message: String,
     targetState: State,
     targetZipCode: String,
 ):
-  def toCreatePost: CreatePost = CreatePost(message, targetState, targetZipCode)
+  def toCreatePost: CreatePost =
+    CreatePost(title, message, targetState, targetZipCode)
 
 object CreatePostDto:
   given JsonDecoder[CreatePostDto] = DeriveJsonDecoder.gen[CreatePostDto]

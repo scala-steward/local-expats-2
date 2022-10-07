@@ -11,6 +11,7 @@ import java.time.ZonedDateTime
 
 case class PostDto(
     id: PostId,
+    title: String,
     message: String,
     targetState: State,
     targetZipCode: String,
@@ -23,6 +24,7 @@ object PostDto {
   def make(post: Post): PostDto =
     PostDto(
       post.id,
+      post.title,
       post.message,
       post.targetState,
       post.targetZipCode,
