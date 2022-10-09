@@ -17,8 +17,18 @@ object ApiUtils:
 
   def parsePageable(req: Request): Pageable = {
     val params = req.url.queryParams
+    val maxPageSize = 100
     Pageable(
-      params.get("pageSize").flatMap(_.headOption).map(_.toInt).getOrElse(20),
-      params.get("lastId").flatMap(_.headOption).map(_.toLong).getOrElse(Long.MaxValue),
+      params
+        .get("pageSize")
+        .flatMap(_.headOption)
+        .map(_.toInt)
+        .getOrElse(maxPageSize)
+        .min(maxPageSize),
+      params
+        .get("lastId")
+        .flatMap(_.headOption)
+        .map(_.toLong)
+        .getOrElse(Long.MaxValue),
     )
   }
