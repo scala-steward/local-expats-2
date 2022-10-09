@@ -1,7 +1,30 @@
 package com.nepalius
 
-import cats.effect.{ExitCode, IO, IOApp}
+import com.nepalius.post.api.PostRoutes
+import zhttp.http.*
+import zio.*
+import zio.UIO
+import zio.Console.*
 
-object Main:
-  def run(args: List[String]): IO[ExitCode] =
-    Server.create[IO].use(_ => IO.never).as(ExitCode.Success)
+import java.io.IOException
+import com.nepalius.config.{AppConfig, DatabaseContext}
+import com.nepalius.post.domain.PostServiceLive
+import com.nepalius.post.repo.PostRepoLive
+import com.nepalius.config.DatabaseMigration
+import zio.logging.backend.SLF4J
+
+object Main extends ZIOAppDefault {
+
+  override def run: Task[Unit] =
+    ZIO
+      .serviceWithZIO[Server](_.start)
+      .provide(
+        Server.layer,
+        AppConfig.layer,
+        PostRoutes.layer,
+        PostRepoLive.layer >>> PostServiceLive.layer,
+        DatabaseMigration.layer,
+        DatabaseContext.layer,
+        Runtime.removeDefaultLoggers >>> SLF4J.slf4j,
+      )
+}

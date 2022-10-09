@@ -3,17 +3,10 @@ ThisBuild / scalaVersion := "3.2.0"
 ThisBuild / version := "0.0.1-SNAPSHOT"
 
 val V = new {
-  val CatsEffect = "3.3.14"
-  val CatsEffectTime = "0.2.0"
-  val Circe = "0.14.3"
-  val CirceConfig = "0.10.0"
-  val Doobie = "1.0.0-RC2"
   val Flyway = "9.4.0"
-  val Http4s = "0.23.16"
   val Postgres = "42.5.0"
   val Quill = "4.5.0"
-  val slf4j = "2.0.3"
-  val TSec = "0.4.0"
+  val Slf4j = "2.0.3"
   val Zio = "2.0.2"
   val ZioConfig = "3.0.2"
   val ZioHttp = "2.0.0-RC11"
@@ -25,8 +18,6 @@ lazy val domain = project
   .settings(commonSettings)
   .settings(
     libraryDependencies ++= Seq(
-      "org.typelevel" %% "cats-effect" % V.CatsEffect,
-      "io.chrisdavenport" %% "cats-effect-time" % V.CatsEffectTime,
       "dev.zio" %% "zio" % V.Zio,
     ),
   )
@@ -37,10 +28,6 @@ lazy val repo = project
   .settings(
     libraryDependencies ++= Seq(
       "org.postgresql" % "postgresql" % V.Postgres,
-      "org.tpolecat" %% "doobie-free" % V.Doobie,
-      "org.tpolecat" %% "doobie-core" % V.Doobie,
-      "org.tpolecat" %% "doobie-postgres" % V.Doobie,
-      "org.tpolecat" %% "doobie-hikari" % V.Doobie,
       "org.flywaydb" % "flyway-core" % V.Flyway,
       "io.getquill" %% "quill-jdbc-zio" % V.Quill,
     ),
@@ -57,13 +44,6 @@ lazy val api = project
   .settings(commonSettings)
   .settings(
     libraryDependencies ++= Seq(
-      "io.circe" %% "circe-generic" % V.Circe,
-      "org.http4s" %% "http4s-ember-server" % V.Http4s,
-      "org.http4s" %% "http4s-circe" % V.Http4s,
-      "org.http4s" %% "http4s-dsl" % V.Http4s,
-      "io.github.jmcardon" %% "tsec-common" % V.TSec,
-      "io.github.jmcardon" %% "tsec-password" % V.TSec,
-      "io.github.jmcardon" %% "tsec-http4s" % V.TSec,
       "io.d11" %% "zhttp" % V.ZioHttp,
       "dev.zio" %% "zio-json" % V.ZioJson,
     ),
@@ -76,13 +56,12 @@ lazy val root = (project in file("."))
   .settings(reStart / aggregate := false)
   .settings(
     libraryDependencies ++= Seq(
-      "com.hunorkovacs" %% "circe-config" % V.CirceConfig,
       "dev.zio" %% "zio-config" % V.ZioConfig,
       "dev.zio" %% "zio-config-typesafe" % V.ZioConfig,
       "dev.zio" %% "zio-config-magnolia" % V.ZioConfig,
       "dev.zio" %% "zio-logging-slf4j" % V.ZioLogging,
-      "org.slf4j" % "slf4j-api" % V.slf4j,
-      "org.slf4j" % "slf4j-simple" % V.slf4j,
+      "org.slf4j" % "slf4j-api" % V.Slf4j,
+      "org.slf4j" % "slf4j-simple" % V.Slf4j,
     ),
   )
   .dependsOn(domain, api, repo)

@@ -3,7 +3,6 @@ package com.nepalius.post.domain
 import com.nepalius.util.Pageable
 import com.nepalius.post.domain.Post.PostId
 import com.nepalius.post.domain.PostService
-import com.nepalius.user.domain.User
 import zio.*
 
 import java.time.LocalDateTime

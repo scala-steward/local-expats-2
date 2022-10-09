@@ -1,40 +1,29 @@
 package com.nepalius
 
-import cats.effect.Resource
-import cats.effect.kernel.Async
-import cats.implicits.*
-import com.comcast.ip4s.*
-import com.nepalius.auth.Auth
-import com.nepalius.auth.api.AuthController
-import com.nepalius.config.{AppConfig, DatabaseSetup}
-import com.nepalius.user.api.NormalUserController
-import com.nepalius.user.domain.UserService
-import com.nepalius.user.repo.UserRepoImpl
-import io.circe.config.parser
-import io.circe.generic.auto.*
-import org.http4s.ember.server.EmberServerBuilder
-import org.http4s.implicits.*
-import org.http4s.server.Server as HttpServer
-import tsec.passwordhashers.jca.BCrypt
+import com.nepalius.config.{DatabaseMigration, ServerConfig}
+import com.nepalius.post.api.PostRoutes
+import com.nepalius.post.domain.PostRepo
+import zhttp.http.*
+import zhttp.service.Server as HttpServer
+import zio.*
+
+final case class Server(
+    serverConfig: ServerConfig,
+    databaseMigration: DatabaseMigration,
+    postRoutes: PostRoutes,
+):
+  val allRoutes: HttpApp[Any, Throwable] = postRoutes.routes
+
+  def start: ZIO[Any, Throwable, Unit] =
+    for
+      _ <- databaseMigration.migrate()
+      _ <- HttpServer.start(serverConfig.port, allRoutes)
+    yield ()
 
 object Server:
-  def create[F[_]: Async]: Resource[F, HttpServer] =
-    for
-      conf <- Resource.eval(parser.decodePathF[F, AppConfig]("nepalius"))
-      transactor <- DatabaseSetup.dbTransactor(conf.db)
-      userRepo = UserRepoImpl(transactor)
-      passwordHasher = BCrypt.syncPasswordHasher[F]
-      userService = UserService(userRepo)
-      authHandler = Auth.authHandler(userService)
-      httpApp = HttpApp(
-        AuthController(userService, passwordHasher, authHandler),
-        NormalUserController(userService, authHandler, passwordHasher),
-      )
-      _ <- Resource.eval(DatabaseSetup.initDb(conf.db))
-      server <- EmberServerBuilder
-        .default[F]
-        .withHost(Host.fromString(conf.server.host).get)
-        .withPort(Port.fromInt(conf.server.port).get)
-        .withHttpApp(httpApp)
-        .build
-    yield server
+  val layer: ZLayer[
+    ServerConfig & DatabaseMigration & PostRoutes,
+    Nothing,
+    Server,
+  ] =
+    ZLayer.fromFunction(Server.apply)
