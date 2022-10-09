@@ -7,10 +7,11 @@ import {createQueryParams} from "../util/Utils";
 import {Loading} from "../util/Loading";
 
 export const Posts: FC = () => {
+    const pageSize = 10;
 
     const fetchPosts = ({pageParam: lastId = undefined}): Promise<PostDto[]> => {
         const params = {
-            pageSize: 10,
+            pageSize,
             lastId
         }
 
@@ -32,7 +33,7 @@ export const Posts: FC = () => {
         hasNextPage,
         isFetchingNextPage,
     } = useInfiniteQuery(['posts'], fetchPosts, {
-        getNextPageParam: (lastPage) => lastPage[lastPage.length - 1]?.id,
+        getNextPageParam: (lastPage) => lastPage.length === pageSize ? lastPage[lastPage.length - 1]?.id : undefined,
     })
 
     if (isLoading) {
