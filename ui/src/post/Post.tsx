@@ -12,7 +12,7 @@ type PostProps = {
 
 export const Post: FC<PostProps> = ({post}) => {
     const postedDate = new Date(post.createdAt).toLocaleDateString();
-    const postInfo = `posted for ${post.state} on ${postedDate}`;
+    const postInfo = `posted in ${post.state} on ${postedDate}`;
     return (
         <Card sx={{margin: 1}} variant="outlined">
             <CardActionArea>
