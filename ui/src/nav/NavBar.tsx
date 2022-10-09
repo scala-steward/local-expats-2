@@ -47,7 +47,7 @@ const StyledInputBase = styled(InputBase)(({theme}) => ({
 export default function NavBar() {
     return (
         <Box sx={{flexGrow: 1}}>
-            <AppBar position="static">
+            <AppBar position="fixed">
                 <Toolbar>
                     <IconButton
                         size="large"
@@ -89,6 +89,7 @@ export default function NavBar() {
                     </Box>
                 </Toolbar>
             </AppBar>
+            <Toolbar/> {/* This Toolbar will occupy the space underneath the "fixed" Appbar and prevent the content to be hidden underneath Appbar. */}
         </Box>
     );
 }
