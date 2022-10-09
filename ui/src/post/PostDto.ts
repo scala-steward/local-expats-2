@@ -4,6 +4,6 @@ export interface PostDto {
     id: number;
     title: string;
     message: string;
-    targetState: StateCode;
+    state: StateCode;
     createdAt: string;
 }

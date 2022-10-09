@@ -13,7 +13,7 @@ case class PostDto(
     id: PostId,
     title: String,
     message: String,
-    targetState: State,
+    state: State,
     createdAt: ZonedDateTime,
 )
 
@@ -25,7 +25,7 @@ object PostDto {
       post.id,
       post.title,
       post.message,
-      post.targetState,
+      post.state,
       post.createdAt,
     )
 

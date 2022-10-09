@@ -37,7 +37,7 @@ final case class PostRepoLive(dataSource: DataSource) extends PostRepo:
         .insert(
           _.title -> lift(post.title),
           _.message -> lift(post.message),
-          _.targetState -> lift(post.targetState),
+          _.state -> lift(post.state),
         )
         .returningGenerated(p => (p.id, p.createdAt))
     }
@@ -47,7 +47,7 @@ final case class PostRepoLive(dataSource: DataSource) extends PostRepo:
           id,
           post.title,
           post.message,
-          post.targetState,
+          post.state,
           createdAt,
         ),
       )

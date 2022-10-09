@@ -9,7 +9,7 @@ case class Post(
     id: PostId,
     title: String,
     message: String,
-    targetState: State,
+    state: State,
     createdAt: ZonedDateTime,
 )
 
