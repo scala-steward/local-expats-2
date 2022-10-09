@@ -11,7 +11,6 @@ case class Post(
     title: String,
     message: String,
     targetState: State,
-    targetZipCode: String,
     createdAt: ZonedDateTime,
 )
 

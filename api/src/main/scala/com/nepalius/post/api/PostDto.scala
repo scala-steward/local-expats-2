@@ -14,7 +14,6 @@ case class PostDto(
     title: String,
     message: String,
     targetState: State,
-    targetZipCode: String,
     createdAt: ZonedDateTime,
 )
 
@@ -27,7 +26,6 @@ object PostDto {
       post.title,
       post.message,
       post.targetState,
-      post.targetZipCode,
       post.createdAt,
     )
 

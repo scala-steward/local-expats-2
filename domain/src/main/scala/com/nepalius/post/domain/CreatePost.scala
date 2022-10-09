@@ -6,5 +6,4 @@ case class CreatePost(
     title: String,
     message: String,
     targetState: State,
-    targetZipCode: String,
 )

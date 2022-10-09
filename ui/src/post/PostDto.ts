@@ -5,6 +5,5 @@ export interface PostDto {
     title: string;
     message: string;
     targetState: StateCode;
-    targetZipCode: string;
     createdAt: string;
 }

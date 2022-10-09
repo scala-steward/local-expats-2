@@ -9,10 +9,9 @@ case class CreatePostDto(
     title: String,
     message: String,
     targetState: State,
-    targetZipCode: String,
 ):
   def toCreatePost: CreatePost =
-    CreatePost(title, message, targetState, targetZipCode)
+    CreatePost(title, message, targetState)
 
 object CreatePostDto:
   given JsonDecoder[CreatePostDto] = DeriveJsonDecoder.gen[CreatePostDto]

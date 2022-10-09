@@ -3,6 +3,5 @@ CREATE TABLE post (
     title           VARCHAR     NOT NULL check ( length(title) > 2 ),
     message         VARCHAR     NOT NULL,
     target_state    VARCHAR     NOT NULL,
-    target_zip_code VARCHAR     NOT NULL,
     created_at      timestamptz NOT NULL DEFAULT now()
 );
