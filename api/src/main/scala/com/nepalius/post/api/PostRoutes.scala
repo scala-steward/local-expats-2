@@ -1,11 +1,10 @@
 package com.nepalius.post.api
 
-import com.nepalius.util.ApiUtils
-import com.nepalius.util.ApiUtils.parseBody
-import com.nepalius.util.Pageable
 import com.nepalius.location.State
 import com.nepalius.post.domain.Post.PostId
 import com.nepalius.post.domain.{Post, PostService}
+import com.nepalius.util.ApiUtils.parseBody
+import com.nepalius.util.{ApiUtils, Pageable}
 import zhttp.http.*
 import zhttp.http.Http.collectZIO
 import zhttp.http.Method.{GET, POST}
@@ -32,11 +31,15 @@ final case class PostRoutes(postService: PostService):
     yield Response.json(postDto.toJson)
   }
 
-  private def getAll(req: Request) =
+  private def getAll(req: Request) = {
+    val pageable = ApiUtils.parsePageable(req)
+    val stateParam = req.url.queryParams.get("state").flatMap(_.headOption)
+    val state = stateParam.map(State.valueOf).getOrElse(State.US)
     for
-      posts <- postService.getAll(ApiUtils.parsePageable(req))
+      posts <- postService.getAll(pageable, state)
       dtos = posts.map(PostDto.make)
     yield Response.json(dtos.toJson)
+  }
 
   private def getOne(id: PostId) =
     for
