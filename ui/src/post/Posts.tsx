@@ -5,14 +5,18 @@ import {Post} from "./Post";
 import InfiniteScroll from "react-infinite-scroll-component";
 import {createQueryParams} from "../util/Utils";
 import {Loading} from "../util/Loading";
+import {useSelectedState} from "../location/SelectedState";
 
 export const Posts: FC = () => {
     const pageSize = 10;
 
+    const {selectedState: state} = useSelectedState();
+
     const fetchPosts = ({pageParam: lastId = undefined}): Promise<PostDto[]> => {
         const params = {
+            state,
             pageSize,
-            lastId
+            lastId,
         }
 
         return fetch(`api/posts?${createQueryParams(params)}`)
@@ -32,7 +36,7 @@ export const Posts: FC = () => {
         fetchNextPage,
         hasNextPage,
         isFetchingNextPage,
-    } = useInfiniteQuery(['posts'], fetchPosts, {
+    } = useInfiniteQuery(['posts', state], fetchPosts, {
         getNextPageParam: (lastPage) => lastPage.length === pageSize ? lastPage[lastPage.length - 1]?.id : undefined,
     })
 
