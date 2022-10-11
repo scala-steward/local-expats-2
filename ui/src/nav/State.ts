@@ -1,4 +1,5 @@
 export const stateLabels = Object.freeze({
+    US: "United States",
     AL: "Alabama",
     AK: "Alaska",
     AZ: "Arizona",
@@ -59,5 +60,6 @@ export interface State {
     name: string
 }
 
+export const stateCodes: StateCode[] = Object.keys(stateLabels) as StateCode[];
 export const states: State[] = Object.entries(stateLabels).map(([code, label]) => ({code: code as StateCode, name: label}))
 

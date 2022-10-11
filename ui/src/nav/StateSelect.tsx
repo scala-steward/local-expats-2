@@ -1,33 +1,42 @@
-import React from 'react';
 import TextField from '@mui/material/TextField';
-import {State, states} from "./State";
+import {State, StateCode, stateCodes, stateLabels, states} from "./State";
 import {Autocomplete, FilterOptionsState} from "@mui/material";
 import Box from "@mui/material/Box";
+import {FC} from "react";
 
 interface StateSelectProps {
-    onChange: (state: State | null) => void;
+    onChange: (state: StateCode) => void;
+    value?: StateCode;
     error?: boolean;
+    label?: string;
 }
 
-export default function StateSelect({onChange, error}: StateSelectProps) {
+export const StateSelect: FC<StateSelectProps> = ({
+    onChange,
+    value,
+    error,
+    label = "State",
+}) => {
 
     return (
         <Autocomplete
-            options={states}
+            options={stateCodes}
             autoHighlight
-            getOptionLabel={(option: State) => `${option.name} (${option.code})`}
-            renderOption={(props, state: State) => (
+            disableClearable
+            value={value}
+            getOptionLabel={(state: StateCode) => `${stateLabels[state]}`}
+            renderOption={(props, state: StateCode) => (
                 <Box component="li" {...props}>
-                    {state.name} ({state.code})
+                    {stateLabels[state]} ({state})
                 </Box>
             )}
             onChange={(event, value) => onChange(value)}
             filterOptions={
-                (options: State[], state: FilterOptionsState<State>) => {
+                (options: StateCode[], state: FilterOptionsState<StateCode>) => {
                     const input = state.inputValue.toLocaleLowerCase();
                     return options.filter(
-                        o => o.name.toLocaleLowerCase().includes(input)
-                            || o.code.toLocaleLowerCase().includes(input)
+                        code => stateLabels[code].toLocaleLowerCase().includes(input)
+                            || code.toLocaleLowerCase().includes(input)
                     );
                 }
             }
@@ -35,14 +44,14 @@ export default function StateSelect({onChange, error}: StateSelectProps) {
                 <TextField
                     {...params}
                     required
-                    label="State"
+                    label={label}
                     variant="outlined"
                     inputProps={{
                         ...params.inputProps,
-                        autoComplete: 'address-level1',
                     }}
                     error={error}
                 />
+
             )}
         />
     );

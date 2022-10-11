@@ -1,4 +1,3 @@
-import {NextPage} from "next";
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 import Grid from '@mui/material/Grid';
@@ -7,7 +6,7 @@ import {Controller, useForm} from 'react-hook-form';
 import Box from "@mui/material/Box";
 import {useRouter} from "next/router";
 import {FC} from "react";
-import StateSelect from "../nav/StateSelect";
+import {StateSelect} from "../nav/StateSelect";
 import {StateCode} from "../nav/State";
 
 type CreatePostDto = {
@@ -81,7 +80,7 @@ export const CreatePost: FC = () => {
                                     <StateSelect
                                         error={!!errors.state}
                                         onChange={(state) => {
-                                            onChange(state?.code)
+                                            onChange(state)
                                         }}/>
                             }
                         />

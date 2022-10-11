@@ -1,6 +1,7 @@
 package com.nepalius.location
 
 enum State(val name: String):
+  case US extends State("United States")
   case AL extends State("Alabama")
   case AK extends State("Alaska")
   case AZ extends State("Arizona")

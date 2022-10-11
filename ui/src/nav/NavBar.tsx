@@ -5,29 +5,37 @@ import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
 import Add from '@mui/icons-material/Add';
 import Link from "next/link";
+import {StateSelect} from "./StateSelect";
+import {useSelectedState} from "../location/SelectedState";
 
 export default function NavBar() {
+    const {selectedState, setSelectedState} = useSelectedState();
+
     return (
         <Box sx={{flexGrow: 1}}>
             <AppBar position="fixed">
                 <Toolbar>
-                    <IconButton
-                        size="large"
-                        edge="start"
-                        color="inherit"
-                        aria-label="open drawer"
-                        sx={{mr: 2}}
-                    >
-                        <Link href="/">
-                            <Typography
-                                variant="h6"
-                                noWrap
-                                component="div"
-                            >
-                                NepaliUS
-                            </Typography>
-                        </Link>
-                    </IconButton>
+                    <Link href="/">
+                        <Typography
+                            variant="h6"
+                            noWrap
+                            component="div"
+                        >
+                            NepaliUS
+                        </Typography>
+                    </Link>
+                    <Box sx={{
+                        flexGrow: 1,
+                        mx: {xs: 1, sm: 2},
+                        width: 140
+                    }}>
+                        <StateSelect
+                            value={selectedState}
+                            label=""
+                            onChange={(state) => {
+                                setSelectedState(state)
+                            }}/>
+                    </Box>
                     <Box sx={{flexGrow: 1}}/>
                     <Box sx={{display: {sm: 'flex'}, ml: 2}}>
                         <IconButton
