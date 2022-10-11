@@ -5,14 +5,14 @@ import Typography from '@mui/material/Typography';
 import CardActionArea from '@mui/material/CardActionArea';
 import CardHeader from '@mui/material/CardHeader';
 import {PostDto} from "./PostDto";
+import {PostSubheader} from "./PostSubheader";
 
 type PostProps = {
     post: PostDto
 };
 
 export const Post: FC<PostProps> = ({post}) => {
-    const postedDate = new Date(post.createdAt).toLocaleDateString();
-    const postInfo = `posted in ${post.state} on ${postedDate}`;
+
     return (
         <Card sx={{margin: 1}} variant="outlined">
             <CardActionArea>
@@ -21,10 +21,7 @@ export const Post: FC<PostProps> = ({post}) => {
                     titleTypographyProps={{
                         variant: "h6",
                     }}
-                    subheader={postInfo}
-                    subheaderTypographyProps={{
-                        variant: "caption"
-                    }}
+                    subheader={<PostSubheader post={post}/>}
                 />
                 {
                     post.message &&
