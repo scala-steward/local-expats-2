@@ -8,7 +8,7 @@ import java.time.ZonedDateTime
 case class Post(
     id: PostId,
     title: String,
-    message: String,
+    message: Option[String],
     state: State,
     createdAt: ZonedDateTime,
 )

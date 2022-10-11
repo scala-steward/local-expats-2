@@ -26,13 +26,18 @@ export const Post: FC<PostProps> = ({post}) => {
                         variant: "caption"
                     }}
                 />
-                <CardContent sx={{mt: -3}}>
-                    <Typography
-                        variant="body1"
-                    >
-                        {post.message}
-                    </Typography>
-                </CardContent>
+                {
+                    post.message &&
+                    (
+                        <CardContent sx={{mt: -3}}>
+                            <Typography
+                                variant="body1"
+                            >
+                                {post.message}
+                            </Typography>
+                        </CardContent>
+                    )
+                }
             </CardActionArea>
         </Card>
     );

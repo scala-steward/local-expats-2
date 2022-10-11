@@ -11,7 +11,7 @@ import {StateCode} from "../nav/State";
 
 type CreatePostDto = {
     title: string,
-    message: string,
+    message?: string,
     state: StateCode,
 };
 
@@ -53,7 +53,7 @@ export const CreatePost: FC = () => {
                             fullWidth
                             label="Title"
                             autoFocus
-                            {...register('title', {required: true})}
+                            {...register('title', {required: true, minLength: 3})}
                             error={!!errors.title}
                         />
                     </Grid>
@@ -62,11 +62,9 @@ export const CreatePost: FC = () => {
                             variant="outlined"
                             multiline
                             rows={4}
-                            required
                             fullWidth
                             label="Message"
-                            {...register('message', {required: true})}
-                            error={!!errors.message}
+                            {...register('message')}
                         />
                     </Grid>
                     <Grid item xs={12}>

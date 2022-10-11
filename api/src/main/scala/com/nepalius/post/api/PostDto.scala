@@ -12,7 +12,7 @@ import java.time.ZonedDateTime
 case class PostDto(
     id: PostId,
     title: String,
-    message: String,
+    message: Option[String],
     state: State,
     createdAt: ZonedDateTime,
 )

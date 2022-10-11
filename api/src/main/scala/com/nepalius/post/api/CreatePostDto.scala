@@ -7,7 +7,7 @@ import zio.json.*
 
 case class CreatePostDto(
     title: String,
-    message: String,
+    message: Option[String],
     state: State,
 ):
   def toCreatePost: CreatePost =
