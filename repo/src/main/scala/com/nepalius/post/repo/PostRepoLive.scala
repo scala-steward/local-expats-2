@@ -1,27 +1,31 @@
 package com.nepalius.post.repo
 import com.nepalius.config.DatabaseContext.*
 import com.nepalius.location.State
-import com.nepalius.util.Pageable
 import com.nepalius.location.StateDbCodec.given
+import com.nepalius.post.domain.*
 import com.nepalius.post.domain.Post.PostId
-import com.nepalius.post.domain.{CreatePost, Post, PostRepo}
+import com.nepalius.util.Pageable
+import io.getquill.*
+import zio.*
 
 import java.sql.SQLException
 import java.time.LocalDateTime
 import java.util.UUID
 import javax.sql.DataSource
-import io.getquill.*
-import zio.*
 
 final case class PostRepoLive(dataSource: DataSource) extends PostRepo:
 
-  override def getOne(id: PostId): ZIO[Any, SQLException, Option[Post]] =
+  override def getOne(
+      id: PostId,
+  ): ZIO[Any, SQLException, Option[PostWithComments]] =
     run {
-      query[Post]
-        .filter(_.id == lift(id))
+      for
+        post <- query[Post].filter(_.id == lift(id))
+        comment <- query[Comment].leftJoin(_.postId == post.id)
+      yield (post, comment)
     }
       .provideEnvironment(ZEnvironment(dataSource))
-      .map(_.headOption)
+      .map(convertToPostWithComments)
 
   override def getAll(
       pageable: Pageable,
@@ -60,6 +64,36 @@ final case class PostRepoLive(dataSource: DataSource) extends PostRepo:
           createdAt,
         ),
       )
+
+  override def addComment(
+      postId: PostId,
+      comment: CreateComment,
+  ): Task[Comment] =
+    run {
+      query[Comment]
+        .insert(
+          _.postId -> lift(postId),
+          _.message -> lift(comment.message),
+        )
+        .returningGenerated(c => (c.id, c.createdAt))
+    }
+      .provideEnvironment(ZEnvironment(dataSource))
+      .map((id, createdAt) =>
+        Comment(
+          id,
+          postId,
+          comment.message,
+          createdAt,
+        ),
+      )
+
+  private def convertToPostWithComments(
+      postWithCommentRows: List[(Post, Option[Comment])],
+  ): Option[PostWithComments] = {
+    val post = postWithCommentRows.headOption.map(_._1)
+    val comments = postWithCommentRows.flatMap(_._2.toList)
+    post.map(PostWithComments(_, comments))
+  }
 
 object PostRepoLive:
   val layer: ZLayer[DataSource, Nothing, PostRepo] =

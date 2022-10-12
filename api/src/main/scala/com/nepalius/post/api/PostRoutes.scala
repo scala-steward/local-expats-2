@@ -20,6 +20,8 @@ final case class PostRoutes(postService: PostService):
       case req @ GET -> !! / "api" / "posts"      => getAll(req)
       case GET -> !! / "api" / "posts" / long(id) => getOne(id)
       case req @ POST -> !! / "api" / "posts"     => createPost(req)
+      case req @ POST -> !! / "api" / "posts" / long(id) / "comments" =>
+        addComment(id, req)
     }
 
   private def createPost(req: Request) = {
@@ -44,10 +46,19 @@ final case class PostRoutes(postService: PostService):
   private def getOne(id: PostId) =
     for
       post <- postService.getOne(id)
-      dto = post.map(PostDto.make)
+      dto = post.map(PostWithCommentsDto.make)
     yield dto
       .map(d => Response.json(d.toJson))
       .getOrElse(Response.status(Status.NotFound))
+
+  private def addComment(postId: PostId, req: Request) = {
+    for
+      dto <- parseBody[CreateCommentDto](req)
+      commentRequest = dto.toCreateComment
+      updatedPost <- postService.addComment(postId, commentRequest)
+      dto = PostWithCommentsDto.make(updatedPost)
+    yield Response.json(dto.toJson)
+  }
 
 object PostRoutes:
   val layer: ZLayer[PostService, Nothing, PostRoutes] =
