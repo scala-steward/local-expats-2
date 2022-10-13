@@ -4,6 +4,7 @@ import Typography from "@mui/material/Typography";
 import {useSelectedState} from "../location/SelectedState";
 import {stateLabels} from "../nav/State";
 import Chip from "@mui/material/Chip";
+import {DateChip} from "./DateChip";
 
 type PostSubheaderProps = {
     post: PostDto
@@ -11,7 +12,6 @@ type PostSubheaderProps = {
 
 export const PostSubheader: FC<PostSubheaderProps> = ({post}) => {
     const {setSelectedState} = useSelectedState();
-    const postedDate = new Date(post.createdAt).toLocaleDateString();
     return (
         <Typography variant="caption">
             posted in
@@ -25,12 +25,7 @@ export const PostSubheader: FC<PostSubheaderProps> = ({post}) => {
                 onClick={() => setSelectedState(post.state)}
             />
             on
-            <Chip
-                sx={{mx: 1}}
-                variant="filled"
-                size="small"
-                label={postedDate}
-            />
+            <DateChip date={post.createdAt}/>
         </Typography>
     );
 }
