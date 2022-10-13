@@ -17,7 +17,6 @@ type CreatePostDto = {
 
 export const CreatePost: FC = () => {
     const router = useRouter();
-    const goToPosts = () => router.push('/');
 
     const {register, handleSubmit, control, formState: {errors}} = useForm<CreatePostDto>();
     const onSubmit = (data: CreatePostDto) =>
@@ -29,7 +28,14 @@ export const CreatePost: FC = () => {
                 body: JSON.stringify(data),
             }
         )
-            .then(goToPosts)
+            .then(response => {
+                if (response.ok) {
+                    return response.json();
+                } else {
+                    throw response.statusText;
+                }
+            })
+            .then(({id}) => router.push(`/posts/${id}`));
 
     return (
         <Box
