@@ -5,6 +5,7 @@ import Button from "@mui/material/Button";
 import {useForm} from "react-hook-form";
 import Box from "@mui/material/Box";
 import {PostWithCommentsDto} from "./PostWithCommentsDto";
+import {post} from "../util/Fetch";
 
 type AddCommentDto = {
     message: string;
@@ -18,21 +19,7 @@ type AddCommentProps = {
 export const AddComment: FC<AddCommentProps> = ({postId, onCommentedAdded}) => {
     const {register, handleSubmit, formState: {errors}, reset} = useForm<AddCommentDto>();
     const onSubmit = (data: AddCommentDto) =>
-        fetch(`/api/posts/${postId}/comments`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(data),
-            }
-        )
-            .then(response => {
-                if (response.ok) {
-                    return response.json();
-                } else {
-                    throw response.statusText;
-                }
-            })
+        post<PostWithCommentsDto>(`/api/posts/${postId}/comments`, data)
             .then(post => {
                 reset()
                 onCommentedAdded && onCommentedAdded(post);

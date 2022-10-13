@@ -3,9 +3,9 @@ import {PostDto} from "./PostDto";
 import {useInfiniteQuery} from "@tanstack/react-query";
 import {Post} from "./Post";
 import InfiniteScroll from "react-infinite-scroll-component";
-import {createQueryParams} from "../util/Utils";
 import {Loading} from "../util/Loading";
 import {useSelectedState} from "../location/SelectedState";
+import {get} from "../util/Fetch";
 
 export const Posts: FC = () => {
     const pageSize = 10;
@@ -18,15 +18,7 @@ export const Posts: FC = () => {
             pageSize,
             lastId,
         }
-
-        return fetch(`api/posts?${createQueryParams(params)}`)
-            .then(response => {
-                if (response.ok) {
-                    return response.json();
-                } else {
-                    throw response.statusText;
-                }
-            });
+        return get('api/posts', params);
     };
 
     const {

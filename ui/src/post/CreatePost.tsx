@@ -8,6 +8,8 @@ import {useRouter} from "next/router";
 import {FC} from "react";
 import {StateSelect} from "../nav/StateSelect";
 import {StateCode} from "../nav/State";
+import {PostDto} from "./PostDto";
+import {post} from "../util/Fetch";
 
 type CreatePostDto = {
     title: string,
@@ -20,21 +22,7 @@ export const CreatePost: FC = () => {
 
     const {register, handleSubmit, control, formState: {errors}} = useForm<CreatePostDto>();
     const onSubmit = (data: CreatePostDto) =>
-        fetch('/api/posts', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(data),
-            }
-        )
-            .then(response => {
-                if (response.ok) {
-                    return response.json();
-                } else {
-                    throw response.statusText;
-                }
-            })
+        post<PostDto>('/api/posts', data)
             .then(({id}) => router.push(`/posts/${id}`));
 
     return (
