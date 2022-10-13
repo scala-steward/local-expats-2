@@ -47,7 +47,7 @@ export const CreatePost: FC = () => {
                             fullWidth
                             label="Title"
                             autoFocus
-                            {...register('title', {required: true, minLength: 3})}
+                            {...register('title', {required: true, minLength: 2})}
                             error={!!errors.title}
                         />
                     </Grid>
