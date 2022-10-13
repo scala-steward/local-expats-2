@@ -3,6 +3,7 @@ import {PostDto} from "./PostDto";
 import Typography from "@mui/material/Typography";
 import {DateChip} from "./DateChip";
 import {StateChip} from "./StateChip";
+import {RandomAvatar} from "./RandomAvatar";
 
 type PostSubheaderProps = {
     post: PostDto
@@ -10,6 +11,7 @@ type PostSubheaderProps = {
 
 export const PostSubheader: FC<PostSubheaderProps> = ({post}) =>
     <Typography variant="caption">
+        <RandomAvatar seed={post.id}/>
         posted in
         <StateChip state={post.state}/>
         on
