@@ -1,6 +1,7 @@
 package com.nepalius
 
 import com.nepalius.config.{DatabaseMigration, ServerConfig}
+import com.nepalius.location.LocationRoutes
 import com.nepalius.post.api.PostRoutes
 import com.nepalius.post.domain.PostRepo
 import zhttp.http.*
@@ -11,8 +12,10 @@ final case class Server(
     serverConfig: ServerConfig,
     databaseMigration: DatabaseMigration,
     postRoutes: PostRoutes,
+    locationRoutes: LocationRoutes,
 ):
-  val allRoutes: HttpApp[Any, Throwable] = postRoutes.routes
+  val allRoutes: HttpApp[Any, Throwable] =
+    postRoutes.routes ++ locationRoutes.routes
 
   def start: ZIO[Any, Throwable, Unit] =
     for
@@ -22,7 +25,7 @@ final case class Server(
 
 object Server:
   val layer: ZLayer[
-    ServerConfig & DatabaseMigration & PostRoutes,
+    ServerConfig & DatabaseMigration & PostRoutes & LocationRoutes,
     Nothing,
     Server,
   ] =
