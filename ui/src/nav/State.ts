@@ -63,3 +63,5 @@ export interface State {
 export const stateCodes: StateCode[] = Object.keys(stateLabels) as StateCode[];
 export const states: State[] = Object.entries(stateLabels).map(([code, label]) => ({code: code as StateCode, name: label}))
 
+export const getStateName = (code: StateCode) => stateLabels[code];
+

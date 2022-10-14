@@ -5,12 +5,12 @@ import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
 import Add from '@mui/icons-material/Add';
 import Link from "next/link";
-import {StateSelect} from "./StateSelect";
 import {useSelectedState} from "../location/SelectedState";
+import {LocationSelect} from "../location/LocationSelect";
+import {useSelectedLocation} from "../location/SelectedLocation";
 
 export default function NavBar() {
-    const {selectedState, setSelectedState} = useSelectedState();
-
+    const {selectedLocation, setSelectedLocation} = useSelectedLocation();
     return (
         <Box sx={{flexGrow: 1}}>
             <AppBar position="fixed">
@@ -29,12 +29,10 @@ export default function NavBar() {
                         mx: {xs: 1, sm: 2},
                         width: 140
                     }}>
-                        <StateSelect
-                            value={selectedState}
-                            label=""
-                            onChange={(state) => {
-                                setSelectedState(state)
-                            }}/>
+                        <LocationSelect
+                            value={selectedLocation}
+                            onChange={setSelectedLocation}
+                        />
                     </Box>
                     <Box sx={{flexGrow: 1}}/>
                     <Box sx={{display: {sm: 'flex'}, ml: 2}}>

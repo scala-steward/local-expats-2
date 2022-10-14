@@ -6,6 +6,7 @@ import {AppProps} from "next/app";
 import {ReactQueryDevtools} from "@tanstack/react-query-devtools";
 import {QueryClient} from "@tanstack/query-core";
 import {QueryClientProvider} from "@tanstack/react-query";
+import {SelectedLocationProvider} from "../src/location/SelectedLocation";
 import {SelectedStateProvider} from "../src/location/SelectedState";
 
 const theme = createTheme();
@@ -24,8 +25,10 @@ export default function MyApp({Component, pageProps}: AppProps) {
 
             <QueryClientProvider client={queryClient}>
                 <SelectedStateProvider>
-                    <NavBar/>
-                    <Component {...pageProps} />
+                    <SelectedLocationProvider>
+                        <NavBar/>
+                        <Component {...pageProps} />
+                    </SelectedLocationProvider>
                 </SelectedStateProvider>
                 <ReactQueryDevtools/>
             </QueryClientProvider>
