@@ -10,7 +10,7 @@ import zio.json.*
 case class CreatePostDto(
     title: String,
     message: Option[String],
-    locationId: Option[LocationId],
+    locationId: LocationId,
 ):
   def toCreatePost: CreatePost =
     CreatePost(title, message, locationId)

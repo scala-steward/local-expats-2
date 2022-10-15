@@ -6,7 +6,11 @@ import com.nepalius.location.domain.Location.LocationId
 import com.nepalius.post.api.PostDto
 import zio.json.{DeriveJsonEncoder, JsonEncoder}
 
-case class LocationDto(id: LocationId, state: State, city: Option[String])
+case class LocationDto(
+    id: LocationId,
+    state: Option[State],
+    city: Option[String],
+)
 
 object LocationDto:
   given JsonEncoder[LocationDto] = DeriveJsonEncoder.gen[LocationDto]

@@ -38,7 +38,8 @@ final case class PostRoutes(postService: PostService):
     val pageable = ApiUtils.parsePageable(req)
     val locationIdParam =
       req.url.queryParams.get("locationId").flatMap(_.headOption)
-    val locationId = locationIdParam.map(_.toLong)
+    val locationId =
+      locationIdParam.map(_.toLong).getOrElse(1L) // 1 = US Location
     for
       posts <- postService.getAll(pageable, locationId)
       dtos = posts.map(PostDto.make)

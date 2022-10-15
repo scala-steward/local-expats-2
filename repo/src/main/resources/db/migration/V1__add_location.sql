@@ -1,12 +1,14 @@
 CREATE TABLE location (
     id    BIGINT PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
-    state varchar NOT NULL,
+    state varchar,
     city  VARCHAR,
+    CONSTRAINT city_should_have_state CHECK (state IS NOT NULL OR city IS NULL),
     CONSTRAINT unique_state_city UNIQUE (state, city) -- Add "NULLS NOT DISTINCT" in Postgres 15
 );
 
 INSERT INTO location(state, city)
-VALUES ('AL', NULL),
+VALUES (NULL, NULL), -- US
+    ('AL', NULL),
     ('AK', NULL),
     ('AZ', NULL),
     ('AR', NULL),

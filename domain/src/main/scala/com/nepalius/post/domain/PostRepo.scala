@@ -10,7 +10,7 @@ trait PostRepo:
   def getOne(id: PostId): Task[Option[PostWithComments]]
   def getAll(
       pageable: Pageable,
-      locationId: Option[LocationId],
+      locationId: LocationId,
   ): Task[List[Post]]
   def create(createPost: CreatePost): Task[Post]
   def addComment(

@@ -16,7 +16,7 @@ final case class PostServiceLive(postRepo: PostRepo) extends PostService:
     postRepo.getOne(id)
   override def getAll(
       pageable: Pageable,
-      locationId: Option[LocationId],
+      locationId: LocationId,
   ): Task[List[Post]] =
     postRepo.getAll(pageable, locationId)
   override def create(createPost: CreatePost): Task[Post] =

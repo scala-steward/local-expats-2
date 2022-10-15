@@ -11,7 +11,7 @@ case class Post(
     id: PostId,
     title: String,
     message: Option[String],
-    locationId: Option[LocationId],
+    locationId: LocationId,
     createdAt: ZonedDateTime,
 )
 

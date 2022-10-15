@@ -2,17 +2,21 @@ import * as React from 'react';
 import {FC} from 'react';
 import TextField from '@mui/material/TextField';
 import Autocomplete from '@mui/material/Autocomplete';
-import {getLocationLabel, LocationDto, US} from "./LocationDto";
+import {getLocationLabel, LocationDto} from "./LocationDto";
 import {isStateCode} from "../nav/State";
-import {SelectedLocation, useSelectedLocation} from "./SelectedLocation";
+import {useSelectedLocation} from "./SelectedLocation";
 import {FilterOptionsState} from "@mui/material";
 
 type LocationSelectProps = {
-    value?: SelectedLocation;
-    onChange: (selectedLocation: SelectedLocation) => void;
+    label?: string;
+    error?: boolean
+    value?: LocationDto;
+    onChange: (selectedLocation: LocationDto) => void;
 }
 
 export const LocationSelect: FC<LocationSelectProps> = ({
+    label,
+    error,
     value,
     onChange
 }) => {
@@ -23,18 +27,22 @@ export const LocationSelect: FC<LocationSelectProps> = ({
             getOptionLabel={getLocationLabel}
             options={locations}
             value={value}
+            disableClearable
             onChange={(_, location) => {
                 onChange(location)
             }}
-            groupBy={(location) => location.state}
+            groupBy={(location) => location.state || ''}
             filterOptions={
                 (locations: LocationDto[], state: FilterOptionsState<LocationDto>) => {
                     const input = state.inputValue.toUpperCase();
                     return locations.filter(
                         (location) =>
-                            location.state.includes(input)
+                            location.state?.includes(input)
                             || state.getOptionLabel(location).toUpperCase().includes(input)
                     ).sort((l1, l2) => {
+                        if (!l1.state) {
+                            return -1;
+                        }
                         // Put the state code match first
                         if (!isStateCode(input)) {
                             return 0;
@@ -48,11 +56,13 @@ export const LocationSelect: FC<LocationSelectProps> = ({
             }
             renderInput={(params) => (
                 <TextField
+                    required
+                    label={label}
                     {...params}
-                    label={US}
                     InputProps={{
                         ...params.InputProps,
                     }}
+                    error={error}
                 />
             )}
         />

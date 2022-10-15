@@ -70,9 +70,12 @@ export const CreatePost: FC = () => {
                             render={
                                 ({field: {onChange}}) =>
                                     <LocationSelect
+                                        label="Post in"
                                         onChange={(location) => {
                                             onChange(location?.id)
-                                        }}/>
+                                        }}
+                                        error={!!errors.locationId}
+                                    />
                             }
                         />
                     </Grid>

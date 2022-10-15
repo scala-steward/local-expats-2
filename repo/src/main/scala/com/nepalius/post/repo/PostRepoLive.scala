@@ -30,7 +30,7 @@ final case class PostRepoLive(dataSource: DataSource) extends PostRepo:
 
   override def getAll(
       pageable: Pageable,
-      locationId: Option[LocationId],
+      locationId: LocationId,
   ): ZIO[Any, SQLException, List[Post]] =
     run {
       query[Post]

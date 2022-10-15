@@ -15,7 +15,7 @@ case class PostDto(
     id: PostId,
     title: String,
     message: Option[String],
-    locationId: Option[LocationId],
+    locationId: LocationId,
     createdAt: ZonedDateTime,
 )
 

@@ -3,23 +3,23 @@ import {LocationDto} from "./LocationDto";
 import {get} from "../util/Fetch";
 import {useQuery} from "@tanstack/react-query";
 
-export type LocationId = number | undefined;
-export type SelectedLocation = LocationDto | null;
-type SetSelectedLocation = (selectedLocation: SelectedLocation) => void;
+export type LocationId = number;
+type SetSelectedLocation = (selectedLocation: LocationDto) => void;
 type SetSelectedLocationId = (selectedLocationId: LocationId) => void;
 
 type UseSelectedLocation = {
     locations: readonly LocationDto[]
-    selectedLocation: SelectedLocation;
+    selectedLocation: LocationDto;
     setSelectedLocation: SetSelectedLocation;
     setSelectedLocationId: SetSelectedLocationId;
-    getLocation: (locationId: LocationId) => SelectedLocation;
+    getLocation: (locationId: LocationId) => LocationDto;
 }
 
 const SelectedLocationContext = createContext<UseSelectedLocation | undefined>(undefined);
 
 export const SelectedLocationProvider: FC<PropsWithChildren> = ({children}) => {
-    const [selectedLocation, setSelectedLocation] = useState<SelectedLocation>(null);
+    const us = {id: 1};
+    const [selectedLocation, setSelectedLocation] = useState<LocationDto>(us);
     const fetchLocations = () => get<LocationDto[]>('/api/locations');
     const {data} = useQuery(['locations'], fetchLocations, {
         refetchOnWindowFocus: false,
@@ -28,11 +28,16 @@ export const SelectedLocationProvider: FC<PropsWithChildren> = ({children}) => {
         staleTime: Infinity,
     });
     const locations = data ?? [];
-    const getLocation = (locationId: LocationId) => locations.find(({id}) => id === locationId) ?? null;
+    const getLocation = (locationId: LocationId): LocationDto => {
+        const location = locations.find(({id}) => id === locationId);
+        if (!location) {
+            throw new Error(`Unknown locationId: ${locationId}`)
+        }
+        return location
+    };
 
     const setSelectedLocationId = (locationId: LocationId) => {
-        const location = locationId ? getLocation(locationId) : null;
-        setSelectedLocation(location);
+        setSelectedLocation(getLocation(locationId));
     }
 
     return (
