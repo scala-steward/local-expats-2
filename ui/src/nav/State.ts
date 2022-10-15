@@ -1,5 +1,4 @@
 export const stateLabels = Object.freeze({
-    US: "United States",
     AL: "Alabama",
     AK: "Alaska",
     AZ: "Arizona",

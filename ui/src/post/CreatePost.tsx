@@ -6,15 +6,15 @@ import {Controller, useForm} from 'react-hook-form';
 import Box from "@mui/material/Box";
 import {useRouter} from "next/router";
 import {FC} from "react";
-import {StateSelect} from "../nav/StateSelect";
-import {StateCode} from "../nav/State";
 import {PostDto} from "./PostDto";
 import {post} from "../util/Fetch";
+import {LocationId} from "../location/SelectedLocation";
+import {LocationSelect} from "../location/LocationSelect";
 
 type CreatePostDto = {
     title: string,
     message?: string,
-    state: StateCode,
+    locationId: LocationId,
 };
 
 export const CreatePost: FC = () => {
@@ -63,16 +63,15 @@ export const CreatePost: FC = () => {
                     </Grid>
                     <Grid item xs={12}>
                         <Controller
-                            name="state"
+                            name="locationId"
                             control={control}
                             rules={{required: true}}
                             defaultValue={undefined}
                             render={
                                 ({field: {onChange}}) =>
-                                    <StateSelect
-                                        error={!!errors.state}
-                                        onChange={(state) => {
-                                            onChange(state)
+                                    <LocationSelect
+                                        onChange={(location) => {
+                                            onChange(location?.id)
                                         }}/>
                             }
                         />

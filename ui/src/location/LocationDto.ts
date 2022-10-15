@@ -7,9 +7,10 @@ export type LocationDto = {
     city?: string;
 }
 
+export const US = "United States";
 export const getLocationLabel = (location: SelectedLocation) => {
     if (!location) {
-        return "United States";
+        return US;
     }
     return location.city ? `${location.state} / ${location.city}` : getStateName(location.state);
 }

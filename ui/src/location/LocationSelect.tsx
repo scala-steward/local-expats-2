@@ -2,13 +2,13 @@ import * as React from 'react';
 import {FC} from 'react';
 import TextField from '@mui/material/TextField';
 import Autocomplete from '@mui/material/Autocomplete';
-import {getLocationLabel, LocationDto} from "./LocationDto";
-import {getStateName, isStateCode} from "../nav/State";
+import {getLocationLabel, LocationDto, US} from "./LocationDto";
+import {isStateCode} from "../nav/State";
 import {SelectedLocation, useSelectedLocation} from "./SelectedLocation";
 import {FilterOptionsState} from "@mui/material";
 
 type LocationSelectProps = {
-    value: SelectedLocation;
+    value?: SelectedLocation;
     onChange: (selectedLocation: SelectedLocation) => void;
 }
 
@@ -49,7 +49,7 @@ export const LocationSelect: FC<LocationSelectProps> = ({
             renderInput={(params) => (
                 <TextField
                     {...params}
-                    label="United States"
+                    label={US}
                     InputProps={{
                         ...params.InputProps,
                     }}
