@@ -2,6 +2,7 @@ import {createContext, FC, PropsWithChildren, useContext, useState} from "react"
 import {LocationDto} from "./LocationDto";
 import {get} from "../util/Fetch";
 import {useQuery} from "@tanstack/react-query";
+import {Loading} from "../util/Loading";
 
 export type LocationId = number;
 type SetSelectedLocation = (selectedLocation: LocationDto) => void;
@@ -21,12 +22,17 @@ export const SelectedLocationProvider: FC<PropsWithChildren> = ({children}) => {
     const us = {id: 1};
     const [selectedLocation, setSelectedLocation] = useState<LocationDto>(us);
     const fetchLocations = () => get<LocationDto[]>('/api/locations');
-    const {data} = useQuery(['locations'], fetchLocations, {
+    const {isLoading, data} = useQuery(['locations'], fetchLocations, {
         refetchOnWindowFocus: false,
         refetchOnMount: false,
         refetchOnReconnect: false,
         staleTime: Infinity,
     });
+
+    if (isLoading) {
+        return <Loading/>
+    }
+
     const locations = data ?? [];
     const getLocation = (locationId: LocationId): LocationDto => {
         const location = locations.find(({id}) => id === locationId);
