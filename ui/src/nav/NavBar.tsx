@@ -9,16 +9,17 @@ import {LocationSelect} from "../location/LocationSelect";
 import {useSelectedLocation} from "../location/SelectedLocation";
 
 export default function NavBar() {
-    const {selectedLocation, setSelectedLocation} = useSelectedLocation();
+    const {selectedLocation, setSelectedLocation, setSelectedLocationToDefault} = useSelectedLocation();
     return (
-        <Box sx={{flexGrow: 1}}>
+        <Box>
             <AppBar position="fixed">
                 <Toolbar>
                     <Link href="/">
                         <Typography
                             variant="h6"
                             noWrap
-                            component="div"
+                            sx={{cursor: "pointer"}}
+                            onClick={setSelectedLocationToDefault}
                         >
                             NepaliUS
                         </Typography>

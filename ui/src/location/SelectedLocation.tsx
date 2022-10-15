@@ -12,6 +12,7 @@ type UseSelectedLocation = {
     locations: readonly LocationDto[]
     selectedLocation: LocationDto;
     setSelectedLocation: SetSelectedLocation;
+    setSelectedLocationToDefault: () => void;
     setSelectedLocationId: SetSelectedLocationId;
     getLocation: (locationId: LocationId) => LocationDto;
 }
@@ -37,12 +38,21 @@ export const SelectedLocationProvider: FC<PropsWithChildren> = ({children}) => {
         return location
     };
 
+    const setSelectedLocationToDefault = () => setSelectedLocation(US);
     const setSelectedLocationId = (locationId: LocationId) => {
         setSelectedLocation(getLocation(locationId));
     }
 
     return (
-        <SelectedLocationContext.Provider value={{isLoading, locations, getLocation, selectedLocation, setSelectedLocation, setSelectedLocationId}}>
+        <SelectedLocationContext.Provider value={{
+            isLoading,
+            locations,
+            selectedLocation,
+            getLocation,
+            setSelectedLocation,
+            setSelectedLocationId,
+            setSelectedLocationToDefault
+        }}>
             {children}
         </SelectedLocationContext.Provider>
     );
