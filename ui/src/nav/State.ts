@@ -60,8 +60,8 @@ export interface State {
     name: string
 }
 
-export const stateCodes: StateCode[] = Object.keys(stateLabels) as StateCode[];
+const stateKeys = Object.keys(stateLabels);
+export const stateCodes: StateCode[] = stateKeys as StateCode[];
+export const isStateCode = (code: string): code is StateCode => stateKeys.includes(code);
 export const states: State[] = Object.entries(stateLabels).map(([code, label]) => ({code: code as StateCode, name: label}))
-
 export const getStateName = (code: StateCode) => stateLabels[code];
-

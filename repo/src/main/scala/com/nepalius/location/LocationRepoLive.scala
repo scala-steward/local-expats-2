@@ -8,10 +8,14 @@ import io.getquill.*
 import zio.*
 import com.nepalius.location.State
 import com.nepalius.location.StateDbCodec.given
+import io.getquill.Ord.{asc, ascNullsFirst}
 
 final case class LocationRepoLive(dataSource: DataSource) extends LocationRepo:
   override def getAll: Task[List[Location]] =
-    run(query[Location])
+    run {
+      query[Location]
+        .sortBy(l => (l.state, l.city))(Ord(asc, ascNullsFirst))
+    }
       .provideEnvironment(ZEnvironment(dataSource))
 
 object LocationRepoLive:

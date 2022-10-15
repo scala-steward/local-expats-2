@@ -6,7 +6,7 @@ import {useQuery} from "@tanstack/react-query";
 export type SelectedLocation = LocationDto | null;
 type SetSelectedLocation = (selectedLocation: SelectedLocation) => void;
 type UseSelectedLocation = {
-    locations: LocationDto[]
+    locations: readonly LocationDto[]
     selectedLocation: SelectedLocation;
     setSelectedLocation: SetSelectedLocation;
 }
