@@ -51,7 +51,7 @@ export const Posts: FC = () => {
             loader={<Loading/>}
             endMessage={
                 <p style={{textAlign: 'center'}}>
-                    <b>Yay! you're all caught up.</b>
+                    <b>Yay! you are all caught up.</b>
                 </p>
             }
         >
