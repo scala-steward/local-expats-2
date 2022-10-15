@@ -5,7 +5,6 @@ import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
 import Add from '@mui/icons-material/Add';
 import Link from "next/link";
-import {useSelectedState} from "../location/SelectedState";
 import {LocationSelect} from "../location/LocationSelect";
 import {useSelectedLocation} from "../location/SelectedLocation";
 
