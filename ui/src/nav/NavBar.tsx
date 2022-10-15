@@ -18,7 +18,10 @@ export default function NavBar() {
                         <Typography
                             variant="h6"
                             noWrap
-                            sx={{cursor: "pointer"}}
+                            sx={{
+                                cursor: "pointer",
+                                caretColor: "transparent"
+                            }}
                             onClick={setSelectedLocationToDefault}
                         >
                             NepaliUS
