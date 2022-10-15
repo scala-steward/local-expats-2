@@ -4,17 +4,18 @@ import {useInfiniteQuery} from "@tanstack/react-query";
 import {Post} from "./Post";
 import InfiniteScroll from "react-infinite-scroll-component";
 import {Loading} from "../util/Loading";
-import {useSelectedState} from "../location/SelectedState";
 import {get} from "../util/Fetch";
+import {useSelectedLocation} from "../location/SelectedLocation";
 
 export const Posts: FC = () => {
     const pageSize = 10;
 
-    const {selectedState: state} = useSelectedState();
+    const {selectedLocation} = useSelectedLocation();
+    const locationId = selectedLocation?.id;
 
     const fetchPosts = ({pageParam: lastId = undefined}): Promise<PostDto[]> => {
         const params = {
-            state,
+            locationId,
             pageSize,
             lastId,
         }
@@ -28,7 +29,7 @@ export const Posts: FC = () => {
         fetchNextPage,
         hasNextPage,
         isFetchingNextPage,
-    } = useInfiniteQuery(['posts', state], fetchPosts, {
+    } = useInfiniteQuery(['posts', locationId], fetchPosts, {
         getNextPageParam: (lastPage) => lastPage.length === pageSize ? lastPage[lastPage.length - 1]?.id : undefined,
     })
 
