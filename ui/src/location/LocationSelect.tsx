@@ -37,7 +37,8 @@ export const LocationSelect: FC<LocationSelectProps> = ({
                     const input = state.inputValue.toUpperCase();
                     return locations.filter(
                         (location) =>
-                            location.state?.includes(input)
+                            (input === 'US' && !location.state)
+                            || location.state?.includes(input)
                             || state.getOptionLabel(location).toUpperCase().includes(input)
                     ).sort((l1, l2) => {
                         if (!l1.state) {
