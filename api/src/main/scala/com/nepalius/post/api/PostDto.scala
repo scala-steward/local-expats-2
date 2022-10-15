@@ -1,7 +1,9 @@
 package com.nepalius.post.api
 
-import com.nepalius.location.State
 import com.nepalius.location.StateJsonCodec.given
+import com.nepalius.location.domain.Location
+import com.nepalius.location.domain.Location.LocationId
+import com.nepalius.location.{LocationDto, State}
 import com.nepalius.post.domain.Post
 import com.nepalius.post.domain.Post.PostId
 import zio.*
@@ -13,7 +15,7 @@ case class PostDto(
     id: PostId,
     title: String,
     message: Option[String],
-    state: State,
+    locationId: Option[LocationId],
     createdAt: ZonedDateTime,
 )
 
@@ -25,7 +27,7 @@ object PostDto {
       post.id,
       post.title,
       post.message,
-      post.state,
+      post.locationId,
       post.createdAt,
     )
 

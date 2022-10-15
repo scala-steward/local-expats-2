@@ -1,9 +1,9 @@
-import {StateCode} from "../nav/State";
+import {LocationId} from "../location/SelectedLocation";
 
 export interface PostDto {
     id: number;
     title: string;
     message?: string;
-    state: StateCode;
+    locationId: LocationId;
     createdAt: string;
 }

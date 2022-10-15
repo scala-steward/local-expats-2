@@ -2,7 +2,7 @@ import * as React from 'react';
 import {FC} from 'react';
 import TextField from '@mui/material/TextField';
 import Autocomplete from '@mui/material/Autocomplete';
-import {LocationDto} from "./LocationDto";
+import {getLocationLabel, LocationDto} from "./LocationDto";
 import {getStateName, isStateCode} from "../nav/State";
 import {SelectedLocation, useSelectedLocation} from "./SelectedLocation";
 import {FilterOptionsState} from "@mui/material";
@@ -17,9 +17,6 @@ export const LocationSelect: FC<LocationSelectProps> = ({
     onChange
 }) => {
     const {locations} = useSelectedLocation();
-    const getLocationLabel = ({state, city}: LocationDto) =>
-        city ? `${state} / ${city}` : getStateName(state)
-
     return (
         <Autocomplete
             isOptionEqualToValue={(option, value) => option.id === value.id}

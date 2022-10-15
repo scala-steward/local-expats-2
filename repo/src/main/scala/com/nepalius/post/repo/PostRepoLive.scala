@@ -2,6 +2,7 @@ package com.nepalius.post.repo
 import com.nepalius.config.DatabaseContext.*
 import com.nepalius.location.State
 import com.nepalius.location.StateDbCodec.given
+import com.nepalius.location.domain.Location.LocationId
 import com.nepalius.post.domain.*
 import com.nepalius.post.domain.Post.PostId
 import com.nepalius.util.Pageable
@@ -29,17 +30,13 @@ final case class PostRepoLive(dataSource: DataSource) extends PostRepo:
 
   override def getAll(
       pageable: Pageable,
-      state: State,
+      locationId: Option[LocationId],
   ): ZIO[Any, SQLException, List[Post]] =
     run {
       query[Post]
         .sortBy(_.id)(Ord.desc)
         .take(lift(pageable.pageSize))
-        .filter(p =>
-          if lift(state) == lift(State.US)
-          then true
-          else p.state == lift(state),
-        )
+        .filter(_.locationId == lift(locationId))
         .filter(_.id < lift(pageable.lastId))
     }
       .provideEnvironment(ZEnvironment(dataSource))
@@ -50,7 +47,7 @@ final case class PostRepoLive(dataSource: DataSource) extends PostRepo:
         .insert(
           _.title -> lift(post.title),
           _.message -> lift(post.message),
-          _.state -> lift(post.state),
+          _.locationId -> lift(post.locationId),
         )
         .returningGenerated(p => (p.id, p.createdAt))
     }
@@ -60,7 +57,7 @@ final case class PostRepoLive(dataSource: DataSource) extends PostRepo:
           id,
           post.title,
           post.message,
-          post.state,
+          post.locationId,
           createdAt,
         ),
       )

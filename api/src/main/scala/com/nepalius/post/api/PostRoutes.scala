@@ -2,6 +2,7 @@ package com.nepalius.post.api
 
 import com.nepalius.location.State
 import com.nepalius.post.domain.Post.PostId
+import com.nepalius.location.domain.Location.LocationId
 import com.nepalius.post.domain.{Post, PostService}
 import com.nepalius.util.ApiUtils.parseBody
 import com.nepalius.util.{ApiUtils, Pageable}
@@ -35,10 +36,11 @@ final case class PostRoutes(postService: PostService):
 
   private def getAll(req: Request) = {
     val pageable = ApiUtils.parsePageable(req)
-    val stateParam = req.url.queryParams.get("state").flatMap(_.headOption)
-    val state = stateParam.map(State.valueOf).getOrElse(State.US)
+    val locationIdParam =
+      req.url.queryParams.get("locationId").flatMap(_.headOption)
+    val locationId = locationIdParam.map(_.toLong)
     for
-      posts <- postService.getAll(pageable, state)
+      posts <- postService.getAll(pageable, locationId)
       dtos = posts.map(PostDto.make)
     yield Response.json(dtos.toJson)
   }

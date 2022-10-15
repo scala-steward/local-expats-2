@@ -3,12 +3,17 @@ import {LocationDto} from "./LocationDto";
 import {get} from "../util/Fetch";
 import {useQuery} from "@tanstack/react-query";
 
+export type LocationId = number | undefined;
 export type SelectedLocation = LocationDto | null;
 type SetSelectedLocation = (selectedLocation: SelectedLocation) => void;
+type SetSelectedLocationId = (selectedLocationId: LocationId) => void;
+
 type UseSelectedLocation = {
     locations: readonly LocationDto[]
     selectedLocation: SelectedLocation;
     setSelectedLocation: SetSelectedLocation;
+    setSelectedLocationId: SetSelectedLocationId;
+    getLocation: (locationId: LocationId) => SelectedLocation;
 }
 
 const SelectedLocationContext = createContext<UseSelectedLocation | undefined>(undefined);
@@ -23,8 +28,15 @@ export const SelectedLocationProvider: FC<PropsWithChildren> = ({children}) => {
         staleTime: Infinity,
     });
     const locations = data ?? [];
+    const getLocation = (locationId: LocationId) => locations.find(({id}) => id === locationId) ?? null;
+
+    const setSelectedLocationId = (locationId: LocationId) => {
+        const location = locationId ? getLocation(locationId) : null;
+        setSelectedLocation(location);
+    }
+
     return (
-        <SelectedLocationContext.Provider value={{locations, selectedLocation, setSelectedLocation}}>
+        <SelectedLocationContext.Provider value={{locations, getLocation, selectedLocation, setSelectedLocation, setSelectedLocationId}}>
             {children}
         </SelectedLocationContext.Provider>
     );

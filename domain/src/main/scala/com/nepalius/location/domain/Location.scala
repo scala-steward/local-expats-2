@@ -1,5 +1,9 @@
 package com.nepalius.location.domain
 
 import com.nepalius.location.State
+import com.nepalius.location.domain.Location.LocationId
 
-case class Location(state: State, city: Option[String])
+case class Location(id: LocationId, state: State, city: Option[String])
+
+object Location:
+  type LocationId = Long;
