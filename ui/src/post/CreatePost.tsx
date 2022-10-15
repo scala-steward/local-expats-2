@@ -72,7 +72,7 @@ export const CreatePost: FC = () => {
                                     <LocationSelect
                                         label="Post in"
                                         onChange={(location) => {
-                                            onChange(location?.id)
+                                            onChange(location.id)
                                         }}
                                         error={!!errors.locationId}
                                     />

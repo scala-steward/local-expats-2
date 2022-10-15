@@ -2,7 +2,7 @@ import * as React from 'react';
 import {FC} from 'react';
 import TextField from '@mui/material/TextField';
 import Autocomplete from '@mui/material/Autocomplete';
-import {getLocationLabel, LocationDto} from "./LocationDto";
+import {getLocationLabel, LocationDto, US} from "./LocationDto";
 import {isStateCode} from "../nav/State";
 import {useSelectedLocation} from "./SelectedLocation";
 import {FilterOptionsState} from "@mui/material";
@@ -26,10 +26,10 @@ export const LocationSelect: FC<LocationSelectProps> = ({
             isOptionEqualToValue={(option, value) => option.id === value.id}
             getOptionLabel={getLocationLabel}
             options={locations}
+            disableClearable={!value || value === US}
             value={value}
-            disableClearable
             onChange={(_, location) => {
-                onChange(location)
+                onChange(location ?? US)
             }}
             groupBy={(location) => location.state || ''}
             filterOptions={

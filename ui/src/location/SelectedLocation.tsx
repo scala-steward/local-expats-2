@@ -1,8 +1,7 @@
 import {createContext, FC, PropsWithChildren, useContext, useState} from "react";
-import {LocationDto} from "./LocationDto";
+import {LocationDto, US} from "./LocationDto";
 import {get} from "../util/Fetch";
 import {useQuery} from "@tanstack/react-query";
-import {Loading} from "../util/Loading";
 
 export type LocationId = number;
 type SetSelectedLocation = (selectedLocation: LocationDto) => void;
@@ -20,8 +19,7 @@ type UseSelectedLocation = {
 const SelectedLocationContext = createContext<UseSelectedLocation | undefined>(undefined);
 
 export const SelectedLocationProvider: FC<PropsWithChildren> = ({children}) => {
-    const us = {id: 1};
-    const [selectedLocation, setSelectedLocation] = useState<LocationDto>(us);
+    const [selectedLocation, setSelectedLocation] = useState<LocationDto>(US);
     const fetchLocations = () => get<LocationDto[]>('/api/locations');
     const {isLoading, data} = useQuery(['locations'], fetchLocations, {
         refetchOnWindowFocus: false,
