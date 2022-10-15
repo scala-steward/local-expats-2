@@ -5,8 +5,8 @@ import {LocationId, useSelectedLocation} from "../location/SelectedLocation";
 import {getLocationLabel} from "../location/LocationDto";
 
 export const LocationChip: FC<{ locationId: LocationId }> = ({locationId}) => {
-    const {getLocation, setSelectedLocationId} = useSelectedLocation();
-    const locationLabel = getLocationLabel(getLocation(locationId));
+    const {isLoading, getLocation, setSelectedLocationId} = useSelectedLocation();
+    const locationLabel = isLoading ? '' : getLocationLabel(getLocation(locationId));
     return (
         <Link href="/">
             <Chip
