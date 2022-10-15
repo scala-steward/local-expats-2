@@ -2,6 +2,7 @@ package com.nepalius.post.repo
 import com.nepalius.config.DatabaseContext.*
 import com.nepalius.location.State
 import com.nepalius.location.StateDbCodec.given
+import com.nepalius.location.domain.Location
 import com.nepalius.location.domain.Location.LocationId
 import com.nepalius.post.domain.*
 import com.nepalius.post.domain.Post.PostId
@@ -34,10 +35,18 @@ final case class PostRepoLive(dataSource: DataSource) extends PostRepo:
   ): ZIO[Any, SQLException, List[Post]] =
     run {
       query[Post]
+        .join(query[Location])
+        .on(_.locationId == _.id)
+        .join(query[Location])
+        .on({ case ((_, postLocation), filterLocation) =>
+          filterLocation.id == lift(locationId)
+          && (filterLocation.city.isEmpty || filterLocation.city == postLocation.city)
+          && (filterLocation.state.isEmpty || filterLocation.state == postLocation.state)
+        })
+        .map({ case ((post, _), _) => post })
+        .filter(_.id < lift(pageable.lastId))
         .sortBy(_.id)(Ord.desc)
         .take(lift(pageable.pageSize))
-        .filter(_.locationId == lift(locationId))
-        .filter(_.id < lift(pageable.lastId))
     }
       .provideEnvironment(ZEnvironment(dataSource))
 
