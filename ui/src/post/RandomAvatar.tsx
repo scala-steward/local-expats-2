@@ -51,13 +51,14 @@ export const RandomAvatar: FC<{ seed: number; }> = ({seed}) => {
     const color = colors[seed % colors.length];
     // @ts-ignore
     const bgcolor = color[500];
-    return <Avatar variant="rounded"
-                   sx={{
-                       bgcolor,
-                       height: 24, width: 24,
-                       display: 'inline',
-                       mr: 1
-                   }}>
-        <RandomIcon seed={seed}/>
-    </Avatar>;
+    return (
+        <Avatar variant="rounded"
+                sx={{
+                    bgcolor,
+                    height: 24, width: 24,
+                    mr: 1
+                }}>
+            <RandomIcon seed={seed}/>
+        </Avatar>
+    );
 };

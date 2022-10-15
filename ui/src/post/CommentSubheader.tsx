@@ -1,16 +1,16 @@
 import {FC} from "react";
 import {CommentDto} from "./CommentDto";
-import Typography from "@mui/material/Typography";
 import {DateChip} from "./DateChip";
 import {RandomAvatar} from "./RandomAvatar";
+import {SubheaderWrapper} from "./SubheaderWrapper";
 
 type CommentSubheaderProps = {
     comment: CommentDto
 }
 
 export const CommentSubheader: FC<CommentSubheaderProps> = ({comment}) =>
-    <Typography variant="caption">
+    <SubheaderWrapper>
         <RandomAvatar seed={comment.id}/>
         commented on
         <DateChip date={comment.createdAt}/>
-    </Typography>
+    </SubheaderWrapper>
