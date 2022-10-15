@@ -9,6 +9,7 @@ type SetSelectedLocation = (selectedLocation: LocationDto) => void;
 type SetSelectedLocationId = (selectedLocationId: LocationId) => void;
 
 type UseSelectedLocation = {
+    isLoading: boolean;
     locations: readonly LocationDto[]
     selectedLocation: LocationDto;
     setSelectedLocation: SetSelectedLocation;
@@ -29,10 +30,6 @@ export const SelectedLocationProvider: FC<PropsWithChildren> = ({children}) => {
         staleTime: Infinity,
     });
 
-    if (isLoading) {
-        return <Loading/>
-    }
-
     const locations = data ?? [];
     const getLocation = (locationId: LocationId): LocationDto => {
         const location = locations.find(({id}) => id === locationId);
@@ -47,7 +44,7 @@ export const SelectedLocationProvider: FC<PropsWithChildren> = ({children}) => {
     }
 
     return (
-        <SelectedLocationContext.Provider value={{locations, getLocation, selectedLocation, setSelectedLocation, setSelectedLocationId}}>
+        <SelectedLocationContext.Provider value={{isLoading, locations, getLocation, selectedLocation, setSelectedLocation, setSelectedLocationId}}>
             {children}
         </SelectedLocationContext.Provider>
     );
