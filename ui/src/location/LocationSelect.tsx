@@ -5,7 +5,7 @@ import Autocomplete from '@mui/material/Autocomplete';
 import {getLocationLabel, LocationDto, US} from "./LocationDto";
 import {isStateCode} from "../nav/State";
 import {useSelectedLocation} from "./SelectedLocation";
-import {FilterOptionsState} from "@mui/material";
+import {FilterOptionsState, Popper} from "@mui/material";
 
 type LocationSelectProps = {
     label?: string;
@@ -23,6 +23,14 @@ export const LocationSelect: FC<LocationSelectProps> = ({
     const {locations} = useSelectedLocation();
     return (
         <Autocomplete
+            PopperComponent={(props) =>
+                <Popper
+                    {...props}
+                    style={{
+                        width: '100%',
+                    }}
+                />
+            }
             isOptionEqualToValue={(option, value) => option.id === value.id}
             getOptionLabel={getLocationLabel}
             options={locations}
