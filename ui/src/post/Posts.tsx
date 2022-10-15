@@ -10,7 +10,7 @@ import {useSelectedLocation} from "../location/SelectedLocation";
 export const Posts: FC = () => {
     const pageSize = 10;
 
-    const {selectedLocation, isLoading: isLocationsLoading} = useSelectedLocation();
+    const {selectedLocation} = useSelectedLocation();
     const locationId = selectedLocation?.id;
 
     const fetchPosts = ({pageParam: lastId = undefined}): Promise<PostDto[]> => {
@@ -33,7 +33,7 @@ export const Posts: FC = () => {
         getNextPageParam: (lastPage) => lastPage.length === pageSize ? lastPage[lastPage.length - 1]?.id : undefined,
     })
 
-    if (isLoading || isLocationsLoading) {
+    if (isLoading) {
         return (<Loading/>);
     }
 
