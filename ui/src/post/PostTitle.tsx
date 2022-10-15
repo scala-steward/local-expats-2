@@ -9,7 +9,7 @@ type PostTitleProps = {
 
 export const PostTitle: FC<PostTitleProps> = ({post}) =>
     <Link href={`/posts/${post.id}`}>
-        <Typography variant="h6">
+        <Typography variant="h6" sx={{cursor: "pointer"}}>
             {post.title}
         </Typography>
     </Link>;

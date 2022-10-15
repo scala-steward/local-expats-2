@@ -37,7 +37,7 @@ export const Post: FC<PostProps> = ({
                 post.message &&
                 (
                     <Link href={`/posts/${post.id}`}>
-                        <CardContent sx={{mt: -3}}>
+                        <CardContent sx={{mt: -3, cursor: "pointer"}}>
                             <Typography
                                 variant="body1"
                             >
