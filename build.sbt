@@ -1,6 +1,6 @@
 ThisBuild / organization := "com.nepalius"
 ThisBuild / scalaVersion := "3.2.0"
-ThisBuild / version := "0.0.1-SNAPSHOT"
+ThisBuild / version := "0.0.1"
 
 val V = new {
   val Flyway = "9.4.0"
@@ -65,6 +65,14 @@ lazy val root = (project in file("."))
     ),
   )
   .dependsOn(domain, api, repo)
+  .enablePlugins(JavaAppPackaging)
+  .enablePlugins(DockerPlugin)
+  .settings(
+    Docker / packageName := "nepalius",
+    dockerBaseImage := "amazoncorretto:17.0.4-alpine",
+    dockerExposedPorts := Seq(9000),
+    dockerUpdateLatest := true,
+  )
 
 lazy val commonSettings = Seq(
   scalacOptions ++= Seq(
