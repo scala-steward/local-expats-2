@@ -6,7 +6,7 @@ import zio.config.typesafe.TypesafeConfigSource
 
 final case class AppConfig(server: ServerConfig, db: DatabaseConfig)
 
-final case class ServerConfig(host: String, port: Int)
+final case class ServerConfig(port: Int)
 
 object AppConfig:
   private def readAppConfig: IO[ReadError[String], AppConfig] = read {
