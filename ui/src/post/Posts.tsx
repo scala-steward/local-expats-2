@@ -29,7 +29,7 @@ export const Posts: FC = () => {
         fetchNextPage,
         hasNextPage,
         isFetchingNextPage,
-    } = useInfiniteQuery(['posts', locationId], fetchPosts, {
+    } = useInfiniteQuery(['posts', 'locationId', locationId], fetchPosts, {
         getNextPageParam: (lastPage) => lastPage.length === pageSize ? lastPage[lastPage.length - 1]?.id : undefined,
     })
 
