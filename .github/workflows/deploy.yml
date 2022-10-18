@@ -18,4 +18,4 @@ jobs:
         - name: Docker stage
           run: sbt Docker/stage
         - uses: superfly/flyctl-actions/setup-flyctl@master
-        - run: flyctl deploy --remote-only target/docker/stage
+        - run: flyctl deploy --remote-only
