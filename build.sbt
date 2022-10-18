@@ -69,7 +69,7 @@ lazy val root = (project in file("."))
   .enablePlugins(DockerPlugin)
   .settings(
     Docker / packageName := "nepalius",
-    dockerBaseImage := "amazoncorretto:17.0.4-alpine",
+    dockerBaseImage := "amazoncorretto:17",
     dockerExposedPorts := Seq(9000),
     dockerUpdateLatest := true,
   )
