@@ -55,7 +55,8 @@ npm run dev
 - [MUI](https://mui.com/) for UI components
 
 ### Development Approaches
+- [Effectful](https://www.edward-huang.com/functional-programming/scala/monad/2020/06/21/what-is-effect-or-effectful-mean-in-functional-programming/) [Functional Reactive Programming](https://blog.danlew.net/2017/07/27/an-introduction-to-functional-reactive-programming/)
 - [Domain Driven Design](https://martinfowler.com/bliki/DomainDrivenDesign.html)
 - [Hexagonal Architecture](https://alistair.cockburn.us/hexagonal-architecture/)
-
+- [Mobile First Design](https://developer.mozilla.org/en-US/docs/Web/Progressive_web_apps/Responsive/Mobile_first)
 
