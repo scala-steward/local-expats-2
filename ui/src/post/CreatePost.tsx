@@ -6,7 +6,7 @@ import {Controller, useForm} from 'react-hook-form';
 import Box from "@mui/material/Box";
 import {useRouter} from "next/router";
 import {FC} from "react";
-import {PostDto} from "./PostDto";
+import {getPostUrl, PostDto} from "./PostDto";
 import {post} from "../util/Fetch";
 import {LocationId} from "../location/SelectedLocation";
 import {LocationSelect} from "../location/LocationSelect";
@@ -23,7 +23,7 @@ export const CreatePost: FC = () => {
     const {register, handleSubmit, control, formState: {errors}} = useForm<CreatePostDto>();
     const onSubmit = (data: CreatePostDto) =>
         post<PostDto>('/api/posts', data)
-            .then(({id}) => router.push(`/posts/${id}`));
+            .then((post) => router.push(getPostUrl(post)));
 
     return (
         <Box

@@ -7,3 +7,5 @@ export interface PostDto {
     locationId: LocationId;
     createdAt: string;
 }
+
+export const getPostUrl = (post: PostDto) => `/posts/${post.id}`;

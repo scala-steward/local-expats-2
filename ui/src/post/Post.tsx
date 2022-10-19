@@ -3,7 +3,7 @@ import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import Typography from '@mui/material/Typography';
 import CardHeader from '@mui/material/CardHeader';
-import {PostDto} from "./PostDto";
+import {getPostUrl, PostDto} from "./PostDto";
 import {PostSubheader} from "./PostSubheader";
 import {CardActions} from "@mui/material";
 import {CommentDto} from "./CommentDto";
@@ -36,8 +36,8 @@ export const Post: FC<PostProps> = ({
             {
                 post.message &&
                 (
-                    <Link href={`/posts/${post.id}`}>
-                        <CardContent sx={{mt: -3, cursor: "pointer"}}>
+                    <Link href={getPostUrl(post)}>
+                        <CardContent sx={{mt: -3, mb: -2, cursor: "pointer"}}>
                             <Typography
                                 variant="body1"
                             >
