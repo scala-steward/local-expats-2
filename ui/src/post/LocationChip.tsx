@@ -3,21 +3,29 @@ import Link from "next/link";
 import Chip from "@mui/material/Chip";
 import {LocationId, useSelectedLocation} from "../location/SelectedLocation";
 import {getLocationLabel} from "../location/LocationDto";
+import Tooltip from "@mui/material/Tooltip";
+import {useSmallScreen} from "../util/useUtils";
 
 export const LocationChip: FC<{ locationId: LocationId }> = ({locationId}) => {
     const {isLoading, getLocation, setSelectedLocationId} = useSelectedLocation();
     const locationLabel = isLoading ? '' : getLocationLabel(getLocation(locationId));
+    const smallScreen = useSmallScreen();
     return (
         <Link href="/">
-            <Chip
-                sx={{mx: 1}}
-                clickable
-                color="primary"
-                label={locationLabel}
-                variant="outlined"
-                size="small"
-                onClick={() => setSelectedLocationId(locationId)}
-            />
+            <Tooltip title={locationLabel}>
+                <Chip
+                    clickable
+                    sx={{mx: 1 / 2}}
+                    style={{
+                        ...(smallScreen && {maxWidth: 110})
+                    }}
+                    color="primary"
+                    label={locationLabel}
+                    variant="outlined"
+                    size="small"
+                    onClick={() => setSelectedLocationId(locationId)}
+                />
+            </Tooltip>
         </Link>
     );
 }

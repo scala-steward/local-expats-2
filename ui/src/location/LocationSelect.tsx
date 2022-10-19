@@ -5,7 +5,8 @@ import Autocomplete from '@mui/material/Autocomplete';
 import {getLocationLabel, LocationDto, US} from "./LocationDto";
 import {isStateCode} from "../nav/State";
 import {useSelectedLocation} from "./SelectedLocation";
-import {FilterOptionsState, Popper, useMediaQuery, useTheme} from "@mui/material";
+import {FilterOptionsState, Popper} from "@mui/material";
+import {useSmallScreen} from "../util/useUtils";
 
 type LocationSelectProps = {
     label?: string;
@@ -21,7 +22,7 @@ export const LocationSelect: FC<LocationSelectProps> = ({
     onChange
 }) => {
     const {locations} = useSelectedLocation();
-    const smallScreen = useMediaQuery(useTheme().breakpoints.down('sm'));
+    const smallScreen = useSmallScreen();
     return (
         <Autocomplete
             PopperComponent={(props) =>

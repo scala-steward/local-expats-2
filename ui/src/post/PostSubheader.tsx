@@ -6,6 +6,7 @@ import {LocationChip} from "./LocationChip";
 import {RandomAvatar} from "./RandomAvatar";
 import Box from "@mui/material/Box";
 import {SubheaderWrapper} from "./SubheaderWrapper";
+import {SharePost} from "./SharePost";
 
 type PostSubheaderProps = {
     post: PostDto
@@ -18,4 +19,6 @@ export const PostSubheader: FC<PostSubheaderProps> = ({post}) =>
         <LocationChip locationId={post.locationId}/>
         on
         <DateChip date={post.createdAt}/>
+        <Box sx={{flexGrow: 1}}/>
+        <SharePost post={post}/>
     </SubheaderWrapper>;

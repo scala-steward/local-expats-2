@@ -56,7 +56,7 @@ export const RandomAvatar: FC<{ seed: number; }> = ({seed}) => {
                 sx={{
                     bgcolor,
                     height: 24, width: 24,
-                    mr: 1
+                    mr: 1 / 2
                 }}>
             <RandomIcon seed={seed}/>
         </Avatar>
