@@ -55,7 +55,8 @@ export const CreatePost: FC = () => {
                         <TextField
                             variant="outlined"
                             multiline
-                            rows={4}
+                            minRows={3}
+                            maxRows={6}
                             fullWidth
                             label="Message"
                             {...register('message')}

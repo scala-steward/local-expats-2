@@ -16,7 +16,7 @@ export const Comment: FC<CommentProps> = ({comment}) =>
                     subheader={<CommentSubheader comment={comment}/>}
         />
         <CardContent sx={{mt: -3, mb: -2}}>
-            <Typography variant="body1">
+            <Typography variant="body1" sx={{whiteSpace: "pre-line"}}>
                 {comment.message}
             </Typography>
         </CardContent>

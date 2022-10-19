@@ -40,6 +40,9 @@ export const Post: FC<PostProps> = ({
                         <CardContent sx={{mt: -3, mb: -2, cursor: "pointer"}}>
                             <Typography
                                 variant="body1"
+                                sx={{
+                                    whiteSpace: "pre-line"
+                                }}
                             >
                                 {post.message}
                             </Typography>

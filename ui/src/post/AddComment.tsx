@@ -33,6 +33,9 @@ export const AddComment: FC<AddCommentProps> = ({postId, onCommentedAdded}) => {
                         variant="outlined"
                         required
                         fullWidth
+                        multiline
+                        minRows={2}
+                        maxRows={6}
                         autoComplete="off"
                         {...register('message', {required: true, minLength: 2})}
                         error={!!errors.message}
