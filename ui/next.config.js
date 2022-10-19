@@ -1,5 +1,10 @@
 /** @type {import('next').NextConfig} */
-module.exports = {
+
+const withPWA = require('next-pwa')({
+    dest: 'public'
+});
+
+module.exports = withPWA({
     reactStrictMode: true,
     productionBrowserSourceMaps: true,
     rewrites() {
@@ -11,4 +16,4 @@ module.exports = {
             }
         ]
     }
-};
+});

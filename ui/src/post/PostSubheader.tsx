@@ -1,6 +1,5 @@
 import {FC} from "react";
 import {PostDto} from "./PostDto";
-import Typography from "@mui/material/Typography";
 import {DateChip} from "./DateChip";
 import {LocationChip} from "./LocationChip";
 import {RandomAvatar} from "./RandomAvatar";
