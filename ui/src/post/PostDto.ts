@@ -1,4 +1,5 @@
 import {LocationId} from "../location/SelectedLocation";
+import {replaceNonAlphaNumeric} from "../util/Utils";
 
 export interface PostDto {
     id: number;
@@ -8,4 +9,7 @@ export interface PostDto {
     createdAt: string;
 }
 
-export const getPostUrl = (post: PostDto) => `/posts/${post.id}`;
+const getTitleSlug = (post: PostDto) =>
+    replaceNonAlphaNumeric(post.title, "-").substring(0, 50);
+
+export const getPostUrl = (post: PostDto) => `/posts/${post.id}/${getTitleSlug(post)}`;

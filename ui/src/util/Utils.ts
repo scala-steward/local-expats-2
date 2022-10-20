@@ -8,4 +8,8 @@ export const createQueryParams = (params: Record<string, string | number | undef
 export const toUiDateString = (dateTimeFromServer: string): string =>
     new Date(dateTimeFromServer).toLocaleDateString();
 
-export const isHttps = () => (document.location.protocol === 'https:');
+export const isHttps = () =>
+    document.location.protocol === "https:";
+
+export const replaceNonAlphaNumeric = (text: string, replacement = "") =>
+    text.replace(/[\W_]+/g, replacement);

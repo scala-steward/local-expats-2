@@ -1,7 +1,7 @@
 import {useRouter} from 'next/router'
-import {PostDetail} from "../../src/post/PostDetail";
 import {NextPage} from "next";
 import {Loading} from "../../src/util/Loading";
+import {PostDetail} from "../../src/post/PostDetail";
 
 const PostDetailPage: NextPage = () => {
     const router = useRouter()
