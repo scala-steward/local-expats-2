@@ -1,10 +1,11 @@
 import {FC} from "react";
-import {getPostUrl, PostDto} from "./PostDto";
+import {getPostUrl} from "./PostDto";
 import Share from "@mui/icons-material/Share";
 import IconButton from "@mui/material/IconButton";
 import {isHttps} from "../util/Utils";
+import {PostOnlyProps} from "./PostOnlyProps";
 
-export const SharePost: FC<{ post: PostDto }> = ({post}) => {
+export const PostShare: FC<PostOnlyProps> = ({post}) => {
     // navigator.share is only available in https
     // Show Share in development
     const hideShare = !navigator.share && isHttps();
@@ -20,7 +21,7 @@ export const SharePost: FC<{ post: PostDto }> = ({post}) => {
     }
 
     return hideShare ? null : (
-        <IconButton onClick={share} sx={{mx: -1 / 2}}>
+        <IconButton onClick={share}>
             <Share fontSize="small"/>
         </IconButton>
     );

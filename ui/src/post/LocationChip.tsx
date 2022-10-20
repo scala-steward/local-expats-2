@@ -15,7 +15,7 @@ export const LocationChip: FC<{ locationId: LocationId }> = ({locationId}) => {
             <Tooltip title={locationLabel}>
                 <Chip
                     clickable
-                    sx={{mx: 1 / 2}}
+                    sx={{mx: 1}}
                     style={{
                         ...(smallScreen && {maxWidth: 110})
                     }}

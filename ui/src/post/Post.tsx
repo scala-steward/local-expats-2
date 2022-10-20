@@ -12,6 +12,7 @@ import {AddComment} from "./AddComment";
 import {PostTitle} from "./PostTitle";
 import Link from "next/link";
 import {PostWithCommentsDto} from "./PostWithCommentsDto";
+import {PostShare} from "./PostShare";
 
 type PostProps = {
     post: PostDto;
@@ -24,32 +25,28 @@ export const Post: FC<PostProps> = ({
     comments,
     onCommentedAdded,
 }) => {
-
     const showComments = comments !== undefined;
-
     return (
-        <Card sx={{margin: 1}} variant="outlined">
+        <Card sx={{m: 1}} variant="outlined">
             <CardHeader
                 title={<PostTitle post={post}/>}
                 subheader={<PostSubheader post={post}/>}
             />
-            {
-                post.message &&
-                (
-                    <Link href={getPostUrl(post)}>
-                        <CardContent sx={{mt: -3, mb: -2, cursor: "pointer"}}>
-                            <Typography
-                                variant="body1"
-                                sx={{
-                                    whiteSpace: "pre-line"
-                                }}
-                            >
-                                {post.message}
-                            </Typography>
-                        </CardContent>
-                    </Link>
-                )
-            }
+            <Link href={getPostUrl(post)}>
+                <CardContent sx={{my: -3, cursor: "pointer"}}>
+                    {post.message && <Typography
+                        variant="body1"
+                        sx={{
+                            whiteSpace: "pre-line"
+                        }}
+                    >
+                        {post.message}
+                    </Typography>}
+                </CardContent>
+            </Link>
+            <CardActions>
+                <PostShare post={post}/>
+            </CardActions>
 
             {showComments &&
                 comments.map(comment => <Comment key={comment.id} comment={comment}/>)}
@@ -59,7 +56,6 @@ export const Post: FC<PostProps> = ({
                     <AddComment postId={post.id} onCommentedAdded={onCommentedAdded}/>
                 </CardActions>
             }
-
         </Card>
     );
 };
