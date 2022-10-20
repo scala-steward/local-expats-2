@@ -7,6 +7,7 @@ import {ReactQueryDevtools} from "@tanstack/react-query-devtools";
 import {QueryClient} from "@tanstack/query-core";
 import {QueryClientProvider} from "@tanstack/react-query";
 import {SelectedLocationProvider} from "../src/location/SelectedLocation";
+import {PostBookmarksProvider} from "../src/post/PostBookmarks";
 
 const theme = createTheme();
 
@@ -48,8 +49,10 @@ export default function MyApp({Component, pageProps}: AppProps) {
 
             <QueryClientProvider client={queryClient}>
                 <SelectedLocationProvider>
-                    <NavBar/>
-                    <Component {...pageProps} />
+                    <PostBookmarksProvider>
+                        <NavBar/>
+                        <Component {...pageProps} />
+                    </PostBookmarksProvider>
                 </SelectedLocationProvider>
                 <ReactQueryDevtools/>
             </QueryClientProvider>

@@ -13,6 +13,7 @@ import {PostTitle} from "./PostTitle";
 import Link from "next/link";
 import {PostWithCommentsDto} from "./PostWithCommentsDto";
 import {PostShare} from "./PostShare";
+import {PostBookmark} from "./PostBookmark";
 
 type PostProps = {
     post: PostDto;
@@ -45,6 +46,7 @@ export const Post: FC<PostProps> = ({
                 </CardContent>
             </Link>
             <CardActions>
+                <PostBookmark post={post}/>
                 <PostShare post={post}/>
             </CardActions>
 
