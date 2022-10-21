@@ -7,7 +7,6 @@ import io.getquill.jdbczio.Quill
 import io.getquill.{PostgresZioJdbcContext, SnakeCase}
 import zio.*
 import zio.interop.catz.*
-import zio.managed.{ZManaged, ZManagedZIOSyntax}
 import doobie.util.transactor.Transactor
 import doobie.hikari.HikariTransactor.apply
 import doobie.hikari.HikariTransactor
@@ -32,21 +31,21 @@ object DoobieContext {
       }
   }
 
-  def transactor: ZManaged[Any, Throwable, Transactor[Task]] =
-    for {
-      // rt <- ZIO.runtime[Any].toManaged
-      ec <- ZIO.executor.map(_.asExecutionContext).toManaged
-      xa <- HikariTransactor
-        .newHikariTransactor[Task](
-          "org.postgresql.Driver",
-          "jdbc:postgresql://localhost:5432/nepalius",
-          "postgres",
-          "postgres",
-          ec, // await connection here
-        )
-        .toManaged
-    } yield xa
+  def transactor =
+    ZIO.executor
+      .map(_.asExecutionContext)
+      .flatMap(ec =>
+        HikariTransactor
+          .newHikariTransactor[Task](
+            "org.postgresql.Driver",
+            "jdbc:postgresql://localhost:5432/nepalius",
+            "postgres",
+            "postgres",
+            ec, // await connection here
+          )
+          .toScopedZIO,
+      )
 
   val liveTransactor: ZLayer[Any, Throwable, Transactor[Task]] =
-    transactor.toLayer
+    ZLayer.scoped(transactor)
 }

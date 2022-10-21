@@ -38,7 +38,6 @@ lazy val repo = project
       "org.tpolecat" %% "doobie-postgres" % V.Doobie,
       "org.tpolecat" %% "doobie-hikari" % V.Doobie,
       "dev.zio" %% "zio-interop-cats" % V.ZioCats,
-      "dev.zio" %% "zio-managed" % V.Zio,
     ),
   )
   .enablePlugins(FlywayPlugin)
