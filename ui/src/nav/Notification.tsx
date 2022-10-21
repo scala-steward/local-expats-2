@@ -1,7 +1,7 @@
 import IconButton from "@mui/material/IconButton";
 import {Badge, ListItemIcon, ListItemText, Menu, MenuItem} from "@mui/material";
 import {Notifications, QuestionAnswer} from "@mui/icons-material";
-import React, {FC, useState} from "react";
+import React, {FC, useEffect, useState} from "react";
 import {get} from "../util/Fetch";
 import {PostDto} from "../post/PostDto";
 import {useQuery} from "@tanstack/react-query";
@@ -9,23 +9,41 @@ import {usePostBookmarks} from "../post/PostBookmarks";
 import Tooltip from "@mui/material/Tooltip";
 import {PostLink} from "../post/PostLink";
 import {useSmallScreen} from "../util/useUtils";
+import {useLocalStorage} from "usehooks-ts";
 
 export const Notification: FC = () => {
+    const [lastChecked, setLastChecked] = useLocalStorage('notificationsLastChecked', "");
+
+    function getCurrentDateIso() {
+        return new Date().toISOString();
+    }
+
+    useEffect(() => {
+        if (lastChecked === "") {
+            setLastChecked(getCurrentDateIso());
+        }
+    }, []);
+
     const {postIds} = usePostBookmarks();
     const ids = postIds.join(',');
-    const fetchUpdatedPosts = () => get<PostDto[]>('/api/posts/updated', {
-        ids,
-        since: new Date().toISOString(),
-    });
-    const {data} = useQuery(['notifications', ids], fetchUpdatedPosts, {
+    const fetchUpdatedPosts = () => {
+        if (!postIds.length) {
+            return Promise.resolve([]);
+        }
+        return get<PostDto[]>('/api/posts/updated', {
+            ids,
+            since: lastChecked,
+        });
+    };
+    const {data} = useQuery(['notifications'], fetchUpdatedPosts, {
         refetchOnWindowFocus: false,
         refetchOnMount: false,
         refetchOnReconnect: false,
-        refetchInterval: 3 * 60 * 1000, // 3 minutes
+        refetchInterval: 2 * 60 * 1000, // 2 minutes
     });
-    const updatedPosts = data ?? [];
 
     const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);
+
     const handleOpenUserMenu = (event: React.MouseEvent<HTMLElement>) => {
         setAnchorElUser(event.currentTarget);
     };
@@ -33,12 +51,17 @@ export const Notification: FC = () => {
         setAnchorElUser(null);
     };
 
-    const smallScreen = useSmallScreen();
+    const handleNotificationClick = (event: React.MouseEvent<HTMLElement>) => {
+        handleOpenUserMenu(event);
+        setLastChecked(getCurrentDateIso());
+    }
 
+    const smallScreen = useSmallScreen();
+    const updatedPosts = data ?? [];
     return (
         <>
             <Tooltip title="Show notifications">
-                <IconButton onClick={handleOpenUserMenu}
+                <IconButton onClick={handleNotificationClick}
                             size="large"
                             color="inherit"
                 >
@@ -79,6 +102,13 @@ export const Notification: FC = () => {
                         </MenuItem>
                     </PostLink>
                 ))}
+                {updatedPosts.length === 0 &&
+                    <MenuItem onClick={handleCloseUserMenu}>
+                        <ListItemText primary="No new notifications at this time."
+                                      secondary="Bookmark posts to get notified.">
+                        </ListItemText>
+                    </MenuItem>
+                }
             </Menu>
         </>
     );
