@@ -10,6 +10,7 @@ import {getPostUrl, PostDto} from "./PostDto";
 import {post} from "../util/Fetch";
 import {LocationId} from "../location/SelectedLocation";
 import {LocationSelect} from "../location/LocationSelect";
+import {usePostBookmarks} from "./PostBookmarks";
 
 type CreatePostDto = {
     title: string,
@@ -19,11 +20,14 @@ type CreatePostDto = {
 
 export const CreatePost: FC = () => {
     const router = useRouter();
-
+    const {addBookmark} = usePostBookmarks();
     const {register, handleSubmit, control, formState: {errors}} = useForm<CreatePostDto>();
     const onSubmit = (data: CreatePostDto) =>
         post<PostDto>('/api/posts', data)
-            .then((post) => router.push(getPostUrl(post)));
+            .then((post) => {
+                addBookmark(post.id);
+                return router.push(getPostUrl(post));
+            });
 
     return (
         <Box
