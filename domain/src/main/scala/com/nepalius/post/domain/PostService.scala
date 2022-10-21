@@ -15,7 +15,7 @@ trait PostService:
       locationId: LocationId,
   ): Task[List[PostView]]
 
-  def getUpdated(ids: List[PostId], since: ZonedDateTime): Task[List[Post]]
+  def getUpdated(ids: List[PostId], since: ZonedDateTime): Task[List[PostView]]
 
   def create(postRequest: CreatePost): Task[Post]
   def addComment(

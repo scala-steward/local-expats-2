@@ -57,7 +57,7 @@ final case class PostRepoLive(
   override def getUpdated(
       ids: List[PostId],
       since: ZonedDateTime,
-  ): Task[List[Post]] = {
+  ): Task[List[PostView]] = {
     val idsNel = ids.toNel
     if idsNel.isEmpty
     then ZIO.succeed(List())
@@ -143,17 +143,20 @@ private object PostSql:
              AND (filter_location.city IS NULL OR filter_location.city = post_location.city)
              AND (filter_location.state IS NULL OR filter_location.state = post_location.state)
            WHERE post.id < ${pageable.lastId}
-        GROUP BY post.id, post.title, post.message, post.location_id, post.created_at
+        GROUP BY post.id
            ORDER BY post.id DESC
            LIMIT ${pageable.pageSize}
        """.query[PostView]
 
   def getUpdated(ids: NonEmptyList[PostId], since: ZonedDateTime) = {
     val q =
-      fr"""SELECT DISTINCT post.id, post.title, post.message, post.location_id AS locationId, post.created_at AS createdAt
+      fr"""SELECT post.id, post.title, post.message, post.location_id, post.created_at, COUNT(comment.id) AS no_of_comments
             FROM post
             JOIN comment ON post.id = comment.post_id
            WHERE comment.created_at > $since
-             AND """ ++ Fragments.in(fr"post.id", ids)
-    q.query[Post]
+             AND """ ++ Fragments.in(
+        fr"post.id",
+        ids,
+      ) ++ fr"""GROUP BY post.id"""
+    q.query[PostView]
   }

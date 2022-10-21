@@ -79,7 +79,7 @@ export const Notification: FC = () => {
                     <PostLink post={post} key={post.id}>
                         <MenuItem onClick={handleCloseUserMenu}>
                             <ListItemIcon>
-                                <Badge badgeContent={2} color="info">
+                                <Badge badgeContent={post.noOfComments} color="info">
                                     <QuestionAnswer fontSize="small"/>
                                 </Badge>
                             </ListItemIcon>
