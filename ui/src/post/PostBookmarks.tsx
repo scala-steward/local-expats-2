@@ -4,19 +4,31 @@ import {xor} from "lodash";
 
 type PostId = number;
 type UsePostBookmarks = {
-    isBookmarked: (postId: PostId) => boolean
-    toggleBookmark: (postId: PostId) => void
+    postIds: readonly PostId[];
+    isBookmarked: (postId: PostId) => boolean;
+    toggleBookmark: (postId: PostId) => void;
 }
 
 const PostBookmarksContext = createContext<UsePostBookmarks | undefined>(undefined);
 
 export const PostBookmarksProvider: FC<PropsWithChildren> = ({children}) => {
+    const defaultBookmarks = "[]";
     // Use IndexedDB if performance issue
-    const [storageBookmarks, setStorageBookmarks] = useLocalStorage("bookmarks", "[]");
+    const [storageBookmarks, setStorageBookmarks] = useLocalStorage("bookmarks", defaultBookmarks);
 
-    // use zod or io-ts to validate
-    // @ts-ignore
-    const postIds: PostId[] = JSON.parse(storageBookmarks);
+    const parseBookmarkedPostIds = (): PostId[] => {
+        // @ts-ignore
+        try {
+            // use zod or io-ts to validate
+            return JSON.parse(storageBookmarks) as PostId[];
+        } catch (error) {
+            console.error(error);
+            setStorageBookmarks(defaultBookmarks)
+            return [];
+        }
+    };
+
+    const postIds: PostId[] = parseBookmarkedPostIds();
     const postIdsSet = new Set(postIds);
 
     const isBookmarked = (postId: PostId) => postIdsSet.has(postId);
@@ -27,6 +39,7 @@ export const PostBookmarksProvider: FC<PropsWithChildren> = ({children}) => {
 
     return (
         <PostBookmarksContext.Provider value={{
+            postIds,
             isBookmarked,
             toggleBookmark
         }}>

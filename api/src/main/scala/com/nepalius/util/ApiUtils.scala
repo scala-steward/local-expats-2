@@ -1,5 +1,6 @@
 package com.nepalius.util
 
+import com.nepalius.util.ApiUtils.getQueryParam
 import com.nepalius.util.Pageable
 import zhttp.http.Request
 import zio.json.*
@@ -16,19 +17,18 @@ object ApiUtils:
     yield parsed
 
   def parsePageable(req: Request): Pageable = {
-    val params = req.url.queryParams
     val maxPageSize = 100
     Pageable(
-      params
-        .get("pageSize")
-        .flatMap(_.headOption)
+      getQueryParam(req, "pageSize")
         .map(_.toInt)
         .getOrElse(maxPageSize)
         .min(maxPageSize),
-      params
-        .get("lastId")
-        .flatMap(_.headOption)
+      getQueryParam(req, "lastId")
         .map(_.toLong)
         .getOrElse(Long.MaxValue),
     )
+  }
+
+  def getQueryParam(req: Request, key: String): Option[String] = {
+    req.url.queryParams.get(key).flatMap(_.headOption)
   }
