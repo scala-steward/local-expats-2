@@ -25,7 +25,7 @@ export const CreatePost: FC = () => {
     const onSubmit = (data: CreatePostDto) =>
         post<PostDto>('/api/posts', data)
             .then((post) => {
-                addBookmark(post.id);
+                addBookmark(post.id, false);
                 return router.push(getPostUrl(post));
             });
 

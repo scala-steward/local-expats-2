@@ -26,7 +26,7 @@ export const PostBookmarksProvider: FC<PropsWithChildren> = ({children}) => {
         if (notificationsLastChecked === "") {
             setNotificationsLastChecked(getCurrentDateIso());
         }
-    }, []);
+    }, [notificationsLastChecked, setNotificationsLastChecked]);
 
     const parseBookmarkedPostIds = (): PostId[] => {
         // @ts-ignore
