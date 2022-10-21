@@ -48,10 +48,11 @@ final case class PostRepoLive(
       pageable: Pageable,
       locationId: LocationId,
   ): Task[List[Post]] =
-    PostSql.getAll.to[List]
+    PostSql
+      .getAll(pageable, locationId)
+      .to[List]
       .transact(transactor)
       .foldZIO(err => ZIO.fail(err), posts => ZIO.succeed(posts))
-    // .provideEnvironment(ZEnvironment(dataSource))
 
   override def getUpdated(
       ids: List[PostId],
@@ -124,5 +125,25 @@ object PostRepoLive:
   val layer = ZLayer.fromFunction(PostRepoLive.apply)
 
 private object PostSql:
-  def getAll =
-    sql"""SELECT id, title, message, location_id, created_at from post ORDER BY id DESC""".query[Post]
+
+  import doobie.*
+  import doobie.implicits.*
+  import doobie.util.ExecutionContexts
+  import cats.*
+  import cats.data.*
+  import cats.effect.*
+  import cats.implicits.*
+  import fs2.Stream
+  def getAll(pageable: Pageable, locationId: LocationId) =
+    sql"""SELECT post.id, post.title, post.message, post.location_id, post.created_at
+          FROM post
+          JOIN location post_location
+            ON post.location_id = post_location.id
+          JOIN location filter_location
+            ON filter_location.id = ${locationId}
+           AND (filter_location.city IS NULL OR filter_location.city = post_location.city)
+           AND (filter_location.state IS NULL OR filter_location.state = post_location.state)
+         WHERE post.id < ${pageable.lastId}
+         ORDER BY post.id DESC
+         LIMIT ${pageable.pageSize}
+       """.query[Post]
