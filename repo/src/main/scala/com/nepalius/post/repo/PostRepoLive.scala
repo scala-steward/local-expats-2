@@ -8,10 +8,11 @@ import com.nepalius.post.domain.*
 import com.nepalius.post.domain.Post.PostId
 import com.nepalius.util.Pageable
 import io.getquill.*
+import io.getquill.extras.*
 import zio.*
 
 import java.sql.SQLException
-import java.time.LocalDateTime
+import java.time.{LocalDateTime, ZonedDateTime}
 import java.util.UUID
 import javax.sql.DataSource
 
@@ -47,6 +48,22 @@ final case class PostRepoLive(dataSource: DataSource) extends PostRepo:
         .filter(_.id < lift(pageable.lastId))
         .sortBy(_.id)(Ord.desc)
         .take(lift(pageable.pageSize))
+    }
+      .provideEnvironment(ZEnvironment(dataSource))
+
+  override def getUpdated(
+      ids: List[PostId],
+      since: ZonedDateTime,
+  ): ZIO[Any, SQLException, List[Post]] =
+    run {
+      query[Post]
+        .join(query[Comment])
+        .on(_.id == _.postId)
+        // ZonedDateTime comparison isn't working
+// .filter({ case (_, comment) => comment.createdAt > lift(since) })
+        .map(_._1)
+        .filter(post => liftQuery(ids).contains(post.id))
+        .distinct
     }
       .provideEnvironment(ZEnvironment(dataSource))
 

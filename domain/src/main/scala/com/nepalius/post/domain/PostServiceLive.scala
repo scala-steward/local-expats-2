@@ -7,7 +7,7 @@ import com.nepalius.post.domain.Post.PostId
 import com.nepalius.post.domain.PostService
 import zio.*
 
-import java.time.LocalDateTime
+import java.time.{LocalDateTime, ZonedDateTime}
 import java.util.UUID
 import javax.sql.DataSource
 
@@ -19,6 +19,9 @@ final case class PostServiceLive(postRepo: PostRepo) extends PostService:
       locationId: LocationId,
   ): Task[List[Post]] =
     postRepo.getAll(pageable, locationId)
+
+  override def getUpdated(ids: List[PostId], since: ZonedDateTime): Task[List[Post]] = postRepo.getUpdated(ids, since)
+      
   override def create(createPost: CreatePost): Task[Post] =
     postRepo.create(createPost)
 
