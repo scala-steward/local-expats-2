@@ -1,6 +1,5 @@
 package com.nepalius.post.repo
-import com.nepalius.config.DatabaseContext.*
-import com.nepalius.config.DatabaseContext.QuillContext.*
+import com.nepalius.config.QuillContext.*
 import com.nepalius.location.State
 import com.nepalius.location.StateDbCodec.given
 import com.nepalius.location.domain.Location

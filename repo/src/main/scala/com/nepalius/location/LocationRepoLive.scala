@@ -3,8 +3,7 @@ import com.nepalius.location.domain.{Location, LocationRepo}
 import zio.Task
 
 import javax.sql.DataSource
-import com.nepalius.config.DatabaseContext.*
-import com.nepalius.config.DatabaseContext.QuillContext.*
+import com.nepalius.config.QuillContext.*
 import io.getquill.*
 import zio.*
 import com.nepalius.location.State

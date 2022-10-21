@@ -1,6 +1,6 @@
 package com.nepalius
 
-import com.nepalius.config.{AppConfig, DatabaseContext, DatabaseMigration}
+import com.nepalius.config.{AppConfig, DatabaseMigration}
 import com.nepalius.location.domain.LocationServiceLive
 import com.nepalius.location.{LocationRepoLive, LocationRoutes}
 import com.nepalius.post.api.PostRoutes
@@ -11,7 +11,8 @@ import zio.*
 import zio.logging.backend.SLF4J
 
 import java.io.IOException
-import com.nepalius.config.DatabaseContext.DoobieContext
+import com.nepalius.config.DoobieContext
+import com.nepalius.config.DataSourceContext
 
 object Main extends ZIOAppDefault {
 
@@ -26,8 +27,8 @@ object Main extends ZIOAppDefault {
         PostRepoLive.layer >>> PostServiceLive.layer,
         LocationRepoLive.layer >>> LocationServiceLive.layer,
         DatabaseMigration.layer,
-        DatabaseContext.layer,
-        DatabaseContext.DoobieContext.liveTransactor,
+        DataSourceContext.layer,
+        DoobieContext.liveTransactor,
         Runtime.removeDefaultLoggers >>> SLF4J.slf4j,
       )
 }
