@@ -7,6 +7,7 @@ type UsePostBookmarks = {
     postIds: readonly PostId[];
     isBookmarked: (postId: PostId) => boolean;
     toggleBookmark: (postId: PostId) => void;
+    addBookmark: (postId: PostId) => void;
 }
 
 const PostBookmarksContext = createContext<UsePostBookmarks | undefined>(undefined);
@@ -36,12 +37,18 @@ export const PostBookmarksProvider: FC<PropsWithChildren> = ({children}) => {
         const newPostIds = xor(postIds, [postId])
         setStorageBookmarks(JSON.stringify(newPostIds));
     }
+    const addBookmark = (postId: PostId) => {
+        if (!isBookmarked(postId)) {
+            toggleBookmark(postId);
+        }
+    }
 
     return (
         <PostBookmarksContext.Provider value={{
             postIds,
             isBookmarked,
-            toggleBookmark
+            toggleBookmark,
+            addBookmark,
         }}>
             {children}
         </PostBookmarksContext.Provider>

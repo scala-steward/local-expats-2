@@ -6,6 +6,7 @@ import {useForm} from "react-hook-form";
 import Box from "@mui/material/Box";
 import {PostWithCommentsDto} from "./PostWithCommentsDto";
 import {post} from "../util/Fetch";
+import {usePostBookmarks} from "./PostBookmarks";
 
 type AddCommentDto = {
     message: string;
@@ -18,11 +19,14 @@ type AddCommentProps = {
 
 export const AddComment: FC<AddCommentProps> = ({postId, onCommentedAdded}) => {
     const {register, handleSubmit, formState: {errors}, reset} = useForm<AddCommentDto>();
-    const onSubmit = (data: AddCommentDto) =>
-        post<PostWithCommentsDto>(`/api/posts/${postId}/comments`, data)
-            .then(post => {
+    const {addBookmark} = usePostBookmarks();
+
+    const onSubmit = (comment: AddCommentDto) =>
+        post<PostWithCommentsDto>(`/api/posts/${postId}/comments`, comment)
+            .then(data => {
                 reset()
-                onCommentedAdded && onCommentedAdded(post);
+                addBookmark(data.post.id)
+                onCommentedAdded && onCommentedAdded(data);
             });
 
     return (
