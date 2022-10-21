@@ -14,9 +14,9 @@ jobs:
           uses: actions/setup-node@v3
           with:
             node-version: '16.x'
-        - run: npm ci
-        - run: npm run build --if-present
-        - run: npm test
+        - run: npm --prefix ui ci
+        - run: npm --prefix ui run build --if-present
+        - run: npm --prefix ui test
         - name: Set up JDK 17
           uses: actions/setup-java@v3
           with:
