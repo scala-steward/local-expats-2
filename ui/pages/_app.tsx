@@ -34,7 +34,7 @@ export default function MyApp({Component, pageProps}: AppProps) {
                 <meta name="mobile-web-app-capable" content="yes"/>
                 <meta name="theme-color" content="#ffffff"/>
 
-                <link rel="shortcut icon" href="/favicon.ico"/>
+                <link rel="shortcut icon" href="/np-us.png"/>
                 <link rel="apple-touch-icon" sizes="152x152" href="/icons/icon-152x152.png"/>
 
                 <meta property="og:type" content="website"/>
