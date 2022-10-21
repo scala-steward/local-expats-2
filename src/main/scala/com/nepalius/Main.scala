@@ -11,6 +11,7 @@ import zio.*
 import zio.logging.backend.SLF4J
 
 import java.io.IOException
+import com.nepalius.config.DatabaseContext.DoobieContext
 
 object Main extends ZIOAppDefault {
 
@@ -26,6 +27,7 @@ object Main extends ZIOAppDefault {
         LocationRepoLive.layer >>> LocationServiceLive.layer,
         DatabaseMigration.layer,
         DatabaseContext.layer,
+        DatabaseContext.DoobieContext.liveTransactor,
         Runtime.removeDefaultLoggers >>> SLF4J.slf4j,
       )
 }

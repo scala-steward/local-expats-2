@@ -1,5 +1,6 @@
 package com.nepalius.post.repo
 import com.nepalius.config.DatabaseContext.*
+import com.nepalius.config.DatabaseContext.QuillContext.*
 import com.nepalius.location.State
 import com.nepalius.location.StateDbCodec.given
 import com.nepalius.location.domain.Location
@@ -15,8 +16,22 @@ import java.sql.SQLException
 import java.time.{LocalDateTime, ZonedDateTime}
 import java.util.UUID
 import javax.sql.DataSource
+import doobie.util.transactor
+import doobie.util.transactor.Transactor
+import doobie.util.query.Query0
+import doobie.implicits.*
+import doobie.postgres.implicits.*
+import doobie.util.query.Query0
+import doobie.{Transactor, Update0}
+import cats.data.OptionT
+import cats.effect.MonadCancelThrow
+import cats.implicits.*
+import zio.interop.catz.*
 
-final case class PostRepoLive(dataSource: DataSource) extends PostRepo:
+final case class PostRepoLive(
+    dataSource: DataSource,
+    transactor: Transactor[Task],
+) extends PostRepo:
 
   override def getOne(
       id: PostId,
@@ -33,23 +48,11 @@ final case class PostRepoLive(dataSource: DataSource) extends PostRepo:
   override def getAll(
       pageable: Pageable,
       locationId: LocationId,
-  ): ZIO[Any, SQLException, List[Post]] =
-    run {
-      query[Post]
-        .join(query[Location])
-        .on(_.locationId == _.id)
-        .join(query[Location])
-        .on({ case ((_, postLocation), filterLocation) =>
-          filterLocation.id == lift(locationId)
-          && (filterLocation.city.isEmpty || filterLocation.city == postLocation.city)
-          && (filterLocation.state.isEmpty || filterLocation.state == postLocation.state)
-        })
-        .map({ case ((post, _), _) => post })
-        .filter(_.id < lift(pageable.lastId))
-        .sortBy(_.id)(Ord.desc)
-        .take(lift(pageable.pageSize))
-    }
-      .provideEnvironment(ZEnvironment(dataSource))
+  ): Task[List[Post]] =
+    PostSql.getAll.to[List]
+      .transact(transactor)
+      .foldZIO(err => ZIO.fail(err), posts => ZIO.succeed(posts))
+    // .provideEnvironment(ZEnvironment(dataSource))
 
   override def getUpdated(
       ids: List[PostId],
@@ -119,5 +122,8 @@ final case class PostRepoLive(dataSource: DataSource) extends PostRepo:
   }
 
 object PostRepoLive:
-  val layer: ZLayer[DataSource, Nothing, PostRepo] =
-    ZLayer.fromFunction(PostRepoLive.apply)
+  val layer = ZLayer.fromFunction(PostRepoLive.apply)
+
+private object PostSql:
+  def getAll =
+    sql"""SELECT id, title, message, location_id, created_at from post ORDER BY id DESC""".query[Post]

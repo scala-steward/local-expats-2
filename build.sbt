@@ -5,11 +5,13 @@ ThisBuild / version := "0.0.1-SNAPSHOT"
 Global / onChangedBuildSource := ReloadOnSourceChanges
 
 val V = new {
+  val Doobie = "1.0.0-RC2"
   val Flyway = "9.4.0"
   val Postgres = "42.5.0"
   val Quill = "4.6.0"
   val Slf4j = "2.0.3"
   val Zio = "2.0.2"
+  val ZioCats = "3.3.0"
   val ZioConfig = "3.0.2"
   val ZioHttp = "2.0.0-RC11"
   val ZioJson = "0.3.0"
@@ -32,6 +34,11 @@ lazy val repo = project
       "org.postgresql" % "postgresql" % V.Postgres,
       "org.flywaydb" % "flyway-core" % V.Flyway,
       "io.getquill" %% "quill-jdbc-zio" % V.Quill,
+      "org.tpolecat" %% "doobie-core" % V.Doobie,
+      "org.tpolecat" %% "doobie-postgres" % V.Doobie,
+      "org.tpolecat" %% "doobie-hikari" % V.Doobie,
+      "dev.zio" %% "zio-interop-cats" % V.ZioCats,
+      "dev.zio" %% "zio-managed" % V.Zio,
     ),
   )
   .enablePlugins(FlywayPlugin)

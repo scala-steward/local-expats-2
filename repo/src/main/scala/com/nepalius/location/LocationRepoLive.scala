@@ -4,6 +4,7 @@ import zio.Task
 
 import javax.sql.DataSource
 import com.nepalius.config.DatabaseContext.*
+import com.nepalius.config.DatabaseContext.QuillContext.*
 import io.getquill.*
 import zio.*
 import com.nepalius.location.State
