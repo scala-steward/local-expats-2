@@ -1,4 +1,4 @@
-import {createContext, FC, PropsWithChildren, useContext} from "react";
+import {createContext, FC, PropsWithChildren, useContext, useEffect} from "react";
 import {useLocalStorage} from "usehooks-ts";
 import {xor} from "lodash";
 
@@ -7,8 +7,12 @@ type UsePostBookmarks = {
     postIds: readonly PostId[];
     isBookmarked: (postId: PostId) => boolean;
     toggleBookmark: (postId: PostId) => void;
-    addBookmark: (postId: PostId) => void;
+    addBookmark: (postId: PostId, updateNotificationsLastCheckedDate: boolean) => void;
+    notificationsLastChecked: string;
+    updateNotificationsLastChecked: () => void;
 }
+
+const getCurrentDateIso = () => new Date().toISOString();
 
 const PostBookmarksContext = createContext<UsePostBookmarks | undefined>(undefined);
 
@@ -16,11 +20,18 @@ export const PostBookmarksProvider: FC<PropsWithChildren> = ({children}) => {
     const defaultBookmarks = "[]";
     // Use IndexedDB if performance issue
     const [storageBookmarks, setStorageBookmarks] = useLocalStorage("bookmarks", defaultBookmarks);
+    const [notificationsLastChecked, setNotificationsLastChecked] = useLocalStorage('notificationsLastChecked', "");
+
+    useEffect(() => {
+        if (notificationsLastChecked === "") {
+            setNotificationsLastChecked(getCurrentDateIso());
+        }
+    }, []);
 
     const parseBookmarkedPostIds = (): PostId[] => {
         // @ts-ignore
         try {
-            // use zod or io-ts to validate
+            // use zod to validate
             return JSON.parse(storageBookmarks) as PostId[];
         } catch (error) {
             console.error(error);
@@ -37,11 +48,16 @@ export const PostBookmarksProvider: FC<PropsWithChildren> = ({children}) => {
         const newPostIds = xor(postIds, [postId])
         setStorageBookmarks(JSON.stringify(newPostIds));
     }
-    const addBookmark = (postId: PostId) => {
+    const addBookmark = (postId: PostId, updateNotificationsLastCheckedDate: boolean) => {
         if (!isBookmarked(postId)) {
             toggleBookmark(postId);
         }
+        if (updateNotificationsLastCheckedDate) {
+            updateNotificationsLastChecked();
+        }
     }
+
+    const updateNotificationsLastChecked = () => setNotificationsLastChecked(getCurrentDateIso);
 
     return (
         <PostBookmarksContext.Provider value={{
@@ -49,6 +65,8 @@ export const PostBookmarksProvider: FC<PropsWithChildren> = ({children}) => {
             isBookmarked,
             toggleBookmark,
             addBookmark,
+            notificationsLastChecked,
+            updateNotificationsLastChecked,
         }}>
             {children}
         </PostBookmarksContext.Provider>

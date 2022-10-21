@@ -25,7 +25,7 @@ export const AddComment: FC<AddCommentProps> = ({postId, onCommentedAdded}) => {
         post<PostWithCommentsDto>(`/api/posts/${postId}/comments`, comment)
             .then(data => {
                 reset()
-                addBookmark(data.post.id)
+                addBookmark(data.post.id, true);
                 onCommentedAdded && onCommentedAdded(data);
             });
 

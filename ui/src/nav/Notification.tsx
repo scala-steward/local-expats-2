@@ -12,19 +12,7 @@ import {useSmallScreen} from "../util/useUtils";
 import {useLocalStorage} from "usehooks-ts";
 
 export const Notification: FC = () => {
-    const [lastChecked, setLastChecked] = useLocalStorage('notificationsLastChecked', "");
-
-    function getCurrentDateIso() {
-        return new Date().toISOString();
-    }
-
-    useEffect(() => {
-        if (lastChecked === "") {
-            setLastChecked(getCurrentDateIso());
-        }
-    }, []);
-
-    const {postIds} = usePostBookmarks();
+    const {postIds, notificationsLastChecked, updateNotificationsLastChecked} = usePostBookmarks();
     const ids = postIds.join(',');
     const fetchUpdatedPosts = () => {
         if (!postIds.length) {
@@ -32,7 +20,7 @@ export const Notification: FC = () => {
         }
         return get<PostDto[]>('/api/posts/updated', {
             ids,
-            since: lastChecked,
+            since: notificationsLastChecked,
         });
     };
     const {data} = useQuery(['notifications'], fetchUpdatedPosts, {
@@ -53,7 +41,7 @@ export const Notification: FC = () => {
 
     const handleNotificationClick = (event: React.MouseEvent<HTMLElement>) => {
         handleOpenUserMenu(event);
-        setLastChecked(getCurrentDateIso());
+        updateNotificationsLastChecked();
     }
 
     const smallScreen = useSmallScreen();
