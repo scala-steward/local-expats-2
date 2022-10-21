@@ -1,12 +1,11 @@
 import {FC} from "react";
-import {getPostUrl} from "./PostDto";
 import Typography from "@mui/material/Typography";
-import Link from "next/link";
 import {PostOnlyProps} from "./PostOnlyProps";
+import {PostLink} from "./PostLink";
 
 export const PostTitle: FC<PostOnlyProps> = ({post}) =>
-    <Link href={getPostUrl(post)}>
+    <PostLink post={post}>
         <Typography variant="h6" sx={{cursor: "pointer"}}>
             {post.title}
         </Typography>
-    </Link>;
+    </PostLink>;

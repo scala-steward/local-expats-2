@@ -3,17 +3,17 @@ import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import Typography from '@mui/material/Typography';
 import CardHeader from '@mui/material/CardHeader';
-import {getPostUrl, PostDto} from "./PostDto";
+import {PostDto} from "./PostDto";
 import {PostSubheader} from "./PostSubheader";
 import {CardActions} from "@mui/material";
 import {CommentDto} from "./CommentDto";
 import {Comment} from "./Comment";
 import {AddComment} from "./AddComment";
 import {PostTitle} from "./PostTitle";
-import Link from "next/link";
 import {PostWithCommentsDto} from "./PostWithCommentsDto";
 import {PostShare} from "./PostShare";
 import {PostBookmark} from "./PostBookmark";
+import {PostLink} from "./PostLink";
 
 type PostProps = {
     post: PostDto;
@@ -33,7 +33,7 @@ export const Post: FC<PostProps> = ({
                 title={<PostTitle post={post}/>}
                 subheader={<PostSubheader post={post}/>}
             />
-            <Link href={getPostUrl(post)}>
+            <PostLink post={post}>
                 <CardContent sx={{my: -3, cursor: "pointer"}}>
                     {post.message && <Typography
                         variant="body1"
@@ -44,7 +44,7 @@ export const Post: FC<PostProps> = ({
                         {post.message}
                     </Typography>}
                 </CardContent>
-            </Link>
+            </PostLink>
             <CardActions>
                 <PostBookmark post={post}/>
                 <PostShare post={post}/>
