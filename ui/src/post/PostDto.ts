@@ -10,6 +10,6 @@ export interface PostDto {
 }
 
 const getTitleSlug = (post: PostDto) =>
-    replaceNonAlphaNumeric(post.title, "-").substring(0, 50);
+    replaceNonAlphaNumeric(post.title, "-").substring(0, 50).toLowerCase();
 
 export const getPostUrl = (post: PostDto) => `/posts/${post.id}/${getTitleSlug(post)}`;
