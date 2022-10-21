@@ -47,7 +47,7 @@ final case class PostRepoLive(
   override def getAll(
       pageable: Pageable,
       locationId: LocationId,
-  ): Task[List[Post]] =
+  ): Task[List[PostView]] =
     PostSql
       .getAll(pageable, locationId)
       .to[List]
@@ -133,18 +133,20 @@ private object PostSql:
   import cats.implicits.*
 
   def getAll(pageable: Pageable, locationId: LocationId) =
-    sql"""SELECT post.id, post.title, post.message, post.location_id, post.created_at
-          FROM post
-          JOIN location post_location
-            ON post.location_id = post_location.id
-          JOIN location filter_location
-            ON filter_location.id = ${locationId}
-           AND (filter_location.city IS NULL OR filter_location.city = post_location.city)
-           AND (filter_location.state IS NULL OR filter_location.state = post_location.state)
-         WHERE post.id < ${pageable.lastId}
-         ORDER BY post.id DESC
-         LIMIT ${pageable.pageSize}
-       """.query[Post]
+    sql"""SELECT post.id, post.title, post.message, post.location_id, post.created_at, COUNT(comment.id) AS no_of_comments
+            FROM post
+       LEFT JOIN comment on post.id = comment.post_id
+            JOIN location post_location
+              ON post.location_id = post_location.id
+            JOIN location filter_location
+              ON filter_location.id = ${locationId}
+             AND (filter_location.city IS NULL OR filter_location.city = post_location.city)
+             AND (filter_location.state IS NULL OR filter_location.state = post_location.state)
+           WHERE post.id < ${pageable.lastId}
+        GROUP BY post.id, post.title, post.message, post.location_id, post.created_at
+           ORDER BY post.id DESC
+           LIMIT ${pageable.pageSize}
+       """.query[PostView]
 
   def getUpdated(ids: NonEmptyList[PostId], since: ZonedDateTime) = {
     val q =

@@ -17,11 +17,14 @@ final case class PostServiceLive(postRepo: PostRepo) extends PostService:
   override def getAll(
       pageable: Pageable,
       locationId: LocationId,
-  ): Task[List[Post]] =
+  ): Task[List[PostView]] =
     postRepo.getAll(pageable, locationId)
 
-  override def getUpdated(ids: List[PostId], since: ZonedDateTime): Task[List[Post]] = postRepo.getUpdated(ids, since)
-      
+  override def getUpdated(
+      ids: List[PostId],
+      since: ZonedDateTime,
+  ): Task[List[Post]] = postRepo.getUpdated(ids, since)
+
   override def create(createPost: CreatePost): Task[Post] =
     postRepo.create(createPost)
 

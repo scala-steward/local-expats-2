@@ -7,6 +7,7 @@ export interface PostDto {
     message?: string;
     locationId: LocationId;
     createdAt: string;
+    noOfComments: number;
 }
 
 const getTitleSlug = (post: PostDto) =>
