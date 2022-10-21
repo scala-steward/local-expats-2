@@ -1,7 +1,7 @@
 import IconButton from "@mui/material/IconButton";
 import {Badge, ListItemIcon, ListItemText, Menu, MenuItem} from "@mui/material";
 import {Notifications, QuestionAnswer} from "@mui/icons-material";
-import React, {FC, useEffect, useState} from "react";
+import React, {FC, useState} from "react";
 import {get} from "../util/Fetch";
 import {PostDto} from "../post/PostDto";
 import {useQuery} from "@tanstack/react-query";
@@ -9,7 +9,6 @@ import {usePostBookmarks} from "../post/PostBookmarks";
 import Tooltip from "@mui/material/Tooltip";
 import {PostLink} from "../post/PostLink";
 import {useSmallScreen} from "../util/useUtils";
-import {useLocalStorage} from "usehooks-ts";
 
 export const Notification: FC = () => {
     const {postIds, notificationsLastChecked, updateNotificationsLastChecked} = usePostBookmarks();
@@ -23,10 +22,7 @@ export const Notification: FC = () => {
             since: notificationsLastChecked,
         });
     };
-    const {data} = useQuery(['notifications'], fetchUpdatedPosts, {
-        refetchOnWindowFocus: false,
-        refetchOnMount: false,
-        refetchOnReconnect: false,
+    const {data, refetch} = useQuery(['notifications'], fetchUpdatedPosts, {
         refetchInterval: 2 * 60 * 1000, // 2 minutes
     });
 
@@ -40,6 +36,7 @@ export const Notification: FC = () => {
     };
 
     const handleNotificationClick = (event: React.MouseEvent<HTMLElement>) => {
+        void refetch();
         handleOpenUserMenu(event);
         updateNotificationsLastChecked();
     }
