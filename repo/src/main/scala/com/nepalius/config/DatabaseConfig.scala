@@ -2,7 +2,9 @@ package com.nepalius.config
 
 final case class DatabaseConfig(
     url: String,
-)
+) {
+  def toConnectionInfo = DatabaseConfig.parseConnectionInfo(url)
+}
 
 object DatabaseConfig {
   final case class ConnectionInfo(
@@ -12,10 +14,11 @@ object DatabaseConfig {
       port: String,
       dbname: String,
   ) {
+    def jdbcUrl = s"jdbc:postgresql://$host:$port/$dbname"
 
     def toMap: Map[String, String] =
       Map(
-        "jdbcUrl" -> s"jdbc:postgresql://$host:$port/$dbname",
+        "jdbcUrl" -> jdbcUrl,
         "username" -> username,
         "password" -> password,
       )
