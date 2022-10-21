@@ -57,18 +57,17 @@ final case class PostRepoLive(
   override def getUpdated(
       ids: List[PostId],
       since: ZonedDateTime,
-  ): ZIO[Any, SQLException, List[Post]] =
-    run {
-      query[Post]
-        .join(query[Comment])
-        .on(_.id == _.postId)
-        // ZonedDateTime comparison isn't working
-// .filter({ case (_, comment) => comment.createdAt > lift(since) })
-        .map(_._1)
-        .filter(post => liftQuery(ids).contains(post.id))
-        .distinct
-    }
-      .provideEnvironment(ZEnvironment(dataSource))
+  ): Task[List[Post]] = {
+    val idsNel = ids.toNel
+    if idsNel.isEmpty
+    then ZIO.succeed(List())
+    else
+      PostSql
+        .getUpdated(idsNel.get, since)
+        .to[List]
+        .transact(transactor)
+        .foldZIO(err => ZIO.fail(err), posts => ZIO.succeed(posts))
+  }
 
   override def create(post: CreatePost): ZIO[Any, SQLException, Post] =
     run {
@@ -128,12 +127,11 @@ private object PostSql:
 
   import doobie.*
   import doobie.implicits.*
-  import doobie.util.ExecutionContexts
   import cats.*
   import cats.data.*
   import cats.effect.*
   import cats.implicits.*
-  import fs2.Stream
+
   def getAll(pageable: Pageable, locationId: LocationId) =
     sql"""SELECT post.id, post.title, post.message, post.location_id, post.created_at
           FROM post
@@ -147,3 +145,13 @@ private object PostSql:
          ORDER BY post.id DESC
          LIMIT ${pageable.pageSize}
        """.query[Post]
+
+  def getUpdated(ids: NonEmptyList[PostId], since: ZonedDateTime) = {
+    val q =
+      fr"""SELECT DISTINCT post.id, post.title, post.message, post.location_id AS locationId, post.created_at AS createdAt
+            FROM post
+            JOIN comment ON post.id = comment.post_id
+           WHERE comment.created_at > $since
+             AND """ ++ Fragments.in(fr"post.id", ids)
+    q.query[Post]
+  }
