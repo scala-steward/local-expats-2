@@ -76,6 +76,7 @@ final case class PostRepoLive(
           _.title -> lift(post.title),
           _.message -> lift(post.message),
           _.locationId -> lift(post.locationId),
+//          _.images -> lift(post.images),
         )
         .returningGenerated(p => (p.id, p.createdAt))
     }
@@ -87,6 +88,7 @@ final case class PostRepoLive(
           post.message,
           post.locationId,
           createdAt,
+          List(),
         ),
       )
 
@@ -133,7 +135,7 @@ private object PostSql:
   import cats.implicits.*
 
   def getAll(pageable: Pageable, locationId: LocationId) =
-    sql"""SELECT post.id, post.title, post.message, post.location_id, post.created_at, COUNT(comment.id) AS no_of_comments
+    sql"""SELECT post.id, post.title, post.message, post.location_id, post.created_at, post.images, COUNT(comment.id) AS no_of_comments
             FROM post
        LEFT JOIN comment on post.id = comment.post_id
             JOIN location post_location
@@ -150,7 +152,7 @@ private object PostSql:
 
   def getUpdated(ids: NonEmptyList[PostId], since: ZonedDateTime) = {
     val q =
-      fr"""SELECT post.id, post.title, post.message, post.location_id, post.created_at, COUNT(comment.id) AS no_of_comments
+      fr"""SELECT post.id, post.title, post.message, post.location_id, post.created_at, post.images, COUNT(comment.id) AS no_of_comments
             FROM post
             JOIN comment ON post.id = comment.post_id
            WHERE comment.created_at > $since

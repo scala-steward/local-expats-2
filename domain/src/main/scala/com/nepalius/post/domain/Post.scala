@@ -13,6 +13,7 @@ case class Post(
     message: Option[String],
     locationId: LocationId,
     createdAt: ZonedDateTime,
+    images: List[String],
 )
 
 object Post:
