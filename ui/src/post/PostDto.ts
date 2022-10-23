@@ -7,6 +7,7 @@ export interface PostDto {
     message?: string;
     locationId: LocationId;
     createdAt: string;
+    image?: string;
     noOfComments: number;
 }
 

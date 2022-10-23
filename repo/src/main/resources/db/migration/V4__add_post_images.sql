@@ -1,2 +1,0 @@
-ALTER TABLE post
-    ADD COLUMN images VARCHAR[] NOT NULL DEFAULT '{}';

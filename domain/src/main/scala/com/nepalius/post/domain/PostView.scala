@@ -11,7 +11,7 @@ case class PostView(
     message: Option[String],
     locationId: LocationId,
     createdAt: ZonedDateTime,
-    images: List[String],
+    image: Option[String],
     noOfComments: Int,
 )
 
@@ -22,7 +22,7 @@ object PostView {
     post.message,
     post.locationId,
     post.createdAt,
-    post.images,
+    post.image,
     noOfComments,
   )
 }

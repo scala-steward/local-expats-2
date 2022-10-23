@@ -17,7 +17,7 @@ case class PostDto(
     message: Option[String],
     locationId: LocationId,
     createdAt: ZonedDateTime,
-    images: List[String],
+    image: Option[String],
     noOfComments: Int,
 )
 
@@ -34,7 +34,7 @@ object PostDto {
       post.message,
       post.locationId,
       post.createdAt,
-      post.images,
+      post.image,
       post.noOfComments,
     )
 }

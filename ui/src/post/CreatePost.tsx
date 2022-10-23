@@ -5,17 +5,19 @@ import Typography from '@mui/material/Typography';
 import {Controller, useForm} from 'react-hook-form';
 import Box from "@mui/material/Box";
 import {useRouter} from "next/router";
-import {FC} from "react";
+import React, {FC} from "react";
 import {getPostUrl, PostDto} from "./PostDto";
 import {post} from "../util/Fetch";
 import {LocationId} from "../location/SelectedLocation";
 import {LocationSelect} from "../location/LocationSelect";
 import {usePostBookmarks} from "./PostBookmarks";
+import {ImageUpload} from "./ImageUpload";
 
 type CreatePostDto = {
     title: string,
     message?: string,
     locationId: LocationId,
+    image?: string,
 };
 
 export const CreatePost: FC = () => {
@@ -68,6 +70,17 @@ export const CreatePost: FC = () => {
                     </Grid>
                     <Grid item xs={12}>
                         <Controller
+                            name="image"
+                            control={control}
+                            render={({field: {onChange}}) =>
+                                <ImageUpload onUpload={(link) => {
+                                    onChange(link);
+                                }}/>
+                            }
+                        />
+                    </Grid>
+                    <Grid item xs={12}>
+                        <Controller
                             name="locationId"
                             control={control}
                             rules={{required: true}}
@@ -110,6 +123,7 @@ export const CreatePost: FC = () => {
                 </Grid>
             </Box>
         </Box>
-    );
+    )
+        ;
 }
 

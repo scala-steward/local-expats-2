@@ -5,7 +5,7 @@ import Typography from '@mui/material/Typography';
 import CardHeader from '@mui/material/CardHeader';
 import {PostDto} from "./PostDto";
 import {PostSubheader} from "./PostSubheader";
-import {CardActions} from "@mui/material";
+import {CardActions, CardMedia} from "@mui/material";
 import {CommentDto} from "./CommentDto";
 import {Comment} from "./Comment";
 import {AddComment} from "./AddComment";
@@ -15,6 +15,7 @@ import {PostShare} from "./PostShare";
 import {PostBookmark} from "./PostBookmark";
 import {PostComment} from "./PostComment";
 import {PostLink} from "./PostLink";
+import {useSmallScreen} from "../util/useUtils";
 
 type PostProps = {
     post: PostDto;
@@ -28,24 +29,37 @@ export const Post: FC<PostProps> = ({
     onCommentedAdded,
 }) => {
     const showComments = comments !== undefined;
+    const smallScreen = useSmallScreen();
     return (
         <Card sx={{m: 1}} variant="outlined">
             <CardHeader
                 title={<PostTitle post={post}/>}
                 subheader={<PostSubheader post={post}/>}
             />
-            <PostLink post={post}>
-                <CardContent sx={{my: -3, cursor: "pointer"}}>
-                    {post.message && <Typography
-                        variant="body1"
-                        sx={{
-                            whiteSpace: "pre-line"
-                        }}
-                    >
-                        {post.message}
-                    </Typography>}
-                </CardContent>
-            </PostLink>
+            {
+                post.message &&
+                <PostLink post={post}>
+                    <CardContent sx={{mt: -2, cursor: "pointer"}}>
+                        <Typography
+                            variant="body1"
+                            sx={{
+                                whiteSpace: "pre-line"
+                            }}
+                        >
+                            {post.message}
+                        </Typography>
+                    </CardContent>
+                </PostLink>
+            }
+            {
+                post.image &&
+                <CardMedia
+                    component="img"
+                    height={smallScreen ? 240 : 400}
+                    image={post.image}
+                    sx={{objectFit: "contain"}}
+                />
+            }
             <CardActions sx={{display: 'flex', gap: 2}}>
                 <PostComment post={post}/>
                 <PostBookmark post={post}/>
