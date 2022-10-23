@@ -11,6 +11,7 @@ case class CommentDto(
     id: CommentId,
     postId: PostId,
     message: String,
+    image: Option[String],
     createdAt: ZonedDateTime,
 )
 
@@ -21,5 +22,6 @@ object CommentDto:
     comment.id,
     comment.postId,
     comment.message,
+    comment.image,
     comment.createdAt,
   )

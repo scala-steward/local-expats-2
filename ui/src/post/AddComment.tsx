@@ -1,15 +1,17 @@
-import {FC} from "react";
+import React, {FC} from "react";
 import Grid from "@mui/material/Grid";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
-import {useForm} from "react-hook-form";
+import {Controller, useForm} from "react-hook-form";
 import Box from "@mui/material/Box";
 import {PostWithCommentsDto} from "./PostWithCommentsDto";
 import {post} from "../util/Fetch";
 import {usePostBookmarks} from "./PostBookmarks";
+import {ImageUpload} from "./ImageUpload";
 
 type AddCommentDto = {
     message: string;
+    image?: string;
 }
 
 type AddCommentProps = {
@@ -18,7 +20,7 @@ type AddCommentProps = {
 }
 
 export const AddComment: FC<AddCommentProps> = ({postId, onCommentedAdded}) => {
-    const {register, handleSubmit, formState: {errors}, reset} = useForm<AddCommentDto>();
+    const {register, handleSubmit, formState: {errors}, reset, control} = useForm<AddCommentDto>();
     const {addBookmark} = usePostBookmarks();
 
     const onSubmit = (comment: AddCommentDto) =>
@@ -45,6 +47,18 @@ export const AddComment: FC<AddCommentProps> = ({postId, onCommentedAdded}) => {
                         error={!!errors.message}
                     />
                 </Grid>
+                <Grid item xs={12}>
+                    <Controller
+                        name="image"
+                        control={control}
+                        render={({field: {onChange}}) =>
+                            <ImageUpload onUpload={(link) => {
+                                onChange(link);
+                            }}/>
+                        }
+                    />
+                </Grid>
+
                 <Grid item xs={12} sx={{mb: 2}}>
                     <Button
                         type="submit"

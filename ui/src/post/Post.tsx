@@ -1,11 +1,11 @@
-import {FC} from 'react';
+import React, {FC} from 'react';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import Typography from '@mui/material/Typography';
 import CardHeader from '@mui/material/CardHeader';
 import {PostDto} from "./PostDto";
 import {PostSubheader} from "./PostSubheader";
-import {CardActions, CardMedia} from "@mui/material";
+import {CardActions, Divider} from "@mui/material";
 import {CommentDto} from "./CommentDto";
 import {Comment} from "./Comment";
 import {AddComment} from "./AddComment";
@@ -16,6 +16,7 @@ import {PostBookmark} from "./PostBookmark";
 import {PostComment} from "./PostComment";
 import {PostLink} from "./PostLink";
 import {useSmallScreen} from "../util/useUtils";
+import {ImageDisplay} from "./ImageDisplay";
 
 type PostProps = {
     post: PostDto;
@@ -51,15 +52,9 @@ export const Post: FC<PostProps> = ({
                     </CardContent>
                 </PostLink>
             }
-            {
-                post.image &&
-                <CardMedia
-                    component="img"
-                    height={smallScreen ? 240 : 400}
-                    image={post.image}
-                    sx={{objectFit: "contain"}}
-                />
-            }
+
+            <ImageDisplay image={post.image}/>
+
             <CardActions sx={{display: 'flex', gap: 2}}>
                 <PostComment post={post}/>
                 <PostBookmark post={post}/>

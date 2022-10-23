@@ -5,6 +5,7 @@ import CardContent from "@mui/material/CardContent";
 import Typography from "@mui/material/Typography";
 import Card from "@mui/material/Card";
 import {CommentSubheader} from "./CommentSubheader";
+import {ImageDisplay} from "./ImageDisplay";
 
 type CommentProps = {
     comment: CommentDto
@@ -20,4 +21,5 @@ export const Comment: FC<CommentProps> = ({comment}) =>
                 {comment.message}
             </Typography>
         </CardContent>
+        <ImageDisplay image={comment.image}/>
     </Card>;

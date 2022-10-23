@@ -101,6 +101,7 @@ final case class PostRepoLive(
         .insert(
           _.postId -> lift(postId),
           _.message -> lift(comment.message),
+          _.image -> lift(comment.image),
         )
         .returningGenerated(c => (c.id, c.createdAt))
     }
@@ -110,6 +111,7 @@ final case class PostRepoLive(
           id,
           postId,
           comment.message,
+          comment.image,
           createdAt,
         ),
       )
