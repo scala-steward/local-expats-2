@@ -10,7 +10,7 @@ import {AppIcon} from "./AppIcon";
 import Link from "next/link";
 import {useSmallScreen} from "../util/useUtils";
 import Typography from "@mui/material/Typography";
-import {red} from "@mui/material/colors";
+import {Container} from "@mui/material";
 
 export default function NavBar() {
     const {selectedLocation, setSelectedLocation, setSelectedLocationToDefault} = useSelectedLocation();
@@ -19,50 +19,49 @@ export default function NavBar() {
     return (
         <Box>
             <AppBar position="fixed">
-                <Toolbar>
-                    <Link href="/">
-                        <Box onClick={setSelectedLocationToDefault} sx={{display: "flex", alignItems: "center"}}>
-                            <IconButton
-                                size="large"
-                            >
-                                <AppIcon fontSize="large"/>
-                            </IconButton>
+                <Container maxWidth="md" disableGutters>
+                    <Toolbar>
+                        <Link href="/">
+                            <Box onClick={setSelectedLocationToDefault} sx={{display: "flex", alignItems: "center"}}>
+                                <IconButton>
+                                    <AppIcon fontSize="large"/>
+                                </IconButton>
+                                {
+                                    !smallScreen && (
+                                        <Typography
+                                            variant="h6"
+                                            noWrap
+                                            sx={{
+                                                cursor: "pointer",
+                                                caretColor: "transparent"
+                                            }}
 
-                            {
-                                !smallScreen && (
-                                    <Typography
-                                        variant="h6"
-                                        noWrap
-                                        sx={{
-                                            cursor: "pointer",
-                                            caretColor: "transparent"
-                                        }}
+                                        >
+                                            NepaliUS
+                                        </Typography>
+                                    )
+                                }
+                            </Box>
+                        </Link>
 
-                                    >
-                                        NepaliUS
-                                    </Typography>
-                                )
-                            }
+
+                        <Box sx={{
+                            flexGrow: 1,
+                            ml: {xs: 1, sm: 3},
+                            maxWidth: '350px'
+                        }}>
+                            <LocationSelect
+                                value={selectedLocation}
+                                onChange={setSelectedLocation}
+                            />
                         </Box>
-                    </Link>
-
-
-                    <Box sx={{
-                        flexGrow: 1,
-                        ml: {xs: 1, sm: 3},
-                        maxWidth: '350px'
-                    }}>
-                        <LocationSelect
-                            value={selectedLocation}
-                            onChange={setSelectedLocation}
-                        />
-                    </Box>
-                    {!smallScreen && <Box sx={{flexGrow: 1}}/>}
-                    <Box sx={{display: {sm: 'flex'}, ml: 2}}>
-                        <Notification/>
-                        <AddNew/>
-                    </Box>
-                </Toolbar>
+                        {!smallScreen && <Box sx={{flexGrow: 1}}/>}
+                        <Box sx={{display: {sm: 'flex'}, ml: 2}}>
+                            <Notification/>
+                            <AddNew/>
+                        </Box>
+                    </Toolbar>
+                </Container>
             </AppBar>
             <Toolbar/> {/* This Toolbar will occupy the space underneath the "fixed" Appbar and prevent the content to be hidden underneath Appbar. */}
         </Box>
