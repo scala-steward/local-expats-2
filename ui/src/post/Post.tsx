@@ -5,7 +5,7 @@ import Typography from '@mui/material/Typography';
 import CardHeader from '@mui/material/CardHeader';
 import {PostDto} from "./PostDto";
 import {PostSubheader} from "./PostSubheader";
-import {CardActions, Divider} from "@mui/material";
+import {CardActionArea, CardActions, Divider} from "@mui/material";
 import {CommentDto} from "./CommentDto";
 import {Comment} from "./Comment";
 import {AddComment} from "./AddComment";
@@ -53,7 +53,11 @@ export const Post: FC<PostProps> = ({
                 </PostLink>
             }
 
-            <ImageDisplay image={post.image}/>
+            <PostLink post={post}>
+                <CardActionArea>
+                    <ImageDisplay image={post.image}/>
+                </CardActionArea>
+            </PostLink>
 
             <CardActions sx={{display: 'flex', gap: 2}}>
                 <PostComment post={post}/>
