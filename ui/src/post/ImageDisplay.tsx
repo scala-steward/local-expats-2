@@ -16,6 +16,7 @@ export const ImageDisplay: FC<ImageDisplayProps> = ({image}) => {
                 height={smallScreen ? 240 : 400}
                 image={image}
                 sx={{objectFit: "contain", p:1/4}}
+                loading="lazy"
             />
             : null
     );

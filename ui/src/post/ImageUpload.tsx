@@ -1,5 +1,5 @@
 import React, {FC, useState} from "react";
-import {Avatar, Stack} from "@mui/material";
+import {Avatar, CircularProgress, Stack} from "@mui/material";
 import IconButton from "@mui/material/IconButton";
 import {Close, Image, PhotoCamera} from "@mui/icons-material";
 import Badge from "@mui/material/Badge";
@@ -10,6 +10,7 @@ type ImageUploadProps = {
 
 export const ImageUpload: FC<ImageUploadProps> = ({onUpload}) => {
     const [image, setImage] = useState(null);
+    const [uploading, setUploading] = useState(false);
 
     const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
         const fileList = event.target.files
@@ -17,6 +18,7 @@ export const ImageUpload: FC<ImageUploadProps> = ({onUpload}) => {
         if (!file) {
             return;
         }
+        setUploading(true);
         const formData = new FormData();
         formData.append("image", file)
         // Imgur doesn't support upload from localhost, use 0.0.0.0 instead.
@@ -37,6 +39,7 @@ export const ImageUpload: FC<ImageUploadProps> = ({onUpload}) => {
                     console.error(response);
                 }
             })
+            .finally(() => setUploading(false));
     }
     return (
         <Stack direction="row"
@@ -47,12 +50,16 @@ export const ImageUpload: FC<ImageUploadProps> = ({onUpload}) => {
                 <input hidden accept="image/*" type="file" onChange={handleFileUpload}/>
                 <PhotoCamera fontSize="large"/>
             </IconButton>
-            {image &&
+            {
+                uploading &&
+                <CircularProgress/>
+            }
+            {
+                image &&
                 <Avatar variant="rounded" src={image}>
                     <Image/>
                 </Avatar>
             }
-
         </Stack>
     );
 };
