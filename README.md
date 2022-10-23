@@ -50,6 +50,7 @@ npm run dev
 - [ZIO-HTTP](https://zio.github.io/zio-http/) to write HTTP endpoints
 - [Quill](https://getquill.io/) for compile-time SQL query generation
 - [Doobie](https://tpolecat.github.io/doobie/) to construct JDBC programs
+- [Flyway](https://flywaydb.org/) for database migration
 - [PostgreSQL](https://www.postgresql.org/) as database
 - [NextJS](https://nextjs.org/) as frontend framework
 - [React](https://reactjs.org/) for building user interfaces
