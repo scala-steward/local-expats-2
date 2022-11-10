@@ -9,6 +9,7 @@ import {QueryClientProvider} from "@tanstack/react-query";
 import {SelectedLocationProvider} from "../src/location/SelectedLocation";
 import {PostBookmarksProvider} from "../src/post/PostBookmarks";
 import {Container} from "@mui/material";
+import {Analytics} from '@vercel/analytics/react';
 
 const theme = createTheme();
 
@@ -54,6 +55,7 @@ export default function MyApp({Component, pageProps}: AppProps) {
                         <Container maxWidth="md" disableGutters>
                             <NavBar/>
                             <Component {...pageProps} />
+                            <Analytics/>
                         </Container>
                     </PostBookmarksProvider>
                 </SelectedLocationProvider>
