@@ -21,7 +21,7 @@ export default function NavBar() {
             <AppBar position="fixed">
                 <Container maxWidth="md" disableGutters>
                     <Toolbar>
-                        <Link href="/">
+                        <Link href="/" legacyBehavior>
                             <Box onClick={setSelectedLocationToDefault} sx={{display: "flex", alignItems: "center"}}>
                                 <IconButton>
                                     <AppIcon fontSize="large"/>

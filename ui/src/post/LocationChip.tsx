@@ -11,7 +11,7 @@ export const LocationChip: FC<{ locationId: LocationId }> = ({locationId}) => {
     const locationLabel = isLoading ? '' : getLocationLabel(getLocation(locationId));
     const smallScreen = useSmallScreen();
     return (
-        <Link href="/">
+        <Link href="/" legacyBehavior>
             <Tooltip title={locationLabel}>
                 <Chip
                     clickable

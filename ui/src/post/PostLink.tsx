@@ -4,6 +4,6 @@ import Link from "next/link";
 import {PostOnlyProps} from "./PostOnlyProps";
 
 export const PostLink: FC<PostOnlyProps & PropsWithChildren> = ({post, children}) =>
-    <Link href={getPostUrl(post)}>
+    <Link href={getPostUrl(post)} legacyBehavior>
         {children}
     </Link>;
