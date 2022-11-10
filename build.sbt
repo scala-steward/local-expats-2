@@ -6,16 +6,16 @@ Global / onChangedBuildSource := ReloadOnSourceChanges
 
 val V = new {
   val Doobie = "1.0.0-RC2"
-  val Flyway = "9.5.1"
+  val Flyway = "9.7.0"
   val Postgres = "42.5.0"
   val Quill = "4.6.0"
   val Slf4j = "2.0.3"
-  val Zio = "2.0.2"
+  val Zio = "2.0.3"
   val ZioCats = "3.3.0"
   val ZioConfig = "3.0.2"
   val ZioHttp = "2.0.0-RC11"
   val ZioJson = "0.3.0"
-  val ZioLogging = "2.1.2"
+  val ZioLogging = "2.1.3"
 }
 
 lazy val domain = project
