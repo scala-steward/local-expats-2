@@ -1,8 +1,7 @@
 import React, {FC, useState} from "react";
 import {Avatar, CircularProgress, Stack} from "@mui/material";
 import IconButton from "@mui/material/IconButton";
-import {Close, Image, PhotoCamera} from "@mui/icons-material";
-import Badge from "@mui/material/Badge";
+import {Image as ImageIcon, PhotoCamera} from "@mui/icons-material";
 
 type ImageUploadProps = {
     onUpload: (link: string) => void;
@@ -57,7 +56,7 @@ export const ImageUpload: FC<ImageUploadProps> = ({onUpload}) => {
             {
                 image &&
                 <Avatar variant="rounded" src={image}>
-                    <Image/>
+                    <ImageIcon/>
                 </Avatar>
             }
         </Stack>
