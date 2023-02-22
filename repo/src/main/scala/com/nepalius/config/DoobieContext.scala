@@ -29,7 +29,7 @@ object DoobieContext {
         zioRuntime.unsafe
           .run(
             cats.effect.std
-              .Dispatcher[zio.Task]
+              .Dispatcher.parallel[zio.Task]
               .allocated,
           )
           .getOrThrowFiberFailure()(unsafe)
