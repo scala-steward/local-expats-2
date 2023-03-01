@@ -6,7 +6,6 @@ import com.nepalius.location.{LocationRepoLive, LocationRoutes}
 import com.nepalius.post.api.PostRoutes
 import com.nepalius.post.domain.PostServiceLive
 import com.nepalius.post.repo.PostRepoLive
-import zhttp.http.*
 import zio.*
 import zio.logging.backend.SLF4J
 

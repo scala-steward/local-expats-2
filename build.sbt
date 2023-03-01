@@ -13,7 +13,7 @@ val V = new {
   val Zio = "2.0.9"
   val ZioCats = "23.0.0.2"
   val ZioConfig = "3.0.7"
-  val ZioHttp = "2.0.0-RC11"
+  val ZioHttp = "0.0.4"
   val ZioJson = "0.4.2"
   val ZioLogging = "2.1.9"
 }
@@ -52,7 +52,7 @@ lazy val api = project
   .settings(commonSettings)
   .settings(
     libraryDependencies ++= Seq(
-      "io.d11" %% "zhttp" % V.ZioHttp,
+      "dev.zio" %% "zio-http" % V.ZioHttp,
       "dev.zio" %% "zio-json" % V.ZioJson,
     ),
   )

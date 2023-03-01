@@ -6,10 +6,11 @@ import com.nepalius.post.domain.Post.PostId
 import com.nepalius.post.domain.{Post, PostService}
 import com.nepalius.util.ApiUtils.{getQueryParam, parseBody, parsePageable}
 import com.nepalius.util.Pageable
-import zhttp.http.*
-import zhttp.http.Http.collectZIO
-import zhttp.http.Method.{GET, POST}
 import zio.*
+import zio.http.*
+import zio.http.Http.collectZIO
+import zio.http.model.Method.{GET, POST}
+import zio.http.model.Status
 import zio.json.*
 
 import java.time.{LocalDateTime, ZonedDateTime}

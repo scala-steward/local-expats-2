@@ -2,7 +2,7 @@ package com.nepalius.util
 
 import com.nepalius.util.ApiUtils.getQueryParam
 import com.nepalius.util.Pageable
-import zhttp.http.Request
+import zio.http.Request
 import zio.json.*
 import zio.*
 

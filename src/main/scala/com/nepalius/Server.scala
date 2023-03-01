@@ -4,9 +4,8 @@ import com.nepalius.config.{DatabaseMigration, ServerConfig}
 import com.nepalius.location.LocationRoutes
 import com.nepalius.post.api.PostRoutes
 import com.nepalius.post.domain.PostRepo
-import zhttp.http.*
-import zhttp.service.Server as HttpServer
 import zio.*
+import zio.http.{Server as HttpServer, *}
 
 final case class Server(
     serverConfig: ServerConfig,
@@ -20,13 +19,13 @@ final case class Server(
   def start: ZIO[Any, Throwable, Unit] =
     for
       _ <- databaseMigration.migrate()
-      _ <- HttpServer.start(serverConfig.port, allRoutes)
+      configLayer = zio.http.ServerConfig.live(
+        zio.http.ServerConfig.default.port(serverConfig.port),
+      )
+      _ <- HttpServer
+        .serve(allRoutes.withDefaultErrorResponse)
+        .provide(configLayer, HttpServer.live)
     yield ()
 
 object Server:
-  val layer: ZLayer[
-    ServerConfig & DatabaseMigration & PostRoutes & LocationRoutes,
-    Nothing,
-    Server,
-  ] =
-    ZLayer.fromFunction(Server.apply)
+  val layer = ZLayer.fromFunction(Server.apply)
