@@ -1,21 +1,21 @@
 ThisBuild / organization := "com.nepalius"
-ThisBuild / scalaVersion := "3.2.2"
+ThisBuild / scalaVersion := "3.3.0"
 ThisBuild / version := "0.0.1-SNAPSHOT"
 
 Global / onChangedBuildSource := ReloadOnSourceChanges
 
 val V = new {
   val Doobie = "1.0.0-RC2"
-  val Flyway = "9.15.0"
-  val Postgres = "42.5.4"
+  val Flyway = "9.19.1"
+  val Postgres = "42.6.0"
   val Quill = "4.6.0.1"
-  val Slf4j = "2.0.6"
-  val Zio = "2.0.9"
-  val ZioCats = "23.0.0.2"
+  val Slf4j = "2.0.7"
+  val Zio = "2.0.13"
+  val ZioCats = "23.0.0.3"
   val ZioConfig = "3.0.7"
-  val ZioHttp = "0.0.4"
-  val ZioJson = "0.4.2"
-  val ZioLogging = "2.1.9"
+  val ZioHttp = "0.0.5"
+  val ZioJson = "0.5.0"
+  val ZioLogging = "2.1.13"
 }
 
 lazy val domain = project
