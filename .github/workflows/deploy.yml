@@ -13,7 +13,7 @@ jobs:
         - name: npm build
           uses: actions/setup-node@v3
           with:
-            node-version: '16.x'
+            node-version: '18.x'
         - run: npm --prefix ui ci
         - run: npm --prefix ui run build --if-present
         - name: Set up JDK 17

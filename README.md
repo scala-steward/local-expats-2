@@ -39,7 +39,7 @@ To stop the app in sbt, hit the `Enter` key and then type:
 Run NextJS Dev Server
 
 ```bash
-cd ui
+cd mui
 npm run dev
 ```
 
