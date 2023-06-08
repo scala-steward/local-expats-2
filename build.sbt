@@ -50,6 +50,7 @@ lazy val api = project
     libraryDependencies ++= Seq(
       "com.softwaremill.sttp.tapir" %% "tapir-zio-http-server" % V.Tapir,
       "com.softwaremill.sttp.tapir" %% "tapir-json-zio" % V.Tapir,
+      "com.softwaremill.sttp.tapir" %% "tapir-swagger-ui-bundle" % V.Tapir,
     ),
   )
 

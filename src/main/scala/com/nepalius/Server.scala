@@ -6,6 +6,7 @@ import com.nepalius.post.api.PostRoutes
 import com.nepalius.post.domain.PostRepo
 import sttp.tapir.server.ziohttp.ZioHttpInterpreter
 import zio.*
+import zio.Console.printLine
 import zio.http.{Server as HttpServer, *}
 
 final case class Server(
@@ -22,12 +23,14 @@ final case class Server(
     postRoutes.routes ++ locationRoutes.routes ++ allEndpoints
 
   def start: ZIO[Any, Throwable, Unit] =
-    for
+    (for
       _ <- databaseMigration.migrate()
-      _ <- HttpServer
-        .serve(allRoutes.withDefaultErrorResponse)
-        .provide(HttpServer.defaultWithPort(serverConfig.port))
-    yield ()
+      port <- HttpServer.install(allRoutes.withDefaultErrorResponse)
+      _ <- printLine(s"Application NepaliUS started")
+      _ <- printLine(s"Go to http://localhost:${port}/docs to open SwaggerUI")
+      _ <- ZIO.never
+    yield ())
+      .provide(HttpServer.defaultWithPort(serverConfig.port))
 
 object Server:
   val layer = ZLayer.fromFunction(Server.apply)
