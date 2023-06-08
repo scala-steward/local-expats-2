@@ -144,7 +144,7 @@ private object PostSql:
               ON post.location_id = post_location.id
             JOIN location filter_location
               ON filter_location.id = ${locationId}
-             AND (filter_location.city IS NULL OR filter_location.city = post_location.city)
+             AND (filter_location.city IS NULL OR filter_location.id = post_location.id)
              AND (filter_location.state IS NULL OR filter_location.state = post_location.state)
            WHERE post.id < ${pageable.lastId}
         GROUP BY post.id
