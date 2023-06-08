@@ -7,12 +7,12 @@ import com.nepalius.post.domain.Post.PostId
 import com.nepalius.post.domain.{Post, PostService}
 import zio.*
 import zio.http.*
-import zio.http.model.Method.GET
+import zio.http.Method.GET
 import zio.json.*
 
 final case class LocationRoutes(locationService: LocationService):
   val routes: Http[Any, Throwable, Request, Response] =
-    Http.collectZIO[Request] { case GET -> !! / "api" / "locations" => getAll }
+    Http.collectZIO[Request] { case GET -> Root / "api" / "locations" => getAll }
 
   private def getAll =
     for

@@ -13,18 +13,15 @@ final case class Server(
     postRoutes: PostRoutes,
     locationRoutes: LocationRoutes,
 ):
-  val allRoutes: HttpApp[Any, Throwable] =
+  private val allRoutes: HttpApp[Any, Throwable] =
     postRoutes.routes ++ locationRoutes.routes
 
   def start: ZIO[Any, Throwable, Unit] =
     for
       _ <- databaseMigration.migrate()
-      configLayer = zio.http.ServerConfig.live(
-        zio.http.ServerConfig.default.port(serverConfig.port),
-      )
       _ <- HttpServer
         .serve(allRoutes.withDefaultErrorResponse)
-        .provide(configLayer, HttpServer.live)
+        .provide(HttpServer.defaultWithPort(serverConfig.port))
     yield ()
 
 object Server:

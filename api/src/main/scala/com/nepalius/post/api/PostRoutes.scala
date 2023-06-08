@@ -9,8 +9,8 @@ import com.nepalius.util.Pageable
 import zio.*
 import zio.http.*
 import zio.http.Http.collectZIO
-import zio.http.model.Method.{GET, POST}
-import zio.http.model.Status
+import zio.http.Method.{GET, POST}
+import zio.http.Status
 import zio.json.*
 
 import java.time.{LocalDateTime, ZonedDateTime}
@@ -19,11 +19,11 @@ final case class PostRoutes(postService: PostService):
 
   val routes: Http[Any, Throwable, Request, Response] =
     collectZIO[Request] {
-      case req @ GET -> !! / "api" / "posts"             => getAll(req)
-      case req @ GET -> !! / "api" / "posts" / "updated" => getUpdated(req)
-      case GET -> !! / "api" / "posts" / long(id)        => getOne(id)
-      case req @ POST -> !! / "api" / "posts"            => createPost(req)
-      case req @ POST -> !! / "api" / "posts" / long(id) / "comments" =>
+      case req @ GET -> Root / "api" / "posts"             => getAll(req)
+      case req @ GET -> Root / "api" / "posts" / "updated" => getUpdated(req)
+      case GET -> Root / "api" / "posts" / long(id)        => getOne(id)
+      case req @ POST -> Root / "api" / "posts"            => createPost(req)
+      case req @ POST -> Root / "api" / "posts" / long(id) / "comments" =>
         addComment(id, req)
     }
 
