@@ -1,1 +1,13 @@
 GET localhost:9000/api/locations
+
+
+###
+POST localhost:9000/api/users
+Content-Type: application/json
+
+{
+  "email": "dak@tes.com",
+  "password": "pass",
+  "firstName": "First Name",
+  "lastName": "Last Name"
+}

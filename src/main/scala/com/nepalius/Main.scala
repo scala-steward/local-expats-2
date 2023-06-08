@@ -12,6 +12,7 @@ import zio.logging.backend.SLF4J
 import java.io.IOException
 import com.nepalius.config.DoobieContext
 import com.nepalius.config.DataSourceContext
+import com.nepalius.user.{UserEndpoints, UserServerEndpoints}
 
 object Main extends ZIOAppDefault {
 
@@ -29,5 +30,8 @@ object Main extends ZIOAppDefault {
         DataSourceContext.layer,
         DoobieContext.liveTransactor,
         Runtime.removeDefaultLoggers >>> SLF4J.slf4j,
+        Endpoints.live,
+        UserEndpoints.live,
+        UserServerEndpoints.live,
       )
 }
