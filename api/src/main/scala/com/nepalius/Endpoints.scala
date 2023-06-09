@@ -1,6 +1,6 @@
 package com.nepalius
 
-import com.nepalius.user.UserServerEndpoints
+import com.nepalius.user.api.UserServerEndpoints
 import sttp.tapir.swagger.bundle.SwaggerInterpreter
 import sttp.tapir.ztapir.*
 import zio.{Task, ZLayer}

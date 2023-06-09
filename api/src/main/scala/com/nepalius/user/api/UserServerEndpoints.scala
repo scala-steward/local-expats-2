@@ -1,4 +1,6 @@
-package com.nepalius.user
+package com.nepalius.user.api
+
+import com.nepalius.user.api.{UserEndpoints, UserResponse, UserServerEndpoints}
 import sttp.tapir.ztapir.*
 import zio.*
 import zio.Console.*

@@ -1,5 +1,6 @@
-package com.nepalius.user
+package com.nepalius.user.api
 
+import com.nepalius.user.api.UserRegisterData
 import sttp.tapir.Schema.annotations.validate
 import sttp.tapir.Validator
 import zio.json.{DeriveJsonDecoder, DeriveJsonEncoder, JsonDecoder, JsonEncoder}

@@ -1,5 +1,6 @@
-package com.nepalius.user
+package com.nepalius.user.api
 
+import com.nepalius.user.api.UserResponse
 import zio.json.{DeriveJsonDecoder, DeriveJsonEncoder, JsonDecoder, JsonEncoder}
 
 import java.util.UUID

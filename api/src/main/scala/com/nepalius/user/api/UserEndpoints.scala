@@ -1,6 +1,7 @@
-package com.nepalius.user
+package com.nepalius.user.api
 
-import com.nepalius.common.ErrorInfo
+import com.nepalius.common.api.{BaseEndpoints, ErrorInfo}
+import com.nepalius.user.api.{UserEndpoints, UserRegisterData, UserResponse}
 import sttp.tapir.Endpoint
 import sttp.tapir.generic.auto.*
 import sttp.tapir.json.zio.jsonBody
@@ -9,11 +10,10 @@ import zio.ZLayer
 
 import java.util.UUID
 
-class UserEndpoints:
+class UserEndpoints(base: BaseEndpoints):
 
-  val registerEndPoint
-      : Endpoint[Unit, UserRegisterData, Unit, UserResponse, Any] =
-    endpoint
+  val registerEndPoint: Endpoint[Unit, UserRegisterData, ErrorInfo, UserResponse, Any] =
+    base.publicEndpoint
       .summary("Register User")
       .post
       .in("api" / "users")
@@ -39,5 +39,5 @@ class UserEndpoints:
     )
 
 object UserEndpoints:
-  val live: ZLayer[Any, Nothing, UserEndpoints] =
-    ZLayer.fromFunction(() => new UserEndpoints())
+  val live: ZLayer[BaseEndpoints, Nothing, UserEndpoints] =
+    ZLayer.fromFunction(new UserEndpoints(_))
