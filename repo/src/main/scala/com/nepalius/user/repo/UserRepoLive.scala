@@ -1,15 +1,41 @@
 package com.nepalius.user.repo
 
+import com.nepalius.config.QuillContext.*
+import com.nepalius.post.domain.{CreatePost, Post}
 import com.nepalius.user.domain.{User, UserRegisterData, UserRepo}
-import zio.{Task, ZLayer, ZIO}
+import io.getquill.*
+import io.getquill.extras.*
+import zio.*
 
+import java.sql.SQLException
 import java.util.UUID
+import javax.sql.DataSource
 
-class UserRepoLive extends UserRepo {
-  override def save(user: UserRegisterData): Task[User] =
-    ZIO.succeed(User(UUID.randomUUID(), user.email, user.firstName, user.lastName))
+class UserRepoLive(
+    dataSource: DataSource,
+) extends UserRepo {
+  private inline def queryUser = quote(querySchema[User]("users"))
+  override def create(user: UserRegisterData): ZIO[Any, SQLException, User] =
+    run {
+      queryUser
+        .insert(
+          _.email -> lift(user.email),
+          _.firstName -> lift(user.firstName),
+          _.lastName -> lift(user.lastName),
+        )
+        .returningGenerated(p => p.id)
+    }
+      .provideEnvironment(ZEnvironment(dataSource))
+      .map(id =>
+        User(
+          id,
+          user.email,
+          user.firstName,
+          user.lastName,
+        ),
+      )
 }
 
 object UserRepoLive:
-  val live: ZLayer[Any, Nothing, UserRepoLive] =
-    ZLayer.fromFunction(() => new UserRepoLive)
+  val live: ZLayer[DataSource, Nothing, UserRepoLive] =
+    ZLayer.fromFunction(new UserRepoLive(_))

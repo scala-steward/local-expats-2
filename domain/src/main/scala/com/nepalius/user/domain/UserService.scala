@@ -5,7 +5,7 @@ import zio.{Task, ZLayer}
 class UserService(userRepo: UserRepo) {
 
   def register(user: UserRegisterData): Task[User] = {
-    userRepo.save(user)
+    userRepo.create(user)
   }
 
 }

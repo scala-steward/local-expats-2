@@ -4,5 +4,5 @@ import zio.Task
 
 trait UserRepo {
 
-  def save(user: UserRegisterData): Task[User]
+  def create(user: UserRegisterData): Task[User]
 }
