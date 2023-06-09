@@ -1,7 +1,7 @@
 package com.nepalius.user.api
 
 import com.nepalius.common.api.{BaseEndpoints, ErrorInfo}
-import com.nepalius.user.api.{UserEndpoints, UserRegisterData, UserResponse}
+import com.nepalius.user.api.{UserEndpoints, UserRegisterPayload, UserResponse}
 import sttp.tapir.Endpoint
 import sttp.tapir.generic.auto.*
 import sttp.tapir.json.zio.jsonBody
@@ -12,16 +12,16 @@ import java.util.UUID
 
 class UserEndpoints(base: BaseEndpoints):
 
-  val registerEndPoint: Endpoint[Unit, UserRegisterData, ErrorInfo, UserResponse, Any] =
+  val registerEndPoint: Endpoint[Unit, UserRegisterPayload, ErrorInfo, UserResponse, Any] =
     base.publicEndpoint
       .summary("Register User")
       .post
       .in("api" / "users")
-      .in(jsonBody[UserRegisterData].example(Examples.userRegisterData))
+      .in(jsonBody[UserRegisterPayload].example(Examples.userRegisterRequest))
       .out(jsonBody[UserResponse].example(Examples.userResponse))
 
   private object Examples:
-    val userRegisterData: UserRegisterData = UserRegisterData(
+    val userRegisterRequest: UserRegisterPayload = UserRegisterPayload(
       email = "first.last@email.com",
       firstName = "First",
       lastName = "Last",

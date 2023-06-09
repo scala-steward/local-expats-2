@@ -1,6 +1,7 @@
 package com.nepalius.user.api
 
 import com.nepalius.user.api.UserResponse
+import com.nepalius.user.domain.User
 import zio.json.{DeriveJsonDecoder, DeriveJsonEncoder, JsonDecoder, JsonEncoder}
 
 import java.util.UUID
@@ -19,3 +20,11 @@ object UserResponse:
 
   given userDecoder: JsonDecoder[UserResponse] =
     DeriveJsonDecoder.gen[UserResponse]
+
+  def apply(user: User): UserResponse = UserResponse(
+    user.id,
+    user.email,
+    user.firstName,
+    user.lastName,
+    None,
+  )
