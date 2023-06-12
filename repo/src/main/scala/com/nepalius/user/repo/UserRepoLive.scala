@@ -23,6 +23,7 @@ class UserRepoLive(
           _.email -> lift(user.email),
           _.firstName -> lift(user.firstName),
           _.lastName -> lift(user.lastName),
+          _.passwordHash -> lift(user.passwordHash),
         )
         .returningGenerated(p => p.id)
     }
@@ -33,6 +34,7 @@ class UserRepoLive(
           user.email,
           user.firstName,
           user.lastName,
+          user.passwordHash,
         ),
       )
 

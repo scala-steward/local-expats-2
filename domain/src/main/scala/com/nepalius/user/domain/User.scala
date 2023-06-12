@@ -9,6 +9,7 @@ case class User(
     email: String,
     firstName: String,
     lastName: String,
+    passwordHash: String,
 )
 
 object User:

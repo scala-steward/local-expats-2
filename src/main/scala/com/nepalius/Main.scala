@@ -1,5 +1,6 @@
 package com.nepalius
 
+import com.nepalius.auth.AuthService
 import com.nepalius.common.api.BaseEndpoints
 import com.nepalius.config.{AppConfig, DataSourceContext, DatabaseMigration, DoobieContext}
 import com.nepalius.location.domain.LocationServiceLive
@@ -24,18 +25,19 @@ object Main extends ZIOAppDefault {
         Server.layer,
         AppConfig.layer,
         Runtime.removeDefaultLoggers >>> SLF4J.slf4j,
-
+        //
         DatabaseMigration.layer,
         DataSourceContext.layer,
         DoobieContext.liveTransactor,
-
+        //
+        AuthService.live,
         BaseEndpoints.live,
         Endpoints.live,
         UserEndpoints.live,
         UserServerEndpoints.live,
         PostRoutes.layer,
         LocationRoutes.layer,
-
+        //
         PostRepoLive.layer >>> PostServiceLive.layer,
         LocationRepoLive.layer >>> LocationServiceLive.layer,
         UserRepoLive.live >>> UserService.live,

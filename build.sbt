@@ -8,6 +8,8 @@ val V = new {
   val CommonsValidator = "1.7"
   val Doobie = "1.0.0-RC2"
   val Flyway = "9.19.3"
+  val Jwt = "4.4.0"
+  val Password4J = "1.7.1"
   val Postgres = "42.6.0"
   val Quill = "4.6.0.1"
   val Slf4j = "2.0.7"
@@ -53,6 +55,8 @@ lazy val api = project
       "com.softwaremill.sttp.tapir" %% "tapir-zio-http-server" % V.Tapir,
       "com.softwaremill.sttp.tapir" %% "tapir-json-zio" % V.Tapir,
       "com.softwaremill.sttp.tapir" %% "tapir-swagger-ui-bundle" % V.Tapir,
+      "com.auth0" % "java-jwt" % V.Jwt,
+      "com.password4j" % "password4j" % V.Password4J,
     ),
   )
 

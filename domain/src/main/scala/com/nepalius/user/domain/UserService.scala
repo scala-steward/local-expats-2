@@ -15,7 +15,7 @@ class UserService(userRepo: UserRepo) {
     for {
       _ <- validateEmail(emailClean)
       _ <- checkUserDoesNotExistByEmail(emailClean)
-      userDataClean = UserRegisterData(emailClean, firstNameClean, lastNameClean, user.password)
+      userDataClean = UserRegisterData(emailClean, firstNameClean, lastNameClean, user.passwordHash)
       user <- userRepo.create(userDataClean)
     } yield user
   }
