@@ -5,6 +5,7 @@ ThisBuild / version := "0.0.1-SNAPSHOT"
 Global / onChangedBuildSource := ReloadOnSourceChanges
 
 val V = new {
+  val CommonsValidator = "1.7"
   val Doobie = "1.0.0-RC2"
   val Flyway = "9.19.3"
   val Postgres = "42.6.0"
@@ -21,6 +22,7 @@ lazy val domain = project
   .settings(
     libraryDependencies ++= Seq(
       "dev.zio" %% "zio" % V.Zio,
+      "commons-validator" % "commons-validator" % V.CommonsValidator,
     ),
   )
 
