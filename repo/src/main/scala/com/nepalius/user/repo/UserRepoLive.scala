@@ -15,6 +15,7 @@ class UserRepoLive(
     dataSource: DataSource,
 ) extends UserRepo {
   private inline def queryUser = quote(querySchema[User]("users"))
+
   override def create(user: UserRegisterData): ZIO[Any, SQLException, User] =
     run {
       queryUser
@@ -34,6 +35,15 @@ class UserRepoLive(
           user.lastName,
         ),
       )
+
+  override def findUserByEmail(email: String): ZIO[Any, SQLException, Option[User]] =
+    run {
+      queryUser
+        .filter(_.email == lift(email))
+        .take(1)
+    }
+      .provideEnvironment(ZEnvironment(dataSource))
+      .map(_.headOption)
 }
 
 object UserRepoLive:
