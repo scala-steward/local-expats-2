@@ -1,21 +1,50 @@
 package com.nepalius.common.api
 
+import com.nepalius.auth.{AuthService, UserSession}
 import com.nepalius.common.*
-import com.nepalius.common.api.BaseEndpoints.defaultErrorOutputs
+import com.nepalius.common.api.BaseEndpoints.{UserWithEmailNotFoundMessage, defaultErrorOutputs}
+import com.nepalius.user.domain.User.UserId
+import com.nepalius.user.domain.UserService
 import sttp.model.StatusCode
 import sttp.tapir.generic.auto.*
 import sttp.tapir.json.zio.jsonBody
 import sttp.tapir.ztapir.*
 import sttp.tapir.{EndpointOutput, PublicEndpoint}
-import zio.ZLayer
+import zio.*
 
-class BaseEndpoints:
+class BaseEndpoints(authService: AuthService, userService: UserService):
   val publicEndpoint: PublicEndpoint[Unit, ErrorInfo, Unit, Any] =
-    endpoint.errorOut(defaultErrorOutputs)
+    endpoint
+      .errorOut(defaultErrorOutputs)
+
+  val secureEndpoint: ZPartialServerEndpoint[Any, String, UserSession, Unit, ErrorInfo, Unit, Any] =
+    endpoint
+      .errorOut(defaultErrorOutputs)
+      .securityIn(auth.bearer[String]())
+      .zServerSecurityLogic[Any, UserSession](handleAuth)
+
+  private def handleAuth(token: String): IO[ErrorInfo, UserSession] =
+    (for
+      userEmail <- authService.verifyJwt(token)
+      userId <- userIdByEmail(userEmail)
+    yield UserSession(userId))
+      .logError
+      .mapError {
+        case e: Exceptions.Unauthorized => Unauthorized(e.message)
+        case e: Exceptions.NotFound     => NotFound(e.message)
+        case _                          => InternalServerError()
+      }
+
+  private def userIdByEmail(email: String): Task[UserId] =
+    userService.findUserByEmail(email)
+      .someOrFail(Exceptions.NotFound(UserWithEmailNotFoundMessage(email)))
+      .map(_.id)
 
 object BaseEndpoints:
-  val live: ZLayer[Any, Nothing, BaseEndpoints] =
-    ZLayer.fromFunction(() => new BaseEndpoints())
+  val live: ZLayer[AuthService with UserService, Nothing, BaseEndpoints] =
+    ZLayer.fromFunction(new BaseEndpoints(_, _))
+
+  private val UserWithEmailNotFoundMessage: String => String = (email: String) => s"User with email $email doesn't exist"
 
   val defaultErrorOutputs: EndpointOutput.OneOf[ErrorInfo, ErrorInfo] =
     oneOf[ErrorInfo](

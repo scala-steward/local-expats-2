@@ -1,11 +1,17 @@
 package com.nepalius.user.domain
 
+import com.nepalius.common.Exceptions
 import com.nepalius.common.Exceptions.{AlreadyInUse, BadRequest}
-import com.nepalius.user.domain.UserService.{InvalidEmailMessage, UserWithEmailAlreadyInUseMessage}
+import com.nepalius.user.domain.User.UserId
+import com.nepalius.user.domain.UserService.{InvalidEmailMessage, UserWithEmailAlreadyInUseMessage, UserWithIdNotFoundMessage}
 import org.apache.commons.validator.routines.EmailValidator
 import zio.{Task, ZIO, ZLayer}
 
 class UserService(userRepo: UserRepo) {
+
+  def get(userId: UserId): Task[User] =
+    userRepo.findUserById(userId)
+      .someOrFail(Exceptions.NotFound(UserWithIdNotFoundMessage(userId)))
 
   def register(user: UserRegisterData): Task[User] = {
     val emailClean = user.email.toLowerCase.trim()
@@ -42,5 +48,6 @@ object UserService:
   val live: ZLayer[UserRepo, Nothing, UserService] =
     ZLayer.fromFunction(new UserService(_))
 
+  private val UserWithIdNotFoundMessage: UserId => String = (id: UserId) => s"User with id $id doesn't exist"
   private val UserWithEmailAlreadyInUseMessage: String => String = (email: String) => s"User with email $email already in use"
   private val InvalidEmailMessage: String => String = (email: String) => s"Email $email is not valid"

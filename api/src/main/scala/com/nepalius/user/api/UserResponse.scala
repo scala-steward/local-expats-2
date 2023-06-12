@@ -11,20 +11,15 @@ case class UserResponse(
     email: String,
     firstName: String,
     lastName: String,
-    token: Option[String],
 )
 
 object UserResponse:
-  given userEncoder: JsonEncoder[UserResponse] =
-    DeriveJsonEncoder.gen[UserResponse]
+  given JsonEncoder[UserResponse] = DeriveJsonEncoder.gen[UserResponse]
+  given JsonDecoder[UserResponse] = DeriveJsonDecoder.gen[UserResponse]
 
-  given userDecoder: JsonDecoder[UserResponse] =
-    DeriveJsonDecoder.gen[UserResponse]
-
-  def apply(user: User, token: String): UserResponse = UserResponse(
+  def apply(user: User): UserResponse = UserResponse(
     user.id,
     user.email,
     user.firstName,
     user.lastName,
-    Some(token),
   )

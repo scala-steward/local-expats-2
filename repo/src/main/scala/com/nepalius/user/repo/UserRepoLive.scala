@@ -2,6 +2,7 @@ package com.nepalius.user.repo
 
 import com.nepalius.config.QuillContext.*
 import com.nepalius.post.domain.{CreatePost, Post}
+import com.nepalius.user.domain.User.UserId
 import com.nepalius.user.domain.{User, UserRegisterData, UserRepo}
 import io.getquill.*
 import io.getquill.extras.*
@@ -42,7 +43,14 @@ class UserRepoLive(
     run {
       queryUser
         .filter(_.email == lift(email))
-        .take(1)
+    }
+      .provideEnvironment(ZEnvironment(dataSource))
+      .map(_.headOption)
+
+  override def findUserById(id: UserId): Task[Option[User]] =
+    run {
+      queryUser
+        .filter(_.id == lift(id))
     }
       .provideEnvironment(ZEnvironment(dataSource))
       .map(_.headOption)

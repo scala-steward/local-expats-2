@@ -1,5 +1,6 @@
 package com.nepalius.user.api
 
+import com.nepalius.auth.UserSession
 import com.nepalius.common.api.{BaseEndpoints, ErrorInfo}
 import com.nepalius.user.api.{UserEndpoints, UserRegisterPayload, UserResponse}
 import sttp.tapir.Endpoint
@@ -12,21 +13,28 @@ import java.util.UUID
 
 class UserEndpoints(base: BaseEndpoints):
 
-  val registerEndPoint: Endpoint[Unit, UserRegisterPayload, ErrorInfo, UserResponse, Any] =
+  val registerEndPoint: Endpoint[Unit, UserRegisterPayload, ErrorInfo, UserWithAuthTokenResponse, Any] =
     base.publicEndpoint
       .summary("Register User")
       .post
       .in("api" / "users")
       .in(jsonBody[UserRegisterPayload].example(Examples.userRegisterPayload))
-      .out(jsonBody[UserResponse].example(Examples.userResponse))
+      .out(jsonBody[UserWithAuthTokenResponse].example(Examples.userWithAuthTokenResponse))
 
-  val loginEndpoint: Endpoint[Unit, UserLoginPayload, ErrorInfo, UserResponse, Any] =
+  val loginEndpoint: Endpoint[Unit, UserLoginPayload, ErrorInfo, UserWithAuthTokenResponse, Any] =
     base.publicEndpoint
       .summary("Login User")
       .post
       .in("api" / "users" / "login")
       .in(jsonBody[UserLoginPayload].example(Examples.userLoginPayload))
-      .out(jsonBody[UserResponse].example(Examples.userResponse))
+      .out(jsonBody[UserWithAuthTokenResponse].example(Examples.userWithAuthTokenResponse))
+
+  val getCurrentUserEndpoint: ZPartialServerEndpoint[Any, String, UserSession, Unit, ErrorInfo, UserResponse, Any] =
+    base.secureEndpoint
+      .summary("Get Current User")
+      .get
+      .in("api" / "user")
+      .out(jsonBody[UserResponse].example(Examples.getUserResponse))
 
   private object Examples:
     val userRegisterPayload: UserRegisterPayload = UserRegisterPayload(
@@ -41,14 +49,17 @@ class UserEndpoints(base: BaseEndpoints):
       password = "secret_password",
     )
 
-    val userResponse: UserResponse = UserResponse(
+    val getUserResponse: UserResponse = UserResponse(
       id = UUID.fromString("cbee098c-9fe5-4e0b-9e28-2d4a1db83345"),
       email = "user123@email.com",
       firstName = "First",
       lastName = "Last",
-      token = Some(
+    )
+
+    val userWithAuthTokenResponse: UserWithAuthTokenResponse = UserWithAuthTokenResponse(
+      user = getUserResponse,
+      authToken =
         "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJTb2Z0d2FyZU1pbGwiLCJ1c2VyRW1haWwiOiJ1c2VyMTIzQGVtYWlsLmNvbSIsImV4cCI6MTY4MjU4MzY0NCwiaWF0IjoxNjgyNTgwMDQ0LCJqdGkiOiJkMmEzYThjZC1mNmFhLTQwNzgtYTk4Ni1jZmIwNTg5NTAxYmEifQ.SwY-ynkmR3-uYZU0K2cI0NY7Cs8oSgCU8RUVUagOAok",
-      ),
     )
 
 object UserEndpoints:
