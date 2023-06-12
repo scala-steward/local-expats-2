@@ -21,8 +21,8 @@ case class UserRegisterPayload(
 }
 
 object UserRegisterPayload:
-  given UserRegisterRequestEncoder: JsonEncoder[UserRegisterPayload] =
+  given JsonEncoder[UserRegisterPayload] =
     DeriveJsonEncoder.gen[UserRegisterPayload]
 
-  given UserRegisterRequestDecoder: JsonDecoder[UserRegisterPayload] =
+  given JsonDecoder[UserRegisterPayload] =
     DeriveJsonDecoder.gen[UserRegisterPayload]

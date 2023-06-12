@@ -17,14 +17,27 @@ class UserEndpoints(base: BaseEndpoints):
       .summary("Register User")
       .post
       .in("api" / "users")
-      .in(jsonBody[UserRegisterPayload].example(Examples.userRegisterRequest))
+      .in(jsonBody[UserRegisterPayload].example(Examples.userRegisterPayload))
+      .out(jsonBody[UserResponse].example(Examples.userResponse))
+
+  val loginEndpoint: Endpoint[Unit, UserLoginPayload, ErrorInfo, UserResponse, Any] =
+    base.publicEndpoint
+      .summary("Login User")
+      .post
+      .in("api" / "users" / "login")
+      .in(jsonBody[UserLoginPayload].example(Examples.userLoginPayload))
       .out(jsonBody[UserResponse].example(Examples.userResponse))
 
   private object Examples:
-    val userRegisterRequest: UserRegisterPayload = UserRegisterPayload(
+    val userRegisterPayload: UserRegisterPayload = UserRegisterPayload(
       email = "first.last@email.com",
       firstName = "First",
       lastName = "Last",
+      password = "secret_password",
+    )
+
+    val userLoginPayload: UserLoginPayload = UserLoginPayload(
+      email = "first.last@email.com",
       password = "secret_password",
     )
 

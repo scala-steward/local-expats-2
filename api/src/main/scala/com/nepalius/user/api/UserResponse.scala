@@ -21,10 +21,10 @@ object UserResponse:
   given userDecoder: JsonDecoder[UserResponse] =
     DeriveJsonDecoder.gen[UserResponse]
 
-  def apply(user: User): UserResponse = UserResponse(
+  def apply(user: User, token: String): UserResponse = UserResponse(
     user.id,
     user.email,
     user.firstName,
     user.lastName,
-    None,
+    Some(token),
   )

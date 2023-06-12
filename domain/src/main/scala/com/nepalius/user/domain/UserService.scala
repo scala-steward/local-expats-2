@@ -20,6 +20,9 @@ class UserService(userRepo: UserRepo) {
     } yield user
   }
 
+  def findUserByEmail(email: String): Task[Option[User]] =
+    userRepo.findUserByEmail(email.toLowerCase.trim())
+
   private def validateEmail(email: String): Task[Unit] =
     if EmailValidator.getInstance().isValid(email)
     then ZIO.unit
