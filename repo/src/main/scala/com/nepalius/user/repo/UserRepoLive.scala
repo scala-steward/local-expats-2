@@ -59,7 +59,7 @@ class UserRepoLive(
         .filter(_.email == lift(email))
     }
       .map(_.headOption)
-      .map(row => row.map(_.toUser()))
+      .map(row => row.map(_.toUser))
 
   override def findUserById(id: UserId): Task[Option[User]] =
     run {
@@ -67,7 +67,7 @@ class UserRepoLive(
         .filter(_.id == lift(id))
     }
       .map(_.headOption)
-      .map(row => row.map(_.toUser()))
+      .map(row => row.map(_.toUser))
 
   override def update(id: UserId, userData: UserData): Task[User] = {
     val user = UserRow(id, userData.email, userData.firstName, userData.lastName, userData.passwordHash)
@@ -76,7 +76,7 @@ class UserRepoLive(
         .filter(_.id == lift(id))
         .updateValue(lift(user))
     }
-      .map(_ => user.toUser())
+      .map(_ => user.toUser)
   }
 
 object UserRepoLive:
