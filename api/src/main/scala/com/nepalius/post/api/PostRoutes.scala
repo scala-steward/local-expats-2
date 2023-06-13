@@ -20,7 +20,7 @@ final case class PostRoutes(postService: PostService):
   val routes: Http[Any, Throwable, Request, Response] =
     collectZIO[Request] {
       case req @ GET -> Root / "api" / "posts"             => getAll(req)
-      case req @ GET -> Root / "api" / "posts" / "updated" => getUpdated(req)
+      case req @ GET -> Root / "api" / "posts" / "updated" => getUpdated(req).logError
       case GET -> Root / "api" / "posts" / long(id)        => getOne(id)
       case req @ POST -> Root / "api" / "posts"            => createPost(req)
       case req @ POST -> Root / "api" / "posts" / long(id) / "comments" =>

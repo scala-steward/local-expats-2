@@ -1,5 +1,7 @@
 GET localhost:9000/api/locations
 
+###
+GET localhost:9000/api/posts
 
 ###
 POST localhost:9000/api/users
@@ -42,3 +44,7 @@ Authorization: Bearer {{authToken}}
   "firstName": "First",
   "lastName": "Last Name"
 }
+
+
+###
+http://localhost:3000/api/posts/updated?ids=16,10,17,18,29,2&since=2023-06-13T19:15:29.603Z

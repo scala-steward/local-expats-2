@@ -14,23 +14,11 @@ import java.sql.SQLException
 import java.time.{LocalDateTime, ZonedDateTime}
 import java.util.UUID
 import javax.sql.DataSource
-import doobie.util.transactor
-import doobie.util.transactor.Transactor
-import doobie.util.query.Query0
-import doobie.implicits.*
-import doobie.postgres.implicits.*
-import doobie.util.query.Query0
-import doobie.{Transactor, Update0}
-import cats.data.OptionT
-import cats.effect.MonadCancelThrow
-import cats.implicits.*
 import com.nepalius.config.QuillContext.QuillPostgres
 import io.getquill.jdbczio.Quill
-import zio.interop.catz.*
 
 class PostRepoLive(
     quill: QuillPostgres,
-    transactor: Transactor[Task],
 ) extends PostRepo:
   import quill.*
 
@@ -49,25 +37,44 @@ class PostRepoLive(
       pageable: Pageable,
       locationId: LocationId,
   ): Task[List[PostView]] =
-    PostSql
-      .getAll(pageable, locationId)
-      .to[List]
-      .transact(transactor)
-      .foldZIO(err => ZIO.fail(err), posts => ZIO.succeed(posts))
+    run {
+      quote {
+        sql"""SELECT post.id, post.title, post.message, post.location_id, post.created_at, post.image, COUNT(comment.id) AS no_of_comments
+                FROM post
+           LEFT JOIN comment on post.id = comment.post_id
+                JOIN location post_location
+                  ON post.location_id = post_location.id
+                JOIN location filter_location
+                  ON filter_location.id = ${lift(locationId)}
+                 AND (filter_location.city IS NULL OR filter_location.id = post_location.id)
+                 AND (filter_location.state IS NULL OR filter_location.state = post_location.state)
+               WHERE post.id < ${lift(pageable.lastId)}
+            GROUP BY post.id
+               ORDER BY post.id DESC
+               LIMIT ${lift(pageable.pageSize)}
+           """.as[Query[PostView]]
+      }
+    }
 
   override def getUpdated(
       ids: List[PostId],
       since: ZonedDateTime,
   ): Task[List[PostView]] = {
-    val idsNel = ids.toNel
-    if idsNel.isEmpty
+    if ids.isEmpty
     then ZIO.succeed(List())
-    else
-      PostSql
-        .getUpdated(idsNel.get, since)
-        .to[List]
-        .transact(transactor)
-        .foldZIO(err => ZIO.fail(err), posts => ZIO.succeed(posts))
+    else {
+      run {
+        quote {
+          sql"""SELECT post.id, post.title, post.message, post.location_id, post.created_at, post.image, COUNT(comment.id) AS no_of_comments
+                  FROM post
+                  JOIN comment ON post.id = comment.post_id
+                 WHERE comment.created_at > ${lift(since)}
+              GROUP BY post.id
+           """.as[Query[PostView]]
+        }
+          .filter(p => lift(ids).contains(p.id)) // Fix nested query
+      }
+    }
   }
 
   override def create(post: CreatePost): ZIO[Any, SQLException, Post] =
@@ -124,42 +131,4 @@ class PostRepoLive(
   }
 
 object PostRepoLive:
-  val live = ZLayer.fromFunction(new PostRepoLive(_, _))
-
-private object PostSql:
-
-  import doobie.*
-  import doobie.implicits.*
-  import cats.*
-  import cats.data.*
-  import cats.effect.*
-  import cats.implicits.*
-
-  def getAll(pageable: Pageable, locationId: LocationId) =
-    sql"""SELECT post.id, post.title, post.message, post.location_id, post.created_at, post.image, COUNT(comment.id) AS no_of_comments
-            FROM post
-       LEFT JOIN comment on post.id = comment.post_id
-            JOIN location post_location
-              ON post.location_id = post_location.id
-            JOIN location filter_location
-              ON filter_location.id = ${locationId}
-             AND (filter_location.city IS NULL OR filter_location.id = post_location.id)
-             AND (filter_location.state IS NULL OR filter_location.state = post_location.state)
-           WHERE post.id < ${pageable.lastId}
-        GROUP BY post.id
-           ORDER BY post.id DESC
-           LIMIT ${pageable.pageSize}
-       """.query[PostView]
-
-  def getUpdated(ids: NonEmptyList[PostId], since: ZonedDateTime) = {
-    val q =
-      fr"""SELECT post.id, post.title, post.message, post.location_id, post.created_at, post.image, COUNT(comment.id) AS no_of_comments
-            FROM post
-            JOIN comment ON post.id = comment.post_id
-           WHERE comment.created_at > $since
-             AND """ ++ Fragments.in(
-        fr"post.id",
-        ids,
-      ) ++ fr"""GROUP BY post.id"""
-    q.query[PostView]
-  }
+  val live = ZLayer.fromFunction(new PostRepoLive(_))
