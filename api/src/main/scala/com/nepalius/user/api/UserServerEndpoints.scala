@@ -73,7 +73,7 @@ class UserServerEndpoints(userEndpoints: UserEndpoints, userService: UserService
       passwordHash <- authService.encryptPassword(user.password)
       userWithPasswordHash = user.copy(password = passwordHash)
       user <- userService.register(userWithPasswordHash.toData)
-      token <- authService.generateJwt(user.email)
+      token <- authService.generateJwt(user.data.email)
     yield UserWithAuthTokenResponse(UserResponse(user), token)
 
   private def loginUser(userCredentials: UserLoginPayload): Task[UserWithAuthTokenResponse] =
@@ -81,7 +81,7 @@ class UserServerEndpoints(userEndpoints: UserEndpoints, userService: UserService
       maybeUser <- userService.findUserByEmail(userCredentials.email)
       user <- ZIO.fromOption(maybeUser)
         .mapError(_ => Unauthorized())
-      token <- authService.generateJwt(user.email)
+      token <- authService.generateJwt(user.data.email)
     yield UserWithAuthTokenResponse(UserResponse(user), token)
 
   val endpoints: List[ZServerEndpoint[Any, Any]] = List(

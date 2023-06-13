@@ -13,12 +13,22 @@ import java.sql.SQLException
 import java.util.UUID
 import javax.sql.DataSource
 
+case class UserRow(
+    id: UserId,
+    email: String,
+    firstName: String,
+    lastName: String,
+    passwordHash: String,
+) {
+  def toUser(): User = User(id, UserData(email, firstName, lastName, passwordHash))
+}
+
 class UserRepoLive(
     quill: QuillPostgres,
 ) extends UserRepo:
   import quill.*
 
-  private inline def queryUser = quote(querySchema[User]("users"))
+  private inline def queryUser = quote(querySchema[UserRow]("users"))
 
   override def create(user: UserRegisterData): ZIO[Any, SQLException, User] =
     run {
@@ -34,10 +44,12 @@ class UserRepoLive(
       .map(id =>
         User(
           id,
-          user.email,
-          user.firstName,
-          user.lastName,
-          user.passwordHash,
+          UserData(
+            user.email,
+            user.firstName,
+            user.lastName,
+            user.passwordHash,
+          ),
         ),
       )
 
@@ -47,6 +59,7 @@ class UserRepoLive(
         .filter(_.email == lift(email))
     }
       .map(_.headOption)
+      .map(row => row.map(_.toUser()))
 
   override def findUserById(id: UserId): Task[Option[User]] =
     run {
@@ -54,15 +67,16 @@ class UserRepoLive(
         .filter(_.id == lift(id))
     }
       .map(_.headOption)
+      .map(row => row.map(_.toUser()))
 
   override def update(id: UserId, userData: UserData): Task[User] = {
-    val user = User(id, userData.email, userData.firstName, userData.lastName, userData.passwordHash)
+    val user = UserRow(id, userData.email, userData.firstName, userData.lastName, userData.passwordHash)
     run {
       queryUser
         .filter(_.id == lift(id))
         .updateValue(lift(user))
     }
-      .map(_ => user)
+      .map(_ => user.toUser())
   }
 
 object UserRepoLive:

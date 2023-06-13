@@ -19,7 +19,7 @@ object UserResponse:
 
   def apply(user: User): UserResponse = UserResponse(
     user.id,
-    user.email,
-    user.firstName,
-    user.lastName,
+    user.data.email,
+    user.data.firstName,
+    user.data.lastName,
   )

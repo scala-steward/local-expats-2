@@ -36,10 +36,10 @@ class UserService(userRepo: UserRepo) {
       _ <- ZIO.foreach(emailCleanOpt)(email => checkUserDoesNotExistByEmail(email, user.id))
       oldUser <- get(user.id)
       newUserData = UserData(
-        email = user.email.getOrElse(oldUser.email),
+        email = user.email.getOrElse(oldUser.data.email),
         firstName = firstNameClean,
         lastName = lastNameClean,
-        passwordHash = user.passwordHash.getOrElse(oldUser.passwordHash),
+        passwordHash = user.passwordHash.getOrElse(oldUser.data.passwordHash),
       )
       updatedUser <- userRepo.update(user.id, newUserData)
     yield updatedUser

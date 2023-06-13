@@ -13,10 +13,7 @@ case class UserData(
 
 case class User(
     id: UserId,
-    email: String,
-    firstName: String,
-    lastName: String,
-    passwordHash: String,
+    data: UserData,
 )
 
 object User:
