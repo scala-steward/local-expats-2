@@ -1,6 +1,6 @@
 package com.nepalius.user.repo
 
-import com.nepalius.config.QuillContext.QuillPostgres
+import com.nepalius.config.QuillContext
 import com.nepalius.post.domain.{CreatePost, Post}
 import com.nepalius.user.domain.User.UserId
 import com.nepalius.user.domain.{User, UserData, UserRegisterData, UserRepo}
@@ -20,11 +20,11 @@ case class UserRow(
     lastName: String,
     passwordHash: String,
 ) {
-  def toUser(): User = User(id, UserData(email, firstName, lastName, passwordHash))
+  def toUser: User = User(id, UserData(email, firstName, lastName, passwordHash))
 }
 
 class UserRepoLive(
-    quill: QuillPostgres,
+    quill: QuillContext,
 ) extends UserRepo:
   import quill.*
 
@@ -80,5 +80,5 @@ class UserRepoLive(
   }
 
 object UserRepoLive:
-  val live: ZLayer[QuillPostgres, Nothing, UserRepoLive] =
+  val live: ZLayer[QuillContext, Nothing, UserRepoLive] =
     ZLayer.fromFunction(new UserRepoLive(_))

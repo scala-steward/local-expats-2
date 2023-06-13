@@ -1,5 +1,5 @@
 package com.nepalius.location
-import com.nepalius.config.QuillContext.QuillPostgres
+import com.nepalius.config.QuillContext
 import com.nepalius.location.State
 import com.nepalius.location.StateDbCodec.given
 import com.nepalius.location.domain.{Location, LocationRepo}
@@ -10,7 +10,7 @@ import zio.*
 
 import javax.sql.DataSource
 
-class LocationRepoLive(quill: QuillPostgres) extends LocationRepo:
+class LocationRepoLive(quill: QuillContext) extends LocationRepo:
   import quill.*
 
   override def getAll: Task[List[Location]] =
@@ -20,5 +20,5 @@ class LocationRepoLive(quill: QuillPostgres) extends LocationRepo:
     }
 
 object LocationRepoLive:
-  val live: ZLayer[QuillPostgres, Nothing, LocationRepoLive] =
+  val live: ZLayer[QuillContext, Nothing, LocationRepoLive] =
     ZLayer.fromFunction(new LocationRepoLive(_))

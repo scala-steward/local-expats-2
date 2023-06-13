@@ -14,11 +14,11 @@ import java.sql.SQLException
 import java.time.{LocalDateTime, ZonedDateTime}
 import java.util.UUID
 import javax.sql.DataSource
-import com.nepalius.config.QuillContext.QuillPostgres
+import com.nepalius.config.QuillContext
 import io.getquill.jdbczio.Quill
 
 class PostRepoLive(
-    quill: QuillPostgres,
+    quill: QuillContext,
 ) extends PostRepo:
   import quill.*
 
@@ -131,4 +131,5 @@ class PostRepoLive(
   }
 
 object PostRepoLive:
-  val live = ZLayer.fromFunction(new PostRepoLive(_))
+  val live: ZLayer[QuillContext, Nothing, PostRepoLive] =
+    ZLayer.fromFunction(new PostRepoLive(_))

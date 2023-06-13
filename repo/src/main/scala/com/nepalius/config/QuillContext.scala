@@ -7,7 +7,8 @@ import zio.ZLayer
 import javax.sql.DataSource
 import scala.language.adhocExtensions
 
+type QuillContext = Quill.Postgres[SnakeCase]
+
 object QuillContext:
-  type QuillPostgres = Quill.Postgres[SnakeCase]
-  val live: ZLayer[DataSource, Nothing, QuillPostgres] =
+  val live: ZLayer[DataSource, Nothing, QuillContext] =
     Quill.Postgres.fromNamingStrategy(SnakeCase)
