@@ -3,7 +3,7 @@ package com.nepalius.user.repo
 import com.nepalius.config.QuillContext.*
 import com.nepalius.post.domain.{CreatePost, Post}
 import com.nepalius.user.domain.User.UserId
-import com.nepalius.user.domain.{User, UserRegisterData, UserRepo}
+import com.nepalius.user.domain.{User, UserData, UserRegisterData, UserRepo}
 import io.getquill.*
 import io.getquill.extras.*
 import zio.*
@@ -54,6 +54,17 @@ class UserRepoLive(
     }
       .provideEnvironment(ZEnvironment(dataSource))
       .map(_.headOption)
+
+  override def update(id: UserId, userData: UserData): Task[User] = {
+    val user = User(id, userData.email, userData.firstName, userData.lastName, userData.passwordHash)
+    run {
+      queryUser
+        .filter(_.id == lift(id))
+        .updateValue(lift(user))
+    }
+      .provideEnvironment(ZEnvironment(dataSource))
+      .map(_ => user)
+  }
 }
 
 object UserRepoLive:

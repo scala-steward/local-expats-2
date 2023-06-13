@@ -3,11 +3,10 @@ package com.nepalius.user.api
 import com.nepalius.auth.AuthService
 import com.nepalius.common.Exceptions
 import com.nepalius.common.Exceptions.Unauthorized
-import com.nepalius.user.api.ErrorMapper.*
 import com.nepalius.common.api.*
+import com.nepalius.user.api.ErrorMapper.*
 import com.nepalius.user.api.{UserEndpoints, UserResponse, UserServerEndpoints}
-import com.nepalius.user.domain.UserService
-
+import com.nepalius.user.domain.{UserService, UserUpdateData}
 import sttp.tapir.ztapir.*
 import zio.*
 import zio.Console.*
@@ -49,6 +48,26 @@ class UserServerEndpoints(userEndpoints: UserEndpoints, userService: UserService
             .map(UserResponse.apply),
       )
 
+  private val updateCurrentUserServerEndpoints: ZServerEndpoint[Any, Any] =
+    userEndpoints
+      .updateUserEndpoint
+      .serverLogic(session =>
+        payload =>
+          (for
+            mayBeNewPassword <- payload.password
+              .map(authService.encryptPassword(_).asSome)
+              .getOrElse(ZIO.succeed(None))
+            userUpdateData = UserUpdateData(session.userId, payload.email, mayBeNewPassword, payload.firstName, payload.lastName)
+            updatedUser <- userService.updateUser(userUpdateData)
+          yield UserResponse(updatedUser))
+            .logError
+            .mapError {
+              case e: Exceptions.NotFound     => NotFound(e.message)
+              case e: Exceptions.AlreadyInUse => Conflict(e.message)
+              case _                          => InternalServerError()
+            },
+      )
+
   private def registerUser(user: UserRegisterPayload): Task[UserWithAuthTokenResponse] =
     for
       passwordHash <- authService.encryptPassword(user.password)
@@ -69,6 +88,7 @@ class UserServerEndpoints(userEndpoints: UserEndpoints, userService: UserService
     registerServerEndpoints,
     loginServerEndpoints,
     getCurrentUserServerEndpoints,
+    updateCurrentUserServerEndpoints,
   )
 
 object UserServerEndpoints:

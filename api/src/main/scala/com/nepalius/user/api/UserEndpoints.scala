@@ -36,6 +36,14 @@ class UserEndpoints(base: BaseEndpoints):
       .in("api" / "user")
       .out(jsonBody[UserResponse].example(Examples.getUserResponse))
 
+  val updateUserEndpoint: ZPartialServerEndpoint[Any, String, UserSession, UserUpdatePayload, ErrorInfo, UserResponse, Any] =
+    base.secureEndpoint
+      .summary("Update Current User")
+      .put
+      .in("api" / "user")
+      .in(jsonBody[UserUpdatePayload].example(Examples.userUpdatePayload))
+      .out(jsonBody[UserResponse].example(Examples.updatedUserResponse))
+
   private object Examples:
     val userRegisterPayload: UserRegisterPayload = UserRegisterPayload(
       email = "first.last@email.com",
@@ -60,6 +68,20 @@ class UserEndpoints(base: BaseEndpoints):
       user = getUserResponse,
       authToken =
         "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJTb2Z0d2FyZU1pbGwiLCJ1c2VyRW1haWwiOiJ1c2VyMTIzQGVtYWlsLmNvbSIsImV4cCI6MTY4MjU4MzY0NCwiaWF0IjoxNjgyNTgwMDQ0LCJqdGkiOiJkMmEzYThjZC1mNmFhLTQwNzgtYTk4Ni1jZmIwNTg5NTAxYmEifQ.SwY-ynkmR3-uYZU0K2cI0NY7Cs8oSgCU8RUVUagOAok",
+    )
+
+    val userUpdatePayload: UserUpdatePayload = UserUpdatePayload(
+      email = Some("new@email.com"),
+      password = Some("new_secure_password"),
+      firstName = "First",
+      lastName = "Lasting",
+    )
+
+    val updatedUserResponse: UserResponse = UserResponse(
+      id = getUserResponse.id,
+      email = userUpdatePayload.email.get,
+      firstName = userUpdatePayload.firstName,
+      lastName = userUpdatePayload.lastName,
     )
 
 object UserEndpoints:

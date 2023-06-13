@@ -26,6 +26,25 @@ class UserService(userRepo: UserRepo) {
     } yield user
   }
 
+  def updateUser(user: UserUpdateData): Task[User] = {
+    val emailCleanOpt = user.email.map(_.toLowerCase.trim())
+    val firstNameClean = user.firstName.trim()
+    val lastNameClean = user.lastName.trim()
+
+    for
+      _ <- ZIO.foreach(emailCleanOpt)(validateEmail)
+      _ <- ZIO.foreach(emailCleanOpt)(email => checkUserDoesNotExistByEmail(email, user.id))
+      oldUser <- get(user.id)
+      newUserData = UserData(
+        email = user.email.getOrElse(oldUser.email),
+        firstName = firstNameClean,
+        lastName = lastNameClean,
+        passwordHash = user.passwordHash.getOrElse(oldUser.passwordHash),
+      )
+      updatedUser <- userRepo.update(user.id, newUserData)
+    yield updatedUser
+  }
+
   def findUserByEmail(email: String): Task[Option[User]] =
     userRepo.findUserByEmail(email.toLowerCase.trim())
 
@@ -40,6 +59,14 @@ class UserService(userRepo: UserRepo) {
       _ <- ZIO
         .fail(AlreadyInUse(UserWithEmailAlreadyInUseMessage(email)))
         .when(maybeUserByEmail.isDefined)
+    } yield ()
+
+  private def checkUserDoesNotExistByEmail(email: String, id: UserId): Task[Unit] =
+    for {
+      maybeUserByEmail <- userRepo.findUserByEmail(email)
+      _ <- ZIO
+        .fail(AlreadyInUse(UserWithEmailAlreadyInUseMessage(email)))
+        .when(maybeUserByEmail.isDefined && maybeUserByEmail.exists(_.id != id))
     } yield ()
 
 }

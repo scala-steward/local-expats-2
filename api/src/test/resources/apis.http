@@ -21,6 +21,24 @@ Content-Type: application/json
   "password": "pass"
 }
 
+> {%
+    client.global.set("authToken", response.body.authToken)
+%}
+
+
 ###
 GET localhost:9000/api/user
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJOZXBhbGlVUyIsInVzZXJFbWFpbCI6ImZpcnN0Lmxhc3RAZW1haWwuY29tIiwiaWF0IjoxNjg2NTkxOTI0LCJleHAiOjE2ODY1OTU1MjQsImp0aSI6IjhhMDEzMmQxLWQ4NzEtNDM2NC1iMTRjLWU1YzgyM2Q2ZjE0MiJ9.ODueHXVD8B8vr3218GeSqncMWoBLffgMoCz6CY8BASU
+Authorization: Bearer {{authToken}}
+
+
+###
+PUT localhost:9000/api/user
+Content-Type: application/json
+Authorization: Bearer {{authToken}}
+
+{
+  "email": "first.last@email.com",
+  "password": "pass",
+  "firstName": "F",
+  "lastName": "Last Name"
+}
