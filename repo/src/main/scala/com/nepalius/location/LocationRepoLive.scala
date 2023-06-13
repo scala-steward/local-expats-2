@@ -1,22 +1,24 @@
 package com.nepalius.location
-import com.nepalius.location.domain.{Location, LocationRepo}
-import zio.Task
-
-import javax.sql.DataSource
-import com.nepalius.config.QuillContext.*
-import io.getquill.*
-import zio.*
+import com.nepalius.config.QuillContext.QuillPostgres
 import com.nepalius.location.State
 import com.nepalius.location.StateDbCodec.given
+import com.nepalius.location.domain.{Location, LocationRepo}
+import io.getquill.*
 import io.getquill.Ord.{asc, ascNullsFirst}
+import io.getquill.jdbczio.Quill
+import zio.*
 
-final case class LocationRepoLive(dataSource: DataSource) extends LocationRepo:
+import javax.sql.DataSource
+
+class LocationRepoLive(quill: QuillPostgres) extends LocationRepo:
+  import quill.*
+
   override def getAll: Task[List[Location]] =
     run {
       query[Location]
         .sortBy(l => (l.state, l.city))(Ord(asc, ascNullsFirst))
     }
-      .provideEnvironment(ZEnvironment(dataSource))
 
 object LocationRepoLive:
-  val layer = ZLayer.fromFunction(LocationRepoLive.apply)
+  val live: ZLayer[QuillPostgres, Nothing, LocationRepoLive] =
+    ZLayer.fromFunction(new LocationRepoLive(_))

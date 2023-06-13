@@ -1,5 +1,4 @@
 package com.nepalius.post.repo
-import com.nepalius.config.QuillContext.*
 import com.nepalius.location.State
 import com.nepalius.location.StateDbCodec.given
 import com.nepalius.location.domain.Location
@@ -25,12 +24,15 @@ import doobie.{Transactor, Update0}
 import cats.data.OptionT
 import cats.effect.MonadCancelThrow
 import cats.implicits.*
+import com.nepalius.config.QuillContext.QuillPostgres
+import io.getquill.jdbczio.Quill
 import zio.interop.catz.*
 
-final case class PostRepoLive(
-    dataSource: DataSource,
+class PostRepoLive(
+    quill: QuillPostgres,
     transactor: Transactor[Task],
 ) extends PostRepo:
+  import quill.*
 
   override def getOne(
       id: PostId,
@@ -41,7 +43,6 @@ final case class PostRepoLive(
         comment <- query[Comment].leftJoin(_.postId == post.id)
       yield (post, comment)
     }
-      .provideEnvironment(ZEnvironment(dataSource))
       .map(convertToPostWithComments)
 
   override def getAll(
@@ -80,7 +81,6 @@ final case class PostRepoLive(
         )
         .returningGenerated(p => (p.id, p.createdAt))
     }
-      .provideEnvironment(ZEnvironment(dataSource))
       .map((id, createdAt) =>
         Post(
           id,
@@ -105,7 +105,6 @@ final case class PostRepoLive(
         )
         .returningGenerated(c => (c.id, c.createdAt))
     }
-      .provideEnvironment(ZEnvironment(dataSource))
       .map((id, createdAt) =>
         Comment(
           id,
@@ -125,7 +124,7 @@ final case class PostRepoLive(
   }
 
 object PostRepoLive:
-  val layer = ZLayer.fromFunction(PostRepoLive.apply)
+  val live = ZLayer.fromFunction(new PostRepoLive(_, _))
 
 private object PostSql:
 

@@ -39,6 +39,6 @@ Authorization: Bearer {{authToken}}
 {
   "email": "first.last@email.com",
   "password": "pass",
-  "firstName": "F",
+  "firstName": "First",
   "lastName": "Last Name"
 }

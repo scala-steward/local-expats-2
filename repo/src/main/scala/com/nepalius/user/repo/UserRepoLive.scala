@@ -1,11 +1,12 @@
 package com.nepalius.user.repo
 
-import com.nepalius.config.QuillContext.*
+import com.nepalius.config.QuillContext.QuillPostgres
 import com.nepalius.post.domain.{CreatePost, Post}
 import com.nepalius.user.domain.User.UserId
 import com.nepalius.user.domain.{User, UserData, UserRegisterData, UserRepo}
 import io.getquill.*
 import io.getquill.extras.*
+import io.getquill.jdbczio.Quill
 import zio.*
 
 import java.sql.SQLException
@@ -13,8 +14,10 @@ import java.util.UUID
 import javax.sql.DataSource
 
 class UserRepoLive(
-    dataSource: DataSource,
-) extends UserRepo {
+    quill: QuillPostgres,
+) extends UserRepo:
+  import quill.*
+
   private inline def queryUser = quote(querySchema[User]("users"))
 
   override def create(user: UserRegisterData): ZIO[Any, SQLException, User] =
@@ -28,7 +31,6 @@ class UserRepoLive(
         )
         .returningGenerated(p => p.id)
     }
-      .provideEnvironment(ZEnvironment(dataSource))
       .map(id =>
         User(
           id,
@@ -44,7 +46,6 @@ class UserRepoLive(
       queryUser
         .filter(_.email == lift(email))
     }
-      .provideEnvironment(ZEnvironment(dataSource))
       .map(_.headOption)
 
   override def findUserById(id: UserId): Task[Option[User]] =
@@ -52,7 +53,6 @@ class UserRepoLive(
       queryUser
         .filter(_.id == lift(id))
     }
-      .provideEnvironment(ZEnvironment(dataSource))
       .map(_.headOption)
 
   override def update(id: UserId, userData: UserData): Task[User] = {
@@ -62,11 +62,9 @@ class UserRepoLive(
         .filter(_.id == lift(id))
         .updateValue(lift(user))
     }
-      .provideEnvironment(ZEnvironment(dataSource))
       .map(_ => user)
   }
-}
 
 object UserRepoLive:
-  val live: ZLayer[DataSource, Nothing, UserRepoLive] =
+  val live: ZLayer[QuillPostgres, Nothing, UserRepoLive] =
     ZLayer.fromFunction(new UserRepoLive(_))
