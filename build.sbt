@@ -1,19 +1,19 @@
 ThisBuild / organization := "com.nepalius"
-ThisBuild / scalaVersion := "3.2.2"
+ThisBuild / scalaVersion := "3.3.0"
 ThisBuild / version := "0.0.1-SNAPSHOT"
 
 Global / onChangedBuildSource := ReloadOnSourceChanges
 
 val V = new {
   val CommonsValidator = "1.7"
-  val Flyway = "9.19.3"
+  val Flyway = "9.20.0"
   val Jwt = "4.4.0"
   val Password4J = "1.7.1"
   val Postgres = "42.6.0"
   val Quill = "4.6.0.1"
   val Slf4j = "2.0.7"
-  val Tapir = "1.5.1"
-  val Zio = "2.0.14"
+  val Tapir = "1.5.5"
+  val Zio = "2.0.15"
   val ZioConfig = "3.0.7"
   val ZioLogging = "2.1.13"
 }
@@ -64,6 +64,7 @@ lazy val root = (project in file("."))
       "dev.zio" %% "zio-config" % V.ZioConfig,
       "dev.zio" %% "zio-config-typesafe" % V.ZioConfig,
       "dev.zio" %% "zio-config-magnolia" % V.ZioConfig,
+      "com.github.ghik" % "silencer-lib_2.13.11" % "1.17.13" % "provided", // Fix for zio-config incompatibility with scala 3.3
       "dev.zio" %% "zio-logging-slf4j" % V.ZioLogging,
       "org.slf4j" % "slf4j-api" % V.Slf4j,
       "org.slf4j" % "slf4j-simple" % V.Slf4j,
