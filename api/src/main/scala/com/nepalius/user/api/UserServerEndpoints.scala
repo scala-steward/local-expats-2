@@ -79,8 +79,8 @@ class UserServerEndpoints(userEndpoints: UserEndpoints, userService: UserService
   private def loginUser(userCredentials: UserLoginPayload): Task[UserWithAuthTokenResponse] =
     for
       maybeUser <- userService.findUserByEmail(userCredentials.email)
-      user <- ZIO.fromOption(maybeUser)
-        .mapError(_ => Unauthorized())
+      user <- ZIO.fromOption(maybeUser).orElseFail(Unauthorized())
+      _ <- authService.verifyPassword(userCredentials.password, user.data.passwordHash)
       token <- authService.generateJwt(user.data.email)
     yield UserWithAuthTokenResponse(UserResponse(user), token)
 

@@ -23,7 +23,7 @@ class UserEndpoints(base: BaseEndpoints):
 
   val loginEndpoint: Endpoint[Unit, UserLoginPayload, ErrorInfo, UserWithAuthTokenResponse, Any] =
     base.publicEndpoint
-      .summary("Login User")
+      .summary("Log In User")
       .post
       .in("api" / "users" / "login")
       .in(jsonBody[UserLoginPayload].example(Examples.userLoginPayload))
