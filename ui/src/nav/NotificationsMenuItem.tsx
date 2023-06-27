@@ -1,4 +1,3 @@
-import IconButton from "@mui/material/IconButton";
 import {Badge, ListItemIcon, ListItemText, Menu, MenuItem} from "@mui/material";
 import {Notifications, QuestionAnswer} from "@mui/icons-material";
 import React, {FC, useState} from "react";
@@ -6,11 +5,11 @@ import {get} from "../util/Fetch";
 import {PostDto} from "../post/PostDto";
 import {useQuery} from "@tanstack/react-query";
 import {usePostBookmarks} from "../post/PostBookmarks";
-import Tooltip from "@mui/material/Tooltip";
 import {PostLink} from "../post/PostLink";
 import {useIsSmallScreen} from "../util/useUtils";
+import {NavIcon} from "./NavIcon";
 
-export const Notification: FC = () => {
+export const NotificationsMenuItem: FC = () => {
     const {postIds, notificationsLastChecked, updateNotificationsLastChecked} = usePostBookmarks();
     const ids = postIds.join(',');
     const fetchUpdatedPosts = () => {
@@ -45,16 +44,15 @@ export const Notification: FC = () => {
     const updatedPosts = data ?? [];
     return (
         <>
-            <Tooltip title="Show notifications">
-                <IconButton onClick={handleNotificationClick}
-                            size="large"
-                            color="inherit"
-                >
+            <MenuItem>
+                <NavIcon onClick={handleNotificationClick}>
                     <Badge badgeContent={updatedPosts.length} color="info">
                         <Notifications/>
                     </Badge>
-                </IconButton>
-            </Tooltip>
+                </NavIcon>
+                <p>Notifications</p>
+
+            </MenuItem>
             <Menu
                 sx={{mt: 5}}
                 anchorEl={anchorElUser}
