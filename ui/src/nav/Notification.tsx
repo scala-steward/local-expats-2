@@ -8,7 +8,7 @@ import {useQuery} from "@tanstack/react-query";
 import {usePostBookmarks} from "../post/PostBookmarks";
 import Tooltip from "@mui/material/Tooltip";
 import {PostLink} from "../post/PostLink";
-import {useSmallScreen} from "../util/useUtils";
+import {useIsSmallScreen} from "../util/useUtils";
 
 export const Notification: FC = () => {
     const {postIds, notificationsLastChecked, updateNotificationsLastChecked} = usePostBookmarks();
@@ -41,7 +41,7 @@ export const Notification: FC = () => {
         updateNotificationsLastChecked();
     }
 
-    const smallScreen = useSmallScreen();
+    const isSmallScreen = useIsSmallScreen();
     const updatedPosts = data ?? [];
     return (
         <>
@@ -71,7 +71,7 @@ export const Notification: FC = () => {
                 onClose={handleCloseUserMenu}
                 PaperProps={{
                     style: {
-                        width: smallScreen ? '100%' : '350px'
+                        width: isSmallScreen ? '100%' : '350px'
                     }
                 }}
             >

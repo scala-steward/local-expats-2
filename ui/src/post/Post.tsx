@@ -15,7 +15,7 @@ import {PostShare} from "./PostShare";
 import {PostBookmark} from "./PostBookmark";
 import {PostComment} from "./PostComment";
 import {PostLink} from "./PostLink";
-import {useSmallScreen} from "../util/useUtils";
+import {useIsSmallScreen} from "../util/useUtils";
 import {ImageDisplay} from "./ImageDisplay";
 
 type PostProps = {
@@ -30,7 +30,7 @@ export const Post: FC<PostProps> = ({
     onCommentedAdded,
 }) => {
     const showComments = comments !== undefined;
-    const smallScreen = useSmallScreen();
+    const isSmallScreen = useIsSmallScreen();
     return (
         <Card sx={{m: 1}} variant="outlined">
             <CardHeader

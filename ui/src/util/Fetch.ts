@@ -1,12 +1,18 @@
 import {createQueryParams} from "./Utils";
+import {getAuthToken} from "../auth/Auth";
 
-type Fetch = typeof fetch;
+const getAuthHeader = () => {
+    const authToken = getAuthToken();
+    return {
+        ...(authToken && {Authorization: `Bearer ${authToken}`})
+    };
+}
 
 const jsonOnSuccess = (response: Response) => {
     if (response.ok) {
         return response.json();
     } else {
-        throw response.statusText;
+        throw response.json();
     }
 };
 
@@ -15,7 +21,11 @@ export function get<ResultType>(
     params: Record<string, string | number | undefined> = {},
     init?: RequestInit,
 ): Promise<ResultType> {
-    return fetch(`${input}?${createQueryParams(params)}`, init)
+    const defaultInit = {
+        headers: getAuthHeader()
+    }
+    const allInit = {...defaultInit, ...init};
+    return fetch(`${input}?${createQueryParams(params)}`, allInit)
         .then(jsonOnSuccess);
 }
 
@@ -27,7 +37,9 @@ export function post<ResultType>(
     const defaultInit = {
         method: 'POST',
         headers: {
-            'Content-Type': 'application/json'
+            'Content-Type': 'application/json',
+            ...getAuthHeader()
+
         },
         body: JSON.stringify(data),
     }

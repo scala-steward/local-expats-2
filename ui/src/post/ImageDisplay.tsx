@@ -1,5 +1,5 @@
 import {CardMedia} from "@mui/material";
-import {useSmallScreen} from "../util/useUtils";
+import {useIsSmallScreen} from "../util/useUtils";
 import {FC} from "react";
 
 type ImageDisplayProps = {
@@ -7,13 +7,13 @@ type ImageDisplayProps = {
 };
 
 export const ImageDisplay: FC<ImageDisplayProps> = ({image}) => {
-    const smallScreen = useSmallScreen();
+    const isSmallScreen = useIsSmallScreen();
     return (
         image
             ?
             <CardMedia
                 component="img"
-                height={smallScreen ? 240 : 400}
+                height={isSmallScreen ? 240 : 400}
                 image={image}
                 sx={{objectFit: "contain", p:1/4}}
                 loading="lazy"

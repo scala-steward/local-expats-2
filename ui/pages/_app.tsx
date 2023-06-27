@@ -10,6 +10,7 @@ import {SelectedLocationProvider} from "../src/location/SelectedLocation";
 import {PostBookmarksProvider} from "../src/post/PostBookmarks";
 import {Container} from "@mui/material";
 import {Analytics} from '@vercel/analytics/react';
+import {AuthProvider} from "../src/auth/Auth";
 
 const theme = createTheme();
 
@@ -50,16 +51,18 @@ export default function MyApp({Component, pageProps}: AppProps) {
             <CssBaseline/>
 
             <QueryClientProvider client={queryClient}>
-                <SelectedLocationProvider>
-                    <PostBookmarksProvider>
-                        <Container maxWidth="md" disableGutters>
-                            <NavBar/>
-                            <Component {...pageProps} />
-                            <Analytics/>
-                        </Container>
-                    </PostBookmarksProvider>
-                </SelectedLocationProvider>
-                <ReactQueryDevtools/>
+                <AuthProvider>
+                    <SelectedLocationProvider>
+                        <PostBookmarksProvider>
+                            <Container maxWidth="md" disableGutters>
+                                <NavBar/>
+                                <Component {...pageProps} />
+                                <Analytics/>
+                            </Container>
+                        </PostBookmarksProvider>
+                    </SelectedLocationProvider>
+                    <ReactQueryDevtools/>
+                </AuthProvider>
             </QueryClientProvider>
         </ThemeProvider>
     );

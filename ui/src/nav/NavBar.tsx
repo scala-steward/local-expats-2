@@ -3,19 +3,19 @@ import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
 import {LocationSelect} from "../location/LocationSelect";
 import {useSelectedLocation} from "../location/SelectedLocation";
-import {AddNew} from "./AddNew";
-import {Notification} from "./Notification";
+import {AddNewNavIcon} from "./AddNewNavIcon";
 import IconButton from "@mui/material/IconButton";
 import {AppIcon} from "./AppIcon";
 import Link from "next/link";
-import {useSmallScreen} from "../util/useUtils";
+import {useIsSmallScreen} from "../util/useUtils";
 import Typography from "@mui/material/Typography";
 import {Container} from "@mui/material";
+import {NavAuth} from "./NavAuth";
 
 export default function NavBar() {
     const {selectedLocation, setSelectedLocation, setSelectedLocationToDefault} = useSelectedLocation();
 
-    const smallScreen = useSmallScreen();
+    const smallScreen = useIsSmallScreen();
     return (
         <Box>
             <AppBar position="fixed">
@@ -57,8 +57,8 @@ export default function NavBar() {
                         </Box>
                         {!smallScreen && <Box sx={{flexGrow: 1}}/>}
                         <Box sx={{display: {sm: 'flex'}, ml: 2}}>
-                            <Notification/>
-                            <AddNew/>
+                            <AddNewNavIcon/>
+                            <NavAuth/>
                         </Box>
                     </Toolbar>
                 </Container>
