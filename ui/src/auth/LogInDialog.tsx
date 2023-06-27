@@ -4,7 +4,7 @@ import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
-import {Dialog, DialogContent, DialogTitle, IconButton, useTheme} from "@mui/material";
+import {Dialog, DialogContent, DialogTitle, IconButton} from "@mui/material";
 import {Close} from "@mui/icons-material";
 import {useForm} from "react-hook-form";
 import {setAuthToken, useAuth} from "./Auth";
@@ -12,6 +12,8 @@ import Box from "@mui/material/Box";
 import {useIsSmallScreen} from "../util/useUtils";
 import {post} from "../util/Fetch";
 import {UserWithAuthTokenResponse} from "./User";
+import Grid from "@mui/material/Grid";
+import RegisterLink from "./RegisterLink";
 
 type LogInPayload = {
     email: string,
@@ -24,7 +26,6 @@ interface LogInDialogProps {
 }
 
 export const LogInDialog: FC<LogInDialogProps> = ({open, onClose}: LogInDialogProps) => {
-    const theme = useTheme();
     const isSmallScreen = useIsSmallScreen();
     const {refreshAuth} = useAuth();
 
@@ -94,6 +95,11 @@ export const LogInDialog: FC<LogInDialogProps> = ({open, onClose}: LogInDialogPr
                             Log In
                         </Button>
                     </Box>
+                    <Grid container sx={{mt: 1}}>
+                        <Grid item xs>
+                            <RegisterLink/>
+                        </Grid>
+                    </Grid>
                 </Box>
             </DialogContent>
         </Dialog>
