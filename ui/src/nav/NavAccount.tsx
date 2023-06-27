@@ -3,6 +3,7 @@ import IconButton from "@mui/material/IconButton";
 import {AccountCircle, Mail, Notifications} from "@mui/icons-material";
 import {Menu, MenuItem} from "@mui/material";
 import Badge from "@mui/material/Badge";
+import {LogOutMenuItem} from "./LogOutMenuItem";
 
 export const NavAccount: FC = () => {
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
@@ -43,7 +44,7 @@ export const NavAccount: FC = () => {
                 <MenuItem>
                     <IconButton size="large" aria-label="show 4 new mails" color="inherit">
                         <Badge badgeContent={4} color="error">
-                            <Mail />
+                            <Mail/>
                         </Badge>
                     </IconButton>
                     <p>Messages</p>
@@ -51,15 +52,15 @@ export const NavAccount: FC = () => {
                 <MenuItem>
                     <IconButton
                         size="large"
-                        aria-label="show 17 new notifications"
                         color="inherit"
                     >
                         <Badge badgeContent={17} color="error">
-                            <Notifications />
+                            <Notifications/>
                         </Badge>
                     </IconButton>
                     <p>Notifications</p>
                 </MenuItem>
+                <LogOutMenuItem/>
             </Menu>
         </>
     );

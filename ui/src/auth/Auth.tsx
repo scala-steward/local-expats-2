@@ -22,6 +22,7 @@ type Auth = {
     loading: boolean;
     authenticated: boolean;
     refreshAuth: () => void;
+    removeAuth: () => void;
 }
 
 const AuthContext = createContext<Auth | undefined>(undefined);
@@ -37,6 +38,11 @@ export const AuthProvider: FC<PropsWithChildren> = ({children}) => {
             .catch(() => setStatus(AuthStatus.UNAUTHENTICATED));
     }
 
+    const removeAuth = () => {
+        setAuthToken(undefined);
+        setStatus(AuthStatus.UNAUTHENTICATED);
+    }
+
     useEffect(refreshAuth, []);
 
     const loading = status === AuthStatus.LOADING;
@@ -44,7 +50,7 @@ export const AuthProvider: FC<PropsWithChildren> = ({children}) => {
     const unauthenticated = status === AuthStatus.UNAUTHENTICATED;
 
     return (
-        <AuthContext.Provider value={{status, unauthenticated, loading, authenticated, refreshAuth}}>
+        <AuthContext.Provider value={{status, unauthenticated, loading, authenticated, refreshAuth, removeAuth}}>
             {children}
         </AuthContext.Provider>
     );
