@@ -1,12 +1,5 @@
 import {createQueryParams} from "./Utils";
-import {getAuthToken} from "../auth/Auth";
-
-const getAuthHeader = () => {
-    const authToken = getAuthToken();
-    return {
-        ...(authToken && {Authorization: `Bearer ${authToken}`})
-    };
-}
+import {getAuthHeader} from "../auth/Auth";
 
 const jsonOnSuccess = (response: Response) => {
     if (response.ok) {

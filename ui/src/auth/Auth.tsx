@@ -4,11 +4,18 @@ import {UserWithAuthTokenResponse} from "./User";
 
 const AuthTokenKey = "AuthToken";
 
-export const getAuthToken = () => localStorage.getItem(AuthTokenKey)
-export const setAuthToken = (token: string | undefined) =>
+const getAuthToken = () => localStorage.getItem(AuthTokenKey)
+const setAuthToken = (token: string | undefined) =>
     token ?
         localStorage.setItem(AuthTokenKey, token)
         : localStorage.removeItem(AuthTokenKey);
+
+export const getAuthHeader = () => {
+    const authToken = getAuthToken();
+    return {
+        ...(authToken && {Authorization: `Bearer ${authToken}`})
+    };
+}
 
 export enum AuthStatus {
     UNAUTHENTICATED,
@@ -21,7 +28,7 @@ type Auth = {
     unauthenticated: boolean;
     loading: boolean;
     authenticated: boolean;
-    refreshAuth: () => void;
+    updateAuth: (userWithAuthToken: UserWithAuthTokenResponse) => void;
     removeAuth: () => void;
 }
 
@@ -30,13 +37,17 @@ const AuthContext = createContext<Auth | undefined>(undefined);
 export const AuthProvider: FC<PropsWithChildren> = ({children}) => {
     const [status, setStatus] = useState(AuthStatus.UNAUTHENTICATED);
 
-    function refreshAuth() {
+    const refreshAuth = () => {
         setStatus(AuthStatus.LOADING);
-
         get<UserWithAuthTokenResponse>("api/user")
             .then(() => setStatus(AuthStatus.AUTHENTICATED))
             .catch(() => setStatus(AuthStatus.UNAUTHENTICATED));
     }
+
+    const updateAuth = ({authToken}: UserWithAuthTokenResponse) => {
+        setStatus(AuthStatus.AUTHENTICATED)
+        setAuthToken(authToken)
+    };
 
     const removeAuth = () => {
         setAuthToken(undefined);
@@ -50,7 +61,7 @@ export const AuthProvider: FC<PropsWithChildren> = ({children}) => {
     const unauthenticated = status === AuthStatus.UNAUTHENTICATED;
 
     return (
-        <AuthContext.Provider value={{status, unauthenticated, loading, authenticated, refreshAuth, removeAuth}}>
+        <AuthContext.Provider value={{status, unauthenticated, loading, authenticated, updateAuth, removeAuth}}>
             {children}
         </AuthContext.Provider>
     );

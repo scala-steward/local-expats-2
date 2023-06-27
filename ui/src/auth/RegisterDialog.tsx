@@ -7,7 +7,7 @@ import Typography from '@mui/material/Typography';
 import {Dialog, DialogContent, DialogTitle, IconButton} from '@mui/material';
 import {Close} from '@mui/icons-material';
 import {useForm} from 'react-hook-form';
-import {setAuthToken, useAuth} from "./Auth";
+import {useAuth} from "./Auth";
 import Box from "@mui/material/Box";
 import {useIsSmallScreen} from "../util/useUtils";
 import {post} from "../util/Fetch";
@@ -27,14 +27,13 @@ type RegisterPayload = {
 
 export default function RegisterDialog({open, onClose}: RegisterDialogProps) {
     const isSmallScreen = useIsSmallScreen();
-    const {refreshAuth} = useAuth();
+    const {updateAuth} = useAuth();
 
     const {register, handleSubmit, control, formState: {errors}} = useForm<RegisterPayload>();
     const onSubmit = (data: RegisterPayload) => {
         post<UserWithAuthTokenResponse>('/api/users', data)
-            .then(({authToken}) => setAuthToken(authToken))
-            .then(onClose)
-            .then(refreshAuth);
+            .then(updateAuth)
+            .then(onClose);
     }
 
     return (

@@ -7,7 +7,7 @@ import Typography from '@mui/material/Typography';
 import {Dialog, DialogContent, DialogTitle, IconButton} from "@mui/material";
 import {Close} from "@mui/icons-material";
 import {useForm} from "react-hook-form";
-import {setAuthToken, useAuth} from "./Auth";
+import {useAuth} from "./Auth";
 import Box from "@mui/material/Box";
 import {useIsSmallScreen} from "../util/useUtils";
 import {post} from "../util/Fetch";
@@ -27,14 +27,13 @@ interface LogInDialogProps {
 
 export const LogInDialog: FC<LogInDialogProps> = ({open, onClose}: LogInDialogProps) => {
     const isSmallScreen = useIsSmallScreen();
-    const {refreshAuth} = useAuth();
+    const {updateAuth} = useAuth();
 
     const {register, handleSubmit, formState: {errors}} = useForm<LogInPayload>();
     const onSubmit = (data: LogInPayload) => {
         post<UserWithAuthTokenResponse>('/api/users/login', data)
-            .then(({authToken}) => setAuthToken(authToken))
-            .then(onClose)
-            .then(refreshAuth);
+            .then(updateAuth)
+            .then(onClose);
     }
 
     return (
