@@ -77,5 +77,5 @@ final case class PostRoutes(postService: PostService):
   }
 
 object PostRoutes:
-  val layer: ZLayer[PostService, Nothing, PostRoutes] =
-    ZLayer.fromFunction(PostRoutes.apply)
+  // noinspection TypeAnnotation
+  val live = ZLayer.fromFunction(PostRoutes.apply)

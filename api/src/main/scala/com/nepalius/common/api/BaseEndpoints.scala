@@ -12,7 +12,7 @@ import sttp.tapir.ztapir.*
 import sttp.tapir.{EndpointOutput, PublicEndpoint}
 import zio.*
 
-class BaseEndpoints(authService: AuthService, userService: UserService):
+final case class BaseEndpoints(authService: AuthService, userService: UserService):
   val publicEndpoint: PublicEndpoint[Unit, ErrorInfo, Unit, Any] =
     endpoint
       .errorOut(defaultErrorOutputs)
@@ -41,8 +41,8 @@ class BaseEndpoints(authService: AuthService, userService: UserService):
       .map(_.id)
 
 object BaseEndpoints:
-  val live: ZLayer[AuthService with UserService, Nothing, BaseEndpoints] =
-    ZLayer.fromFunction(new BaseEndpoints(_, _))
+  // noinspection TypeAnnotation
+  val live = ZLayer.fromFunction(BaseEndpoints.apply)
 
   private val UserWithEmailNotFoundMessage: String => String = (email: String) => s"User with email $email doesn't exist"
 

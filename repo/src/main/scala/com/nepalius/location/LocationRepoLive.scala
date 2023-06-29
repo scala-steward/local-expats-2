@@ -10,7 +10,7 @@ import zio.*
 
 import javax.sql.DataSource
 
-class LocationRepoLive(quill: QuillContext) extends LocationRepo:
+final case class LocationRepoLive(quill: QuillContext) extends LocationRepo:
   import quill.*
 
   override def getAll: Task[List[Location]] =
@@ -20,5 +20,5 @@ class LocationRepoLive(quill: QuillContext) extends LocationRepo:
     }
 
 object LocationRepoLive:
-  val live: ZLayer[QuillContext, Nothing, LocationRepoLive] =
-    ZLayer.fromFunction(new LocationRepoLive(_))
+  // noinspection TypeAnnotation
+  val live = ZLayer.fromFunction(LocationRepoLive.apply)

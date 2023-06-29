@@ -7,7 +7,7 @@ import com.nepalius.user.domain.UserService.{InvalidEmailMessage, UserWithEmailA
 import org.apache.commons.validator.routines.EmailValidator
 import zio.{Task, ZIO, ZLayer}
 
-class UserService(userRepo: UserRepo) {
+final case class UserService(userRepo: UserRepo) {
 
   def get(userId: UserId): Task[User] =
     userRepo.findUserById(userId)
@@ -72,8 +72,8 @@ class UserService(userRepo: UserRepo) {
 }
 
 object UserService:
-  val live: ZLayer[UserRepo, Nothing, UserService] =
-    ZLayer.fromFunction(new UserService(_))
+  // noinspection TypeAnnotation
+  val live = ZLayer.fromFunction(UserService.apply)
 
   private val UserWithIdNotFoundMessage: UserId => String = (id: UserId) => s"User with id $id doesn't exist"
   private val UserWithEmailAlreadyInUseMessage: String => String = (email: String) => s"User with email $email already in use"

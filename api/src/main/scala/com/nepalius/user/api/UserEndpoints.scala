@@ -11,7 +11,7 @@ import zio.ZLayer
 
 import java.util.UUID
 
-class UserEndpoints(base: BaseEndpoints):
+final case class UserEndpoints(base: BaseEndpoints):
 
   val registerEndPoint: Endpoint[Unit, UserRegisterPayload, ErrorInfo, UserWithAuthTokenResponse, Any] =
     base.publicEndpoint
@@ -85,5 +85,5 @@ class UserEndpoints(base: BaseEndpoints):
     )
 
 object UserEndpoints:
-  val live: ZLayer[BaseEndpoints, Nothing, UserEndpoints] =
-    ZLayer.fromFunction(new UserEndpoints(_))
+  // noinspection TypeAnnotation
+  val live = ZLayer.fromFunction(UserEndpoints.apply)

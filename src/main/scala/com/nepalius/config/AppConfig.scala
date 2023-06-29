@@ -22,7 +22,7 @@ object AppConfig:
     )
   }
 
-  val layer: ZLayer[Any, ReadError[String], DatabaseConfig & ServerConfig & AuthConfig] =
+  val live: ZLayer[Any, ReadError[String], DatabaseConfig & ServerConfig & AuthConfig] =
     ZLayer {
       for appConfig <- readAppConfig
       yield ZLayer.succeed(appConfig.database) ++ ZLayer.succeed(appConfig.server) ++ ZLayer.succeed(appConfig.auth)

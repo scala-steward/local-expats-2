@@ -17,7 +17,7 @@ import javax.sql.DataSource
 import com.nepalius.config.QuillContext
 import io.getquill.jdbczio.Quill
 
-class PostRepoLive(
+final case class PostRepoLive(
     quill: QuillContext,
 ) extends PostRepo:
   import quill.*
@@ -131,5 +131,5 @@ class PostRepoLive(
   }
 
 object PostRepoLive:
-  val live: ZLayer[QuillContext, Nothing, PostRepoLive] =
-    ZLayer.fromFunction(new PostRepoLive(_))
+  // noinspection TypeAnnotation
+  val live = ZLayer.fromFunction(PostRepoLive.apply)

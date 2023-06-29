@@ -5,7 +5,7 @@ import sttp.tapir.swagger.bundle.SwaggerInterpreter
 import sttp.tapir.ztapir.*
 import zio.{Task, ZLayer}
 
-class Endpoints(
+final case class Endpoints(
     userServerEndpoints: UserServerEndpoints,
 ) {
   val endpoints: List[ZServerEndpoint[Any, Any]] = {
@@ -22,5 +22,5 @@ class Endpoints(
 }
 
 object Endpoints:
-  val live: ZLayer[UserServerEndpoints, Nothing, Endpoints] =
-    ZLayer.fromFunction(new Endpoints(_))
+  // noinspection TypeAnnotation
+  val live = ZLayer.fromFunction(Endpoints.apply)

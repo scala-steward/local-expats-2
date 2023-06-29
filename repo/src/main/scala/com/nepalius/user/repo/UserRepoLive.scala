@@ -23,7 +23,7 @@ case class UserRow(
   def toUser: User = User(id, UserData(email, firstName, lastName, passwordHash))
 }
 
-class UserRepoLive(
+final case class UserRepoLive(
     quill: QuillContext,
 ) extends UserRepo:
   import quill.*
@@ -76,9 +76,9 @@ class UserRepoLive(
         .filter(_.id == lift(id))
         .updateValue(lift(user))
     }
-      .map(_ => user.toUser)
+      .as(user.toUser)
   }
 
 object UserRepoLive:
-  val live: ZLayer[QuillContext, Nothing, UserRepoLive] =
-    ZLayer.fromFunction(new UserRepoLive(_))
+  // noinspection TypeAnnotation
+  val live = ZLayer.fromFunction(UserRepoLive.apply)

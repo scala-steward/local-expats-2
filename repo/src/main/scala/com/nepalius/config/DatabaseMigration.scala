@@ -5,7 +5,7 @@ import javax.sql.DataSource
 import zio.*
 import org.flywaydb.core.Flyway
 
-case class DatabaseMigration(dataSource: DataSource):
+final case class DatabaseMigration(dataSource: DataSource):
   def migrate(): Task[Unit] = ZIO.attempt {
     Flyway
       .configure()
@@ -15,5 +15,5 @@ case class DatabaseMigration(dataSource: DataSource):
   }
 
 object DatabaseMigration:
-  val layer: ZLayer[DataSource, Nothing, DatabaseMigration] =
-    ZLayer.fromFunction(DatabaseMigration.apply)
+  // noinspection TypeAnnotation
+  val live = ZLayer.fromFunction(DatabaseMigration.apply)

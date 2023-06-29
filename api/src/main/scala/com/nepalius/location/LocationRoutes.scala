@@ -21,4 +21,5 @@ final case class LocationRoutes(locationService: LocationService):
     yield Response.json(dtos.toJson)
 
 object LocationRoutes:
-  val layer = ZLayer.fromFunction(LocationRoutes.apply)
+  // noinspection TypeAnnotation
+  val live = ZLayer.fromFunction(LocationRoutes.apply)

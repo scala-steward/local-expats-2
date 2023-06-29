@@ -33,4 +33,5 @@ final case class Server(
       .provide(HttpServer.defaultWithPort(serverConfig.port))
 
 object Server:
-  val layer = ZLayer.fromFunction(Server.apply)
+  // noinspection TypeAnnotation
+  val live = ZLayer.fromFunction(Server.apply)

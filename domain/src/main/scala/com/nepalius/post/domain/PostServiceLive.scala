@@ -38,5 +38,5 @@ final case class PostServiceLive(postRepo: PostRepo) extends PostService:
     yield post.get
 
 object PostServiceLive:
-  val layer: ZLayer[PostRepo, Nothing, PostService] =
-    ZLayer.fromFunction(PostServiceLive.apply)
+  // noinspection TypeAnnotation
+  val live = ZLayer.fromFunction(PostServiceLive.apply)

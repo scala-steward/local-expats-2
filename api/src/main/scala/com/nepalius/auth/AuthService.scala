@@ -12,7 +12,7 @@ import java.time.{Duration, Instant}
 import java.util.UUID
 import scala.util.{Success, Try}
 
-class AuthService(config: AuthConfig):
+final case class AuthService(config: AuthConfig):
   def encryptPassword(password: String): Task[String] = PasswordHashing.encryptPassword(password)
   def verifyPassword(password: String, passwordHash: String): Task[Unit] = PasswordHashing.verifyPassword(password, passwordHash)
   def generateJwt(email: String): IO[Exception, String] = Jwt.generate(email)
@@ -67,4 +67,5 @@ class AuthService(config: AuthConfig):
       }
 
 object AuthService:
-  val live: ZLayer[AuthConfig, Nothing, AuthService] = ZLayer.fromFunction(new AuthService(_))
+  // noinspection TypeAnnotation
+  val live = ZLayer.fromFunction(AuthService.apply)
