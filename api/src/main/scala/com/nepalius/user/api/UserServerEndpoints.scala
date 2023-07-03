@@ -4,12 +4,11 @@ import com.nepalius.auth.AuthService
 import com.nepalius.common.Exceptions
 import com.nepalius.common.Exceptions.Unauthorized
 import com.nepalius.common.api.*
-import com.nepalius.user.api.ErrorMapper.*
+import ErrorMapper.*
 import com.nepalius.user.api.{UserEndpoints, UserResponse, UserServerEndpoints}
 import com.nepalius.user.domain.{UserService, UserUpdateData}
 import sttp.tapir.ztapir.*
 import zio.*
-import zio.Console.*
 
 import java.util.UUID
 import scala.util.chaining.*
@@ -41,11 +40,13 @@ class UserServerEndpoints(userEndpoints: UserEndpoints, userService: UserService
         _ =>
           userService.get(session.userId)
             .logError
-            .mapError {
-              case e: Exceptions.NotFound => NotFound(e.message)
-              case _                      => InternalServerError()
-            }
-            .map(UserResponse.apply),
+            .mapBoth(
+              {
+                case e: Exceptions.NotFound => NotFound(e.message)
+                case _                      => InternalServerError()
+              },
+              UserResponse.apply,
+            ),
       )
 
   private val updateCurrentUserServerEndpoints: ZServerEndpoint[Any, Any] =

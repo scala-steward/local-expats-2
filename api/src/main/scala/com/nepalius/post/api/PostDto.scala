@@ -23,6 +23,7 @@ case class PostDto(
 
 object PostDto {
   given JsonEncoder[PostDto] = DeriveJsonEncoder.gen[PostDto]
+  given JsonDecoder[PostDto] = DeriveJsonDecoder.gen[PostDto]
 
   def make(post: Post): PostDto =
     make(PostView.fromPost(post, 0))

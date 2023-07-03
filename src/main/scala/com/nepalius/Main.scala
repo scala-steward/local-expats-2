@@ -5,7 +5,7 @@ import com.nepalius.common.api.BaseEndpoints
 import com.nepalius.config.*
 import com.nepalius.location.domain.LocationServiceLive
 import com.nepalius.location.{LocationRepoLive, LocationRoutes}
-import com.nepalius.post.api.PostRoutes
+import com.nepalius.post.api.{PostEndpoints, PostRoutes, PostServerEndpoints}
 import com.nepalius.post.domain.PostServiceLive
 import com.nepalius.post.repo.PostRepoLive
 import com.nepalius.user.api.{UserEndpoints, UserServerEndpoints}
@@ -37,6 +37,8 @@ object Main extends ZIOAppDefault {
         UserEndpoints.live,
         UserServerEndpoints.live,
         PostRoutes.live,
+        PostEndpoints.live,
+        PostServerEndpoints.live,
         LocationRoutes.live,
         // Service
         PostRepoLive.live >>> PostServiceLive.live,

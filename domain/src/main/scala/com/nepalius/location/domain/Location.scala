@@ -7,4 +7,4 @@ case class Location(id: LocationId, state: Option[State], city: Option[String])
 
 object Location:
   type LocationId = Long
-  val defaultLocationId = 1L // US
+  val DefaultLocationId = 1L // US

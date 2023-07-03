@@ -1,5 +1,6 @@
 package com.nepalius
 
+import com.nepalius.post.api.PostServerEndpoints
 import com.nepalius.user.api.UserServerEndpoints
 import sttp.tapir.swagger.bundle.SwaggerInterpreter
 import sttp.tapir.ztapir.*
@@ -7,9 +8,10 @@ import zio.{Task, ZLayer}
 
 final case class Endpoints(
     userServerEndpoints: UserServerEndpoints,
+    postServerEndpoints: PostServerEndpoints,
 ) {
   val endpoints: List[ZServerEndpoint[Any, Any]] = {
-    val api = userServerEndpoints.endpoints
+    val api = userServerEndpoints.endpoints ++ postServerEndpoints.endpoints
     val docs = docsEndpoints(api)
     api ++ docs
   }

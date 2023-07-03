@@ -1,16 +1,15 @@
 package com.nepalius.post.api
 
 import com.nepalius.location.State
-import com.nepalius.location.domain.Location.{LocationId, defaultLocationId}
+import com.nepalius.location.domain.Location.LocationId
 import com.nepalius.post.domain.Post.PostId
 import com.nepalius.post.domain.{Post, PostService}
 import com.nepalius.util.ApiUtils.{getQueryParam, parseBody, parsePageable}
 import com.nepalius.util.Pageable
 import zio.*
-import zio.http.*
 import zio.http.Http.collectZIO
 import zio.http.Method.{GET, POST}
-import zio.http.Status
+import zio.http.*
 import zio.json.*
 
 import java.time.{LocalDateTime, ZonedDateTime}
@@ -19,8 +18,7 @@ final case class PostRoutes(postService: PostService):
 
   val routes: Http[Any, Throwable, Request, Response] =
     collectZIO[Request] {
-      case req @ GET -> Root / "api" / "posts"             => getAll(req)
-      case req @ GET -> Root / "api" / "posts" / "updated" => getUpdated(req).logError
+      case req @ GET -> Root / "api" / "posts" / "updated" => getUpdated(req)
       case GET -> Root / "api" / "posts" / long(id)        => getOne(id)
       case req @ POST -> Root / "api" / "posts"            => createPost(req)
       case req @ POST -> Root / "api" / "posts" / long(id) / "comments" =>
@@ -34,18 +32,6 @@ final case class PostRoutes(postService: PostService):
       createdPost <- postService.create(postRequest)
       postDto = PostDto.make(createdPost)
     yield Response.json(postDto.toJson)
-  }
-
-  private def getAll(req: Request) = {
-    val pageable = parsePageable(req)
-    val locationIdParam =
-      req.url.queryParams.get("locationId").flatMap(_.headOption)
-    val locationId =
-      locationIdParam.map(_.toLong).getOrElse(defaultLocationId)
-    for
-      posts <- postService.getAll(pageable, locationId)
-      dtos = posts.map(PostDto.make)
-    yield Response.json(dtos.toJson)
   }
 
   private def getUpdated(req: Request) = {

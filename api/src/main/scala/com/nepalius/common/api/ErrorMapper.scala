@@ -1,4 +1,4 @@
-package com.nepalius.user.api
+package com.nepalius.common.api
 
 import com.nepalius.common.*
 import com.nepalius.common.api.*
