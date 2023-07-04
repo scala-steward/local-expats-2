@@ -1,10 +1,10 @@
 package com.nepalius.post.domain
 
 import com.nepalius.location.State
-import com.nepalius.location.domain.Location.LocationId
-import com.nepalius.util.Pageable
+import com.nepalius.location.domain.Location.{DefaultLocationId, LocationId}
 import com.nepalius.post.domain.Post.PostId
 import com.nepalius.post.domain.PostService
+import com.nepalius.util.Pageable
 import zio.*
 
 import java.time.{LocalDateTime, ZonedDateTime}
@@ -12,13 +12,15 @@ import java.util.UUID
 import javax.sql.DataSource
 
 final case class PostServiceLive(postRepo: PostRepo) extends PostService:
+
   override def getOne(id: PostId): Task[Option[PostWithComments]] =
     postRepo.getOne(id)
+
   override def getAll(
       pageable: Pageable,
-      locationId: LocationId,
+      locationId: Option[LocationId],
   ): Task[List[PostView]] =
-    postRepo.getAll(pageable, locationId)
+    postRepo.getAll(pageable, locationId.getOrElse(DefaultLocationId))
 
   override def getUpdated(
       ids: List[PostId],

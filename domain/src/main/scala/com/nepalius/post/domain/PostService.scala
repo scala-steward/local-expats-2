@@ -12,7 +12,7 @@ trait PostService:
   def getOne(id: PostId): Task[Option[PostWithComments]]
   def getAll(
       pageable: Pageable,
-      locationId: LocationId,
+      locationId: Option[LocationId],
   ): Task[List[PostView]]
 
   def getUpdated(ids: List[PostId], since: ZonedDateTime): Task[List[PostView]]

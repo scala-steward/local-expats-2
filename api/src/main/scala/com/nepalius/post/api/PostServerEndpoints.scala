@@ -15,15 +15,15 @@ final case class PostServerEndpoints(
   private val getPostsServerEndpoint: ZServerEndpoint[Any, Any] =
     postEndpoints
       .getPostsEndPoint
-      .zServerLogic((pageable, filters) =>
-        getPosts(pageable, filters)
+      .zServerLogic(
+        getPosts(_)
           .logError
           .pipe(defaultErrorsMappings),
       )
 
-  private def getPosts(pageable: Pageable, filters: PostFilters): Task[List[PostDto]] =
+  private def getPosts(params: GetPostsParams): Task[List[PostDto]] =
     for
-      posts <- postService.getAll(pageable, filters.locationId)
+      posts <- postService.getAll(params.pageable, params.locationId)
       dtos = posts.map(PostDto.make)
     yield dtos
 
