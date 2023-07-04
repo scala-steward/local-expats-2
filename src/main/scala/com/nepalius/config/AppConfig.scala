@@ -5,13 +5,13 @@ import zio.config.*
 import zio.config.magnolia.descriptor
 import zio.config.typesafe.TypesafeConfigSource
 
-final case class AppConfig(
+case class AppConfig(
     auth: AuthConfig,
     database: DatabaseConfig,
     server: ServerConfig,
 )
 
-final case class ServerConfig(port: Int)
+case class ServerConfig(port: Int)
 
 object AppConfig:
   private def readAppConfig: IO[ReadError[String], AppConfig] = read {

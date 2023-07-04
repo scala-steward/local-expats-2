@@ -7,7 +7,7 @@ import com.nepalius.user.domain.UserService.{InvalidEmailMessage, UserWithEmailA
 import org.apache.commons.validator.routines.EmailValidator
 import zio.{Task, ZIO, ZLayer}
 
-final case class UserService(userRepo: UserRepo) {
+case class UserService(userRepo: UserRepo) {
 
   def get(userId: UserId): Task[User] =
     userRepo.findUserById(userId)

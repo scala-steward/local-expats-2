@@ -11,7 +11,7 @@ import java.time.{LocalDateTime, ZonedDateTime}
 import java.util.UUID
 import javax.sql.DataSource
 
-final case class PostServiceLive(postRepo: PostRepo) extends PostService:
+case class PostServiceLive(postRepo: PostRepo) extends PostService:
 
   override def getOne(id: PostId): Task[Option[PostWithComments]] =
     postRepo.getOne(id)

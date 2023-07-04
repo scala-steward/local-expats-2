@@ -12,7 +12,7 @@ import sttp.tapir.ztapir.*
 import sttp.tapir.{EndpointOutput, PublicEndpoint}
 import zio.*
 
-final case class BaseEndpoints(authService: AuthService, userService: UserService):
+case class BaseEndpoints(authService: AuthService, userService: UserService):
   val publicEndpoint: PublicEndpoint[Unit, ErrorInfo, Unit, Any] =
     endpoint
       .errorOut(defaultErrorOutputs)

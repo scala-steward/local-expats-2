@@ -23,7 +23,7 @@ case class UserRow(
   def toUser: User = User(id, UserData(email, firstName, lastName, passwordHash))
 }
 
-final case class UserRepoLive(
+case class UserRepoLive(
     quill: QuillContext,
 ) extends UserRepo:
   import quill.*

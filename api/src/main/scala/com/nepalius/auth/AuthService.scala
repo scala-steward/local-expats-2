@@ -12,7 +12,7 @@ import java.time.{Duration, Instant}
 import java.util.UUID
 import scala.util.{Success, Try}
 
-final case class AuthService(config: AuthConfig):
+case class AuthService(config: AuthConfig):
   def encryptPassword(password: String): Task[String] = PasswordHashing.encryptPassword(password)
   def verifyPassword(password: String, passwordHash: String): Task[Unit] = PasswordHashing.verifyPassword(password, passwordHash)
   def generateJwt(email: String): IO[Exception, String] = Jwt.generate(email)

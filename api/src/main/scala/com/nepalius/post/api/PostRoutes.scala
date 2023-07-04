@@ -14,7 +14,7 @@ import zio.json.*
 
 import java.time.{LocalDateTime, ZonedDateTime}
 
-final case class PostRoutes(postService: PostService):
+case class PostRoutes(postService: PostService):
 
   val routes: Http[Any, Throwable, Request, Response] =
     collectZIO[Request] {

@@ -10,7 +10,7 @@ import zio.http.*
 import zio.http.Method.GET
 import zio.json.*
 
-final case class LocationRoutes(locationService: LocationService):
+case class LocationRoutes(locationService: LocationService):
   val routes: Http[Any, Throwable, Request, Response] =
     Http.collectZIO[Request] { case GET -> Root / "api" / "locations" => getAll }
 

@@ -5,7 +5,7 @@ import javax.sql.DataSource
 import zio.*
 import org.flywaydb.core.Flyway
 
-final case class DatabaseMigration(dataSource: DataSource):
+case class DatabaseMigration(dataSource: DataSource):
   def migrate(): Task[Unit] = ZIO.attempt {
     Flyway
       .configure()

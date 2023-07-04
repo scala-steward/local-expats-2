@@ -8,7 +8,7 @@ import zio.*
 
 import scala.util.chaining.*
 
-final case class PostServerEndpoints(
+case class PostServerEndpoints(
     postEndpoints: PostEndpoints,
     postService: PostService,
 ):

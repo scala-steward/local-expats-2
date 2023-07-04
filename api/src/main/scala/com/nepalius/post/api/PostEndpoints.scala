@@ -8,7 +8,7 @@ import sttp.tapir.ztapir.*
 import sttp.tapir.{EndpointInput, PublicEndpoint}
 import zio.ZLayer
 
-final case class PostEndpoints(base: BaseEndpoints):
+case class PostEndpoints(base: BaseEndpoints):
 
   val getPostsEndPoint: PublicEndpoint[GetPostsParams, ErrorInfo, List[PostDto], Any] =
     base.publicEndpoint

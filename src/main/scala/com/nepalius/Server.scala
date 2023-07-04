@@ -9,7 +9,7 @@ import zio.*
 import zio.Console.printLine
 import zio.http.{Server as HttpServer, *}
 
-final case class Server(
+case class Server(
     serverConfig: ServerConfig,
     databaseMigration: DatabaseMigration,
     postRoutes: PostRoutes,

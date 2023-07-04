@@ -10,7 +10,7 @@ import zio.*
 
 import javax.sql.DataSource
 
-final case class LocationRepoLive(quill: QuillContext) extends LocationRepo:
+case class LocationRepoLive(quill: QuillContext) extends LocationRepo:
   import quill.*
 
   override def getAll: Task[List[Location]] =

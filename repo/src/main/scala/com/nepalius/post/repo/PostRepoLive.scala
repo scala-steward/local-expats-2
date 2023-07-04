@@ -17,7 +17,7 @@ import javax.sql.DataSource
 import com.nepalius.config.QuillContext
 import io.getquill.jdbczio.Quill
 
-final case class PostRepoLive(
+case class PostRepoLive(
     quill: QuillContext,
 ) extends PostRepo:
   import quill.*

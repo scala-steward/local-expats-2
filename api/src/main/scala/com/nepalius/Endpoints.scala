@@ -6,7 +6,7 @@ import sttp.tapir.swagger.bundle.SwaggerInterpreter
 import sttp.tapir.ztapir.*
 import zio.{Task, ZLayer}
 
-final case class Endpoints(
+case class Endpoints(
     userServerEndpoints: UserServerEndpoints,
     postServerEndpoints: PostServerEndpoints,
 ) {

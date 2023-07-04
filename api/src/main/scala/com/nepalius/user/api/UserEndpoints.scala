@@ -11,7 +11,7 @@ import zio.ZLayer
 
 import java.util.UUID
 
-final case class UserEndpoints(base: BaseEndpoints):
+case class UserEndpoints(base: BaseEndpoints):
 
   val registerEndPoint: Endpoint[Unit, UserRegisterPayload, ErrorInfo, UserWithAuthTokenResponse, Any] =
     base.publicEndpoint

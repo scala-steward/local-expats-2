@@ -1,13 +1,13 @@
 package com.nepalius.config
 
-final case class DatabaseConfig(
+case class DatabaseConfig(
     url: String,
 ) {
   def toConnectionInfo = DatabaseConfig.parseConnectionInfo(url)
 }
 
 object DatabaseConfig {
-  final case class ConnectionInfo(
+  case class ConnectionInfo(
       username: String,
       password: String,
       host: String,
