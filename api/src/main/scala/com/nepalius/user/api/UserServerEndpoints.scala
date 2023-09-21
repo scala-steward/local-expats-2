@@ -4,13 +4,11 @@ import com.nepalius.auth.AuthService
 import com.nepalius.common.Exceptions
 import com.nepalius.common.Exceptions.Unauthorized
 import com.nepalius.common.api.*
-import ErrorMapper.*
-import com.nepalius.user.api.{UserEndpoints, UserResponse, UserServerEndpoints}
+import com.nepalius.common.api.ErrorMapper.*
 import com.nepalius.user.domain.{UserService, UserUpdateData}
 import sttp.tapir.ztapir.*
 import zio.*
 
-import java.util.UUID
 import scala.util.chaining.*
 
 class UserServerEndpoints(userEndpoints: UserEndpoints, userService: UserService, authService: AuthService):

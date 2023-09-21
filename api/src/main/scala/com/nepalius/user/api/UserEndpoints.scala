@@ -2,7 +2,6 @@ package com.nepalius.user.api
 
 import com.nepalius.auth.UserSession
 import com.nepalius.common.api.{BaseEndpoints, ErrorInfo}
-import com.nepalius.user.api.{UserEndpoints, UserRegisterPayload, UserResponse}
 import sttp.tapir.Endpoint
 import sttp.tapir.generic.auto.*
 import sttp.tapir.json.zio.jsonBody

@@ -1,11 +1,9 @@
 package com.nepalius.post.api
 
-import com.nepalius.location.StateJsonCodec.given
 import com.nepalius.location.domain.Location
 import com.nepalius.location.domain.Location.LocationId
-import com.nepalius.location.{LocationDto, State}
-import com.nepalius.post.domain.{Post, PostView}
 import com.nepalius.post.domain.Post.PostId
+import com.nepalius.post.domain.{Post, PostView}
 import zio.*
 import zio.json.*
 

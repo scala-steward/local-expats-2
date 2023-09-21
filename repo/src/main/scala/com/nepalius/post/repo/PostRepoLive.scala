@@ -1,6 +1,5 @@
 package com.nepalius.post.repo
-import com.nepalius.location.State
-import com.nepalius.location.StateDbCodec.given
+import com.nepalius.config.QuillContext
 import com.nepalius.location.domain.Location
 import com.nepalius.location.domain.Location.LocationId
 import com.nepalius.post.domain.*
@@ -8,14 +7,11 @@ import com.nepalius.post.domain.Post.PostId
 import com.nepalius.util.Pageable
 import io.getquill.*
 import io.getquill.extras.*
+import io.getquill.jdbczio.Quill
 import zio.*
 
 import java.sql.SQLException
-import java.time.{LocalDateTime, ZonedDateTime}
-import java.util.UUID
-import javax.sql.DataSource
-import com.nepalius.config.QuillContext
-import io.getquill.jdbczio.Quill
+import java.time.ZonedDateTime
 
 case class PostRepoLive(
     quill: QuillContext,

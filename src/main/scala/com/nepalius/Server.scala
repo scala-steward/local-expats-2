@@ -3,7 +3,6 @@ package com.nepalius
 import com.nepalius.config.{DatabaseMigration, ServerConfig}
 import com.nepalius.location.LocationRoutes
 import com.nepalius.post.api.PostRoutes
-import com.nepalius.post.domain.PostRepo
 import sttp.tapir.server.ziohttp.ZioHttpInterpreter
 import zio.*
 import zio.Console.printLine

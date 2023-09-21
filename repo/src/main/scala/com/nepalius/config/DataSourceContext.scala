@@ -1,6 +1,5 @@
 package com.nepalius.config
 
-import com.nepalius.config.DatabaseConfig
 import com.typesafe.config.ConfigFactory
 import io.getquill.jdbczio.Quill
 import zio.{ZIO, ZLayer}

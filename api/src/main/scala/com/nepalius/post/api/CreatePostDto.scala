@@ -1,6 +1,4 @@
 package com.nepalius.post.api
-import com.nepalius.location.State
-import com.nepalius.location.StateJsonCodec.given
 import com.nepalius.location.domain.Location
 import com.nepalius.location.domain.Location.LocationId
 import com.nepalius.post.domain.CreatePost

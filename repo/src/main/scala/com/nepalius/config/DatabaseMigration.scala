@@ -12,6 +12,7 @@ case class DatabaseMigration(dataSource: DataSource):
       .dataSource(dataSource)
       .load()
       .migrate()
+    ()
   }
 
 object DatabaseMigration:

@@ -3,7 +3,6 @@ package com.nepalius.location
 import com.nepalius.location.StateJsonCodec.given
 import com.nepalius.location.domain.Location
 import com.nepalius.location.domain.Location.LocationId
-import com.nepalius.post.api.PostDto
 import zio.json.{DeriveJsonEncoder, JsonEncoder}
 
 case class LocationDto(

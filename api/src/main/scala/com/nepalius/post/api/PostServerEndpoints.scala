@@ -2,7 +2,6 @@ package com.nepalius.post.api
 
 import com.nepalius.common.api.ErrorMapper.*
 import com.nepalius.post.domain.PostService
-import com.nepalius.util.Pageable
 import sttp.tapir.ztapir.*
 import zio.*
 

@@ -14,8 +14,6 @@ import com.nepalius.user.repo.UserRepoLive
 import zio.*
 import zio.logging.backend.SLF4J
 
-import java.io.IOException
-
 object Main extends ZIOAppDefault {
 
   override def run: Task[Unit] =

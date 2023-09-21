@@ -1,7 +1,6 @@
 package com.nepalius.post.api
 
 import com.nepalius.common.api.{BaseEndpoints, ErrorInfo}
-import sttp.tapir.EndpointIO.annotations.query
 import sttp.tapir.generic.auto.*
 import sttp.tapir.json.zio.jsonBody
 import sttp.tapir.ztapir.*

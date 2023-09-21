@@ -2,8 +2,8 @@ package com.nepalius.auth
 
 import com.auth0.jwt.algorithms.Algorithm
 import com.auth0.jwt.{JWT, JWTVerifier}
-import com.nepalius.common.Exceptions.Unauthorized
 import com.nepalius.common.Exceptions
+import com.nepalius.common.Exceptions.Unauthorized
 import com.password4j.{Argon2Function, Password}
 import zio.ZIO.ifZIO
 import zio.{IO, Task, ZIO, ZLayer}

@@ -1,6 +1,6 @@
 package com.nepalius.user.api
 
-import zio.json.{DeriveJsonDecoder, DeriveJsonEncoder, JsonEncoder, JsonDecoder}
+import zio.json.{DeriveJsonDecoder, DeriveJsonEncoder, JsonDecoder, JsonEncoder}
 
 case class UserWithAuthTokenResponse(user: UserResponse, authToken: String)
 

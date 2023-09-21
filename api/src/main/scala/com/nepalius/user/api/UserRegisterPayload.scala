@@ -1,6 +1,5 @@
 package com.nepalius.user.api
 
-import com.nepalius.user.api.UserRegisterPayload
 import com.nepalius.user.domain.UserRegisterData
 import sttp.tapir.Schema.annotations.validate
 import sttp.tapir.Validator

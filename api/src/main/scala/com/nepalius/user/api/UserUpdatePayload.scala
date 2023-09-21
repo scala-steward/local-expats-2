@@ -1,6 +1,5 @@
 package com.nepalius.user.api
 
-import com.nepalius.user.domain.UserRegisterData
 import sttp.tapir.Schema.annotations.{validate, validateEach}
 import sttp.tapir.Validator
 import zio.json.*

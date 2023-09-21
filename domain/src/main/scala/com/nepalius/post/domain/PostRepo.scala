@@ -1,6 +1,5 @@
 package com.nepalius.post.domain
 
-import com.nepalius.location.State
 import com.nepalius.location.domain.Location.LocationId
 import com.nepalius.post.domain.Post.PostId
 import com.nepalius.util.Pageable

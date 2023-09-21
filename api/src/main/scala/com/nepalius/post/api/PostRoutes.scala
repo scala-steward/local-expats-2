@@ -1,18 +1,15 @@
 package com.nepalius.post.api
 
-import com.nepalius.location.State
-import com.nepalius.location.domain.Location.LocationId
 import com.nepalius.post.domain.Post.PostId
 import com.nepalius.post.domain.{Post, PostService}
-import com.nepalius.util.ApiUtils.{getQueryParam, parseBody, parsePageable}
-import com.nepalius.util.Pageable
+import com.nepalius.util.ApiUtils.{getQueryParam, parseBody}
 import zio.*
+import zio.http.*
 import zio.http.Http.collectZIO
 import zio.http.Method.{GET, POST}
-import zio.http.*
 import zio.json.*
 
-import java.time.{LocalDateTime, ZonedDateTime}
+import java.time.ZonedDateTime
 
 case class PostRoutes(postService: PostService):
 

@@ -1,6 +1,5 @@
 package com.nepalius.location
 
-import com.nepalius.location.State
 import zio.json.*
 
 object StateJsonCodec:

@@ -1,10 +1,6 @@
 package com.nepalius.location
 
-import com.nepalius.location.State
 import com.nepalius.location.domain.LocationService
-import com.nepalius.post.api.PostDto
-import com.nepalius.post.domain.Post.PostId
-import com.nepalius.post.domain.{Post, PostService}
 import zio.*
 import zio.http.*
 import zio.http.Method.GET

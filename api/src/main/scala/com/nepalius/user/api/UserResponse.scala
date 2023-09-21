@@ -1,6 +1,5 @@
 package com.nepalius.user.api
 
-import com.nepalius.user.api.UserResponse
 import com.nepalius.user.domain.User
 import zio.json.{DeriveJsonDecoder, DeriveJsonEncoder, JsonDecoder, JsonEncoder}
 

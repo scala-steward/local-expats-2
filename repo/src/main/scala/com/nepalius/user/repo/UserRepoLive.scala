@@ -1,7 +1,6 @@
 package com.nepalius.user.repo
 
 import com.nepalius.config.QuillContext
-import com.nepalius.post.domain.{CreatePost, Post}
 import com.nepalius.user.domain.User.UserId
 import com.nepalius.user.domain.{User, UserData, UserRegisterData, UserRepo}
 import io.getquill.*
@@ -11,7 +10,6 @@ import zio.*
 
 import java.sql.SQLException
 import java.util.UUID
-import javax.sql.DataSource
 
 case class UserRow(
     id: UserId,

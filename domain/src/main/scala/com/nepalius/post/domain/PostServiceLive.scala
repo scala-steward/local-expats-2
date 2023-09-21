@@ -1,15 +1,11 @@
 package com.nepalius.post.domain
 
-import com.nepalius.location.State
 import com.nepalius.location.domain.Location.{DefaultLocationId, LocationId}
 import com.nepalius.post.domain.Post.PostId
-import com.nepalius.post.domain.PostService
 import com.nepalius.util.Pageable
 import zio.*
 
-import java.time.{LocalDateTime, ZonedDateTime}
-import java.util.UUID
-import javax.sql.DataSource
+import java.time.ZonedDateTime
 
 case class PostServiceLive(postRepo: PostRepo) extends PostService:
 
