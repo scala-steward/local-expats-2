@@ -6,7 +6,7 @@ Global / onChangedBuildSource := ReloadOnSourceChanges
 
 val V = new {
   val CommonsValidator = "1.7"
-  val Flyway = "9.22.2"
+  val Flyway = "10.0.0"
   val Jwt = "4.4.0"
   val Laminar = "16.0.0"
   val Password4J = "1.7.3"
@@ -14,10 +14,10 @@ val V = new {
   val Quill = "4.8.0"
   val ScalaJsDom = "2.8.0"
   val Slf4j = "2.0.9"
-  val Tapir = "1.7.6"
-  val Zio = "2.0.18"
+  val Tapir = "1.8.5"
+  val Zio = "2.0.19"
   val ZioConfig = "3.0.7"
-  val ZioLogging = "2.1.14"
+  val ZioLogging = "2.1.15"
 }
 
 lazy val domain = project
