@@ -22,7 +22,7 @@ case class PostEndpoints(base: BaseEndpoints):
     base.publicEndpoint
       .summary("Get Post")
       .get
-      .in("api" / "posts" / path[PostId])
+      .in("api" / "posts" / path[PostId]("id"))
       .out(jsonBody[PostWithCommentsDto])
 
   val createPostEndpoint: PublicEndpoint[CreatePostDto, ErrorInfo, PostDto, Any] =
@@ -37,7 +37,7 @@ case class PostEndpoints(base: BaseEndpoints):
     base.publicEndpoint
       .summary("Add Comment")
       .post
-      .in("api" / "posts" / path[PostId] / "comments")
+      .in("api" / "posts" / path[PostId]("id") / "comments")
       .in(jsonBody[CreateCommentDto])
       .out(jsonBody[PostWithCommentsDto])
 
