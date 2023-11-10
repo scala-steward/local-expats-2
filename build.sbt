@@ -34,6 +34,7 @@ lazy val repo = project
     libraryDependencies ++= Seq(
       "org.postgresql" % "postgresql" % V.Postgres,
       "org.flywaydb" % "flyway-core" % V.Flyway,
+      "org.flywaydb" % "flyway-database-postgresql" % V.Flyway,
       "io.getquill" %% "quill-jdbc-zio" % V.Quill,
     ),
   )

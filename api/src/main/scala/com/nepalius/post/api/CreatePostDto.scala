@@ -15,4 +15,5 @@ case class CreatePostDto(
     CreatePost(title, message, locationId, image)
 
 object CreatePostDto:
+  given JsonEncoder[CreatePostDto] = DeriveJsonEncoder.gen[CreatePostDto]
   given JsonDecoder[CreatePostDto] = DeriveJsonDecoder.gen[CreatePostDto]
