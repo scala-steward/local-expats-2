@@ -21,27 +21,27 @@ object Main extends ZIOAppDefault {
     ZIO
       .serviceWithZIO[Server](_.start)
       .provide(
-        Server.live,
-        AppConfig.live,
+        Server.layer,
+        AppConfig.layer,
         Runtime.removeDefaultLoggers,
         SLF4J.slf4j,
         // Database
-        DatabaseMigration.live,
-        DataSourceContext.live,
-        QuillContext.live,
+        DatabaseMigration.layer,
+        DataSourceContext.layer,
+        QuillContext.layer,
         // API
-        AuthService.live,
-        BaseEndpoints.live,
-        Endpoints.live,
-        UserEndpoints.live,
-        UserServerEndpoints.live,
-        PostEndpoints.live,
-        PostServerEndpoints.live,
-        LocationEndpoints.live,
-        LocationServerEndpoints.live,
+        AuthService.layer, 
+        BaseEndpoints.layer,
+        Endpoints.layer,
+        UserEndpoints.layer,
+        UserServerEndpoints.layer,
+        PostEndpoints.layer,
+        PostServerEndpoints.layer,
+        LocationEndpoints.layer,
+        LocationServerEndpoints.layer,
         // Service
-        PostRepoLive.live >>> PostServiceLive.live,
-        LocationRepoLive.live >>> LocationServiceLive.live,
-        UserRepoLive.live >>> UserService.live,
+        PostRepoLive.layer >>> PostServiceLive.layer,
+        LocationRepoLive.layer >>> LocationServiceLive.layer,
+        UserRepoLive.layer >>> UserService.layer,
       )
 }

@@ -33,4 +33,4 @@ case class LocationServerEndpoints(
 
 object LocationServerEndpoints:
   // noinspection TypeAnnotation
-  val live = ZLayer.fromFunction(LocationServerEndpoints.apply)
+  val layer = ZLayer.fromFunction(LocationServerEndpoints.apply)

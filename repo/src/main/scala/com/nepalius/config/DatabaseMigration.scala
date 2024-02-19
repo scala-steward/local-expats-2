@@ -17,4 +17,4 @@ case class DatabaseMigration(dataSource: DataSource):
 
 object DatabaseMigration:
   // noinspection TypeAnnotation
-  val live = ZLayer.fromFunction(DatabaseMigration.apply)
+  val layer = ZLayer.fromFunction(DatabaseMigration.apply)

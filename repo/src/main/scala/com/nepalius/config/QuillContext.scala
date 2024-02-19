@@ -10,5 +10,5 @@ import scala.language.adhocExtensions
 type QuillContext = Quill.Postgres[SnakeCase]
 
 object QuillContext:
-  val live: ZLayer[DataSource, Nothing, QuillContext] =
+  val layer: ZLayer[DataSource, Nothing, QuillContext] =
     Quill.Postgres.fromNamingStrategy(SnakeCase)

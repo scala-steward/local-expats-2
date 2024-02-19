@@ -85,4 +85,4 @@ case class UserEndpoints(base: BaseEndpoints):
 
 object UserEndpoints:
   // noinspection TypeAnnotation
-  val live = ZLayer.fromFunction(UserEndpoints.apply)
+  val layer = ZLayer.fromFunction(UserEndpoints.apply)

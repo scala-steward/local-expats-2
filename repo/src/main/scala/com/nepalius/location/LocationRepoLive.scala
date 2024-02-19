@@ -18,4 +18,4 @@ case class LocationRepoLive(quill: QuillContext) extends LocationRepo:
 
 object LocationRepoLive:
   // noinspection TypeAnnotation
-  val live = ZLayer.fromFunction(LocationRepoLive.apply)
+  val layer = ZLayer.fromFunction(LocationRepoLive.apply)

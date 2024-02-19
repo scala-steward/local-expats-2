@@ -68,4 +68,4 @@ case class AuthService(config: AuthConfig):
 
 object AuthService:
   // noinspection TypeAnnotation
-  val live = ZLayer.fromFunction(AuthService.apply)
+  val layer = ZLayer.fromFunction(AuthService.apply)

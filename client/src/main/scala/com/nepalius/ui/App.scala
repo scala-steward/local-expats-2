@@ -4,6 +4,6 @@ import com.raquo.laminar.api.L.*
 
 def App(): Element =
   div(
-    h1("Hello Laminar!"),
-    CounterButton(),
+    h1("NepaliUS"),
+    PostsView(),
   )

@@ -30,4 +30,4 @@ case class Endpoints(
 
 object Endpoints:
   // noinspection TypeAnnotation
-  val live = ZLayer.fromFunction(Endpoints.apply)
+  val layer = ZLayer.fromFunction(Endpoints.apply)

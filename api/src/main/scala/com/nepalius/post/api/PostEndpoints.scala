@@ -12,6 +12,8 @@ case class PostEndpoints(base: BaseEndpoints):
 
   val getPostsEndpoint: PublicEndpoint[GetPostsParams, ErrorInfo, List[PostDto], Any] =
     base.publicEndpoint
+      .tag("Posts")
+      .name("Get Posts name")
       .summary("Get Posts")
       .get
       .in("api" / "posts")
@@ -43,4 +45,4 @@ case class PostEndpoints(base: BaseEndpoints):
 
 object PostEndpoints:
   // noinspection TypeAnnotation
-  val live = ZLayer.fromFunction(PostEndpoints.apply)
+  val layer = ZLayer.fromFunction(PostEndpoints.apply)

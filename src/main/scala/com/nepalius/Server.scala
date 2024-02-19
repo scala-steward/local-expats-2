@@ -26,4 +26,4 @@ case class Server(
 
 object Server:
   // noinspection TypeAnnotation
-  val live = ZLayer.fromFunction(Server.apply)
+  val layer = ZLayer.fromFunction(Server.apply)

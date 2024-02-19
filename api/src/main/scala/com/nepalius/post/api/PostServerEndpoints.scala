@@ -84,4 +84,4 @@ case class PostServerEndpoints(
 
 object PostServerEndpoints:
   // noinspection TypeAnnotation
-  val live = ZLayer.fromFunction(PostServerEndpoints.apply)
+  val layer = ZLayer.fromFunction(PostServerEndpoints.apply)

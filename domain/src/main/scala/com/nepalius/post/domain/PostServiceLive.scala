@@ -37,4 +37,4 @@ case class PostServiceLive(postRepo: PostRepo) extends PostService:
 
 object PostServiceLive:
   // noinspection TypeAnnotation
-  val live = ZLayer.fromFunction(PostServiceLive.apply)
+  val layer = ZLayer.fromFunction(PostServiceLive.apply)

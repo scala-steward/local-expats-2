@@ -8,7 +8,7 @@ import javax.sql.DataSource
 import scala.jdk.CollectionConverters.MapHasAsJava
 
 object DataSourceContext:
-  val live: ZLayer[DatabaseConfig, Throwable, DataSource] =
+  val layer: ZLayer[DatabaseConfig, Throwable, DataSource] =
     ZLayer {
       for config <- ZIO.service[DatabaseConfig]
       yield Quill.DataSource.fromConfig(

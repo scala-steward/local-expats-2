@@ -42,7 +42,7 @@ case class BaseEndpoints(authService: AuthService, userService: UserService):
 
 object BaseEndpoints:
   // noinspection TypeAnnotation
-  val live = ZLayer.fromFunction(BaseEndpoints.apply)
+  val layer = ZLayer.fromFunction(BaseEndpoints.apply)
 
   private val UserWithEmailNotFoundMessage: String => String = (email: String) => s"User with email $email doesn't exist"
 

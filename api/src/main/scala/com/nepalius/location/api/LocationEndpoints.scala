@@ -20,4 +20,4 @@ case class LocationEndpoints(base: BaseEndpoints):
 
 object LocationEndpoints:
   // noinspection TypeAnnotation
-  val live = ZLayer.fromFunction(LocationEndpoints.apply)
+  val layer = ZLayer.fromFunction(LocationEndpoints.apply)

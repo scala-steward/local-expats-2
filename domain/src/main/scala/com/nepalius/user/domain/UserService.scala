@@ -73,7 +73,7 @@ case class UserService(userRepo: UserRepo) {
 
 object UserService:
   // noinspection TypeAnnotation
-  val live = ZLayer.fromFunction(UserService.apply)
+  val layer = ZLayer.fromFunction(UserService.apply)
 
   private val UserWithIdNotFoundMessage: UserId => String = (id: UserId) => s"User with id $id doesn't exist"
   private val UserWithEmailAlreadyInUseMessage: String => String = (email: String) => s"User with email $email already in use"

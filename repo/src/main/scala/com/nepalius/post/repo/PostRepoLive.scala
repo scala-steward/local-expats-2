@@ -128,4 +128,4 @@ case class PostRepoLive(
 
 object PostRepoLive:
   // noinspection TypeAnnotation
-  val live = ZLayer.fromFunction(PostRepoLive.apply)
+  val layer = ZLayer.fromFunction(PostRepoLive.apply)

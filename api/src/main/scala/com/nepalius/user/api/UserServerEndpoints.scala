@@ -91,5 +91,5 @@ class UserServerEndpoints(userEndpoints: UserEndpoints, userService: UserService
   )
 
 object UserServerEndpoints:
-  val live: ZLayer[UserEndpoints with UserService with AuthService, Nothing, UserServerEndpoints] = ZLayer
+  val layer: ZLayer[UserEndpoints with UserService with AuthService, Nothing, UserServerEndpoints] = ZLayer
     .fromFunction(new UserServerEndpoints(_, _, _))

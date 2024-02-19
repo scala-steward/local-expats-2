@@ -79,4 +79,4 @@ case class UserRepoLive(
 
 object UserRepoLive:
   // noinspection TypeAnnotation
-  val live = ZLayer.fromFunction(UserRepoLive.apply)
+  val layer = ZLayer.fromFunction(UserRepoLive.apply)
