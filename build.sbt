@@ -5,19 +5,19 @@ ThisBuild / version := "0.0.1-SNAPSHOT"
 Global / onChangedBuildSource := ReloadOnSourceChanges
 
 val V = new {
-  val CommonsValidator = "1.7"
-  val Flyway = "10.0.0"
+  val CommonsValidator = "1.8.0"
+  val Flyway = "10.8.1"
   val Jwt = "4.4.0"
   val Laminar = "16.0.0"
   val Password4J = "1.7.3"
-  val Postgres = "42.6.0"
-  val Quill = "4.8.0"
+  val Postgres = "42.7.1"
+  val Quill = "4.8.1"
   val ScalaJsDom = "2.8.0"
-  val Slf4j = "2.0.9"
-  val Tapir = "1.8.5"
-  val Zio = "2.0.19"
-  val ZioConfig = "3.0.7"
-  val ZioLogging = "2.1.15"
+  val Slf4j = "2.0.12"
+  val Tapir = "1.9.9"
+  val Zio = "2.0.21"
+  val ZioConfig = "4.0.1"
+  val ZioLogging = "2.2.2"
 }
 
 lazy val domain = project
