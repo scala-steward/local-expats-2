@@ -1,10 +1,10 @@
 # Set the java args to high
 
--Xmx512M
+-Xmx4g
 
--XX:MaxPermSize=256m
+-XX:MaxPermSize=512m
 
--XX:ReservedCodeCacheSize=128m
+-XX:ReservedCodeCacheSize=256m
 
 
 
