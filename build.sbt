@@ -96,7 +96,7 @@ lazy val root = (project in file("."))
   .enablePlugins(DockerPlugin)
   .settings(
     Docker / packageName := "nepalius",
-    dockerBaseImage := "eclipse-temurin:17",
+    dockerBaseImage := "eclipse-temurin:21",
     dockerExposedPorts := Seq(9000),
     dockerUpdateLatest := true,
   )
