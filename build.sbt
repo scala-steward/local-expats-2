@@ -16,7 +16,7 @@ val V = new {
   val Slf4j = "2.0.12"
   val Tapir = "1.9.9"
   val Zio = "2.0.21"
-  val ZioConfig = "3.0.7"
+  val ZioConfig = "4.0.1"
   val ZioLogging = "2.2.2"
 }
 
@@ -87,7 +87,6 @@ lazy val root = (project in file("."))
       "dev.zio" %% "zio-config" % V.ZioConfig,
       "dev.zio" %% "zio-config-typesafe" % V.ZioConfig,
       "dev.zio" %% "zio-config-magnolia" % V.ZioConfig,
-      "com.github.ghik" % "silencer-lib_2.13.11" % "1.17.13" % "provided", // Fix for zio-config incompatibility with scala 3.3
       "dev.zio" %% "zio-logging-slf4j" % V.ZioLogging,
       "org.slf4j" % "slf4j-api" % V.Slf4j,
       "org.slf4j" % "slf4j-simple" % V.Slf4j,
