@@ -9,6 +9,7 @@ val V = new {
   val Flyway = "10.8.1"
   val Jwt = "4.4.0"
   val Laminar = "16.0.0"
+  val Logback = "1.5.0"
   val Password4J = "1.7.3"
   val Postgres = "42.7.1"
   val Quill = "4.8.1"
@@ -87,9 +88,8 @@ lazy val root = (project in file("."))
       "dev.zio" %% "zio-config" % V.ZioConfig,
       "dev.zio" %% "zio-config-typesafe" % V.ZioConfig,
       "dev.zio" %% "zio-config-magnolia" % V.ZioConfig,
-      "dev.zio" %% "zio-logging-slf4j" % V.ZioLogging,
-      "org.slf4j" % "slf4j-api" % V.Slf4j,
-      "org.slf4j" % "slf4j-simple" % V.Slf4j,
+      "dev.zio" %% "zio-logging-slf4j2" % V.ZioLogging,
+      "ch.qos.logback" % "logback-classic" % V.Logback,
     ),
   )
   .enablePlugins(JavaAppPackaging)

@@ -1,7 +1,7 @@
 package com.nepalius
 
 import com.nepalius.config.{DatabaseMigration, ServerConfig}
-import sttp.tapir.server.ziohttp.ZioHttpInterpreter
+import sttp.tapir.server.ziohttp.{ZioHttpInterpreter, ZioHttpServerOptions}
 import zio.*
 import zio.Console.printLine
 import zio.http.{Server as HttpServer, *}
@@ -12,7 +12,17 @@ case class Server(
     endpoints: Endpoints,
 ):
 
-  private val allEndpoints = ZioHttpInterpreter().toHttp(endpoints.endpoints)
+  private val allEndpoints = ZioHttpInterpreter(
+    ZioHttpServerOptions
+      .customiseInterceptors
+      .serverLog(
+        ZioHttpServerOptions
+          .defaultServerLog
+          .logWhenReceived(true)
+      )
+      .options,
+  )
+    .toHttp(endpoints.endpoints)
 
   def start: ZIO[Any, Throwable, Unit] =
     (for
