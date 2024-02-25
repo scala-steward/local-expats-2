@@ -13,7 +13,7 @@ export const Posts: FC = () => {
     const {selectedLocation} = useSelectedLocation();
     const locationId = selectedLocation?.id;
 
-    const fetchPosts = ({pageParam: lastId = undefined}): Promise<PostDto[]> => {
+    const fetchPosts = ({pageParam: lastId}: { pageParam?: number }): Promise<PostDto[]> => {
         const params = {
             locationId,
             pageSize,
@@ -29,7 +29,10 @@ export const Posts: FC = () => {
         fetchNextPage,
         hasNextPage,
         isFetchingNextPage,
-    } = useInfiniteQuery(['posts', 'locationId', locationId], fetchPosts, {
+    } = useInfiniteQuery({
+        queryKey: ['posts', 'locationId', locationId],
+        queryFn: fetchPosts,
+        initialPageParam: undefined,
         getNextPageParam: (lastPage) => lastPage.length === pageSize ? lastPage[lastPage.length - 1]?.id : undefined,
     })
 

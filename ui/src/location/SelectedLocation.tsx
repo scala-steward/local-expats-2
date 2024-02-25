@@ -22,7 +22,9 @@ const SelectedLocationContext = createContext<UseSelectedLocation | undefined>(u
 export const SelectedLocationProvider: FC<PropsWithChildren> = ({children}) => {
     const [selectedLocation, setSelectedLocation] = useState<LocationDto>(US);
     const fetchLocations = () => get<LocationDto[]>('/api/locations');
-    const {isLoading, data} = useQuery(['locations'], fetchLocations, {
+    const {isLoading, data} = useQuery({
+        queryKey: ['locations'],
+        queryFn: fetchLocations,
         refetchOnWindowFocus: false,
         refetchOnMount: false,
         refetchOnReconnect: false,

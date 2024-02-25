@@ -13,7 +13,11 @@ export const PostDetail: FC<PostDetailProps> = ({postId}) => {
 
     const fetchPost = () => get<PostWithCommentsDto>(`/api/posts/${postId}`);
 
-    const {isLoading, data: postWithComments, refetch} = useQuery(['posts', 'id', postId], fetchPost);
+    const {isLoading, data: postWithComments, refetch} = useQuery(
+        {
+            queryKey: ['posts', 'id', postId],
+            queryFn: fetchPost
+        });
     if (isLoading || !postWithComments) {
         return <Loading/>
     }
