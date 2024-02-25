@@ -13,6 +13,7 @@ case class LocationEndpoints(base: BaseEndpoints):
 
   val getLocationsEndPoint: PublicEndpoint[Unit, ErrorInfo, List[LocationDto], Any] =
     base.publicEndpoint
+      .tag("Locations")
       .summary("Get Locations")
       .get
       .in("api" / "locations")

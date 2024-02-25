@@ -14,6 +14,7 @@ case class UserEndpoints(base: BaseEndpoints):
 
   val registerEndPoint: Endpoint[Unit, UserRegisterPayload, ErrorInfo, UserWithAuthTokenResponse, Any] =
     base.publicEndpoint
+      .tag("Users")
       .summary("Register User")
       .post
       .in("api" / "users")
@@ -22,6 +23,7 @@ case class UserEndpoints(base: BaseEndpoints):
 
   val loginEndpoint: Endpoint[Unit, UserLoginPayload, ErrorInfo, UserWithAuthTokenResponse, Any] =
     base.publicEndpoint
+      .tag("Users")
       .summary("Log In User")
       .post
       .in("api" / "users" / "login")
@@ -30,6 +32,7 @@ case class UserEndpoints(base: BaseEndpoints):
 
   val getCurrentUserEndpoint: ZPartialServerEndpoint[Any, String, UserSession, Unit, ErrorInfo, UserResponse, Any] =
     base.secureEndpoint
+      .tag("Current User")
       .summary("Get Current User")
       .get
       .in("api" / "user")
@@ -37,6 +40,7 @@ case class UserEndpoints(base: BaseEndpoints):
 
   val updateUserEndpoint: ZPartialServerEndpoint[Any, String, UserSession, UserUpdatePayload, ErrorInfo, UserResponse, Any] =
     base.secureEndpoint
+      .tag("Current User")
       .summary("Update Current User")
       .put
       .in("api" / "user")

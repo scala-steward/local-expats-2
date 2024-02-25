@@ -22,6 +22,7 @@ case class PostEndpoints(base: BaseEndpoints):
 
   val getPostEndpoint: PublicEndpoint[PostId, ErrorInfo, PostWithCommentsDto, Any] =
     base.publicEndpoint
+      .tag("Posts")
       .summary("Get Post")
       .get
       .in("api" / "posts" / path[PostId]("id"))
@@ -29,6 +30,7 @@ case class PostEndpoints(base: BaseEndpoints):
 
   val createPostEndpoint: PublicEndpoint[CreatePostDto, ErrorInfo, PostDto, Any] =
     base.publicEndpoint
+      .tag("Posts")
       .summary("Create Post")
       .post
       .in("api" / "posts")
@@ -37,6 +39,7 @@ case class PostEndpoints(base: BaseEndpoints):
 
   val addCommentEndpoint: PublicEndpoint[(PostId, CreateCommentDto), ErrorInfo, PostWithCommentsDto, Any] =
     base.publicEndpoint
+      .tag("Posts")
       .summary("Add Comment")
       .post
       .in("api" / "posts" / path[PostId]("id") / "comments")
