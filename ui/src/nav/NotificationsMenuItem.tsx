@@ -21,7 +21,9 @@ export const NotificationsMenuItem: FC = () => {
             since: notificationsLastChecked,
         });
     };
-    const {data, refetch} = useQuery(['notifications'], fetchUpdatedPosts, {
+    const {data, refetch} = useQuery({
+        queryKey: ['notifications'],
+        queryFn: fetchUpdatedPosts,
         refetchInterval: 2 * 60 * 1000, // 2 minutes
     });
 
