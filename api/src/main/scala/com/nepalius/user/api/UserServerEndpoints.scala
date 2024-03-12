@@ -11,7 +11,7 @@ import zio.*
 
 import scala.util.chaining.*
 
-class UserServerEndpoints(userEndpoints: UserEndpoints, userService: UserService, authService: AuthService):
+case class UserServerEndpoints(userEndpoints: UserEndpoints, userService: UserService, authService: AuthService):
 
   private val registerServerEndpoints: ZServerEndpoint[Any, Any] =
     userEndpoints
@@ -91,5 +91,5 @@ class UserServerEndpoints(userEndpoints: UserEndpoints, userService: UserService
   )
 
 object UserServerEndpoints:
-  val layer: ZLayer[UserEndpoints with UserService with AuthService, Nothing, UserServerEndpoints] = ZLayer
-    .fromFunction(new UserServerEndpoints(_, _, _))
+  //noinspection TypeAnnotation
+  val layer = ZLayer.fromFunction(UserServerEndpoints.apply)
