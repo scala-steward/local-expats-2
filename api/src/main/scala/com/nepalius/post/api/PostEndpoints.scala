@@ -10,7 +10,8 @@ import zio.ZLayer
 
 case class PostEndpoints(base: BaseEndpoints):
 
-  val getPostsEndpoint: PublicEndpoint[GetPostsParams, ErrorInfo, List[PostDto], Any] =
+  val getPostsEndpoint
+      : PublicEndpoint[GetPostsParams, ErrorInfo, List[PostDto], Any] =
     base.publicEndpoint
       .tag("Posts")
       .name("Get Posts name")
@@ -20,7 +21,8 @@ case class PostEndpoints(base: BaseEndpoints):
       .in(EndpointInput.derived[GetPostsParams])
       .out(jsonBody[List[PostDto]])
 
-  val getPostEndpoint: PublicEndpoint[PostId, ErrorInfo, PostWithCommentsDto, Any] =
+  val getPostEndpoint
+      : PublicEndpoint[PostId, ErrorInfo, PostWithCommentsDto, Any] =
     base.publicEndpoint
       .tag("Posts")
       .summary("Get Post")
@@ -28,7 +30,8 @@ case class PostEndpoints(base: BaseEndpoints):
       .in("api" / "posts" / path[PostId]("id"))
       .out(jsonBody[PostWithCommentsDto])
 
-  val createPostEndpoint: PublicEndpoint[CreatePostDto, ErrorInfo, PostDto, Any] =
+  val createPostEndpoint
+      : PublicEndpoint[CreatePostDto, ErrorInfo, PostDto, Any] =
     base.publicEndpoint
       .tag("Posts")
       .summary("Create Post")
@@ -37,7 +40,12 @@ case class PostEndpoints(base: BaseEndpoints):
       .in(jsonBody[CreatePostDto])
       .out(jsonBody[PostDto])
 
-  val addCommentEndpoint: PublicEndpoint[(PostId, CreateCommentDto), ErrorInfo, PostWithCommentsDto, Any] =
+  val addCommentEndpoint: PublicEndpoint[
+    (PostId, CreateCommentDto),
+    ErrorInfo,
+    PostWithCommentsDto,
+    Any,
+  ] =
     base.publicEndpoint
       .tag("Posts")
       .summary("Add Comment")

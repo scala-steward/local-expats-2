@@ -8,10 +8,10 @@ import sttp.tapir.PublicEndpoint
 import sttp.tapir.ztapir.*
 import zio.ZLayer
 
-
 case class LocationEndpoints(base: BaseEndpoints):
 
-  val getLocationsEndPoint: PublicEndpoint[Unit, ErrorInfo, List[LocationDto], Any] =
+  val getLocationsEndPoint
+      : PublicEndpoint[Unit, ErrorInfo, List[LocationDto], Any] =
     base.publicEndpoint
       .tag("Locations")
       .summary("Get Locations")

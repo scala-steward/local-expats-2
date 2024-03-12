@@ -3,7 +3,11 @@ package com.nepalius.user.domain
 import com.nepalius.common.Exceptions
 import com.nepalius.common.Exceptions.{AlreadyInUse, BadRequest}
 import com.nepalius.user.domain.User.UserId
-import com.nepalius.user.domain.UserService.{InvalidEmailMessage, UserWithEmailAlreadyInUseMessage, UserWithIdNotFoundMessage}
+import com.nepalius.user.domain.UserService.{
+  InvalidEmailMessage,
+  UserWithEmailAlreadyInUseMessage,
+  UserWithIdNotFoundMessage,
+}
 import org.apache.commons.validator.routines.EmailValidator
 import zio.{Task, ZIO, ZLayer}
 
@@ -21,7 +25,12 @@ case class UserService(userRepo: UserRepo) {
     for {
       _ <- validateEmail(emailClean)
       _ <- checkUserDoesNotExistByEmail(emailClean)
-      userDataClean = UserRegisterData(emailClean, firstNameClean, lastNameClean, user.passwordHash)
+      userDataClean = UserRegisterData(
+        emailClean,
+        firstNameClean,
+        lastNameClean,
+        user.passwordHash,
+      )
       user <- userRepo.create(userDataClean)
     } yield user
   }
@@ -33,7 +42,9 @@ case class UserService(userRepo: UserRepo) {
 
     for
       _ <- ZIO.foreach(emailCleanOpt)(validateEmail)
-      _ <- ZIO.foreach(emailCleanOpt)(email => checkUserDoesNotExistByEmail(email, user.id))
+      _ <- ZIO.foreach(emailCleanOpt)(email =>
+        checkUserDoesNotExistByEmail(email, user.id),
+      )
       oldUser <- get(user.id)
       newUserData = UserData(
         email = user.email.getOrElse(oldUser.data.email),
@@ -61,7 +72,10 @@ case class UserService(userRepo: UserRepo) {
         .when(maybeUserByEmail.isDefined)
     } yield ()
 
-  private def checkUserDoesNotExistByEmail(email: String, id: UserId): Task[Unit] =
+  private def checkUserDoesNotExistByEmail(
+      email: String,
+      id: UserId,
+  ): Task[Unit] =
     for {
       maybeUserByEmail <- userRepo.findUserByEmail(email)
       _ <- ZIO
@@ -75,6 +89,9 @@ object UserService:
   // noinspection TypeAnnotation
   val layer = ZLayer.fromFunction(UserService.apply)
 
-  private val UserWithIdNotFoundMessage: UserId => String = (id: UserId) => s"User with id $id doesn't exist"
-  private val UserWithEmailAlreadyInUseMessage: String => String = (email: String) => s"User with email $email already in use"
-  private val InvalidEmailMessage: String => String = (email: String) => s"Email $email is not valid"
+  private val UserWithIdNotFoundMessage: UserId => String =
+    (id: UserId) => s"User with id $id doesn't exist"
+  private val UserWithEmailAlreadyInUseMessage: String => String =
+    (email: String) => s"User with email $email already in use"
+  private val InvalidEmailMessage: String => String =
+    (email: String) => s"Email $email is not valid"

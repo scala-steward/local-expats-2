@@ -30,7 +30,7 @@ object Main extends ZIOAppDefault {
         DataSourceContext.layer,
         QuillContext.layer,
         // API
-        AuthService.layer, 
+        AuthService.layer,
         BaseEndpoints.layer,
         Endpoints.layer,
         UserEndpoints.layer,

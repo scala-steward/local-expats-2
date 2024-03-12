@@ -2,7 +2,10 @@ package com.nepalius.common.api
 
 import com.nepalius.auth.{AuthService, UserSession}
 import com.nepalius.common.*
-import com.nepalius.common.api.BaseEndpoints.{UserWithEmailNotFoundMessage, defaultErrorOutputs}
+import com.nepalius.common.api.BaseEndpoints.{
+  UserWithEmailNotFoundMessage,
+  defaultErrorOutputs,
+}
 import com.nepalius.user.domain.User.UserId
 import com.nepalius.user.domain.UserService
 import sttp.model.StatusCode
@@ -17,7 +20,15 @@ case class BaseEndpoints(authService: AuthService, userService: UserService):
     endpoint
       .errorOut(defaultErrorOutputs)
 
-  val secureEndpoint: ZPartialServerEndpoint[Any, String, UserSession, Unit, ErrorInfo, Unit, Any] =
+  val secureEndpoint: ZPartialServerEndpoint[
+    Any,
+    String,
+    UserSession,
+    Unit,
+    ErrorInfo,
+    Unit,
+    Any,
+  ] =
     endpoint
       .errorOut(defaultErrorOutputs)
       .securityIn(auth.bearer[String]())
@@ -44,7 +55,8 @@ object BaseEndpoints:
   // noinspection TypeAnnotation
   val layer = ZLayer.fromFunction(BaseEndpoints.apply)
 
-  private val UserWithEmailNotFoundMessage: String => String = (email: String) => s"User with email $email doesn't exist"
+  private val UserWithEmailNotFoundMessage: String => String =
+    (email: String) => s"User with email $email doesn't exist"
 
   val defaultErrorOutputs: EndpointOutput.OneOf[ErrorInfo, ErrorInfo] =
     oneOf[ErrorInfo](
@@ -52,7 +64,13 @@ object BaseEndpoints:
       oneOfVariant(statusCode(StatusCode.Forbidden).and(jsonBody[Forbidden])),
       oneOfVariant(statusCode(StatusCode.NotFound).and(jsonBody[NotFound])),
       oneOfVariant(statusCode(StatusCode.Conflict).and(jsonBody[Conflict])),
-      oneOfVariant(statusCode(StatusCode.Unauthorized).and(jsonBody[Unauthorized])),
-      oneOfVariant(statusCode(StatusCode.UnprocessableEntity).and(jsonBody[ValidationFailed])),
-      oneOfVariant(statusCode(StatusCode.InternalServerError).and(jsonBody[InternalServerError])),
+      oneOfVariant(
+        statusCode(StatusCode.Unauthorized).and(jsonBody[Unauthorized]),
+      ),
+      oneOfVariant(statusCode(StatusCode.UnprocessableEntity).and(
+        jsonBody[ValidationFailed],
+      )),
+      oneOfVariant(statusCode(StatusCode.InternalServerError).and(
+        jsonBody[InternalServerError],
+      )),
     )

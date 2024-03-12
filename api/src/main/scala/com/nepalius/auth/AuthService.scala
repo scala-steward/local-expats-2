@@ -13,8 +13,10 @@ import java.util.UUID
 import scala.util.{Success, Try}
 
 case class AuthService(config: AuthConfig):
-  def encryptPassword(password: String): Task[String] = PasswordHashing.encryptPassword(password)
-  def verifyPassword(password: String, passwordHash: String): Task[Unit] = PasswordHashing.verifyPassword(password, passwordHash)
+  def encryptPassword(password: String): Task[String] =
+    PasswordHashing.encryptPassword(password)
+  def verifyPassword(password: String, passwordHash: String): Task[Unit] =
+    PasswordHashing.verifyPassword(password, passwordHash)
   def generateJwt(email: String): IO[Exception, String] = Jwt.generate(email)
   def verifyJwt(jwtToken: String): IO[Exception, String] = Jwt.verify(jwtToken)
 
@@ -27,21 +29,38 @@ case class AuthService(config: AuthConfig):
     private final val Version = 19
 
     private final val Argon2: Argon2Function =
-      Argon2Function.getInstance(MemoryInKib, NumberOfIterations, LevelOfParallelism, LengthOfTheFinalHash, Type, Version)
+      Argon2Function.getInstance(
+        MemoryInKib,
+        NumberOfIterations,
+        LevelOfParallelism,
+        LengthOfTheFinalHash,
+        Type,
+        Version,
+      )
 
     def encryptPassword(password: String): Task[String] =
       ZIO.attempt(Password.hash(password).`with`(Argon2).getResult)
 
     def verifyPassword(password: String, passwordHash: String): Task[Unit] =
-      ifZIO(ZIO.attempt(Password.check(password, passwordHash) `with` PasswordHashing.Argon2))
-        .apply(onTrue = ZIO.succeed(()), onFalse = ZIO.fail(Exceptions.Unauthorized()))
+      ifZIO(
+        ZIO.attempt(
+          Password.check(
+            password,
+            passwordHash,
+          ) `with` PasswordHashing.Argon2,
+        ),
+      ).apply(
+        onTrue = ZIO.succeed(()),
+        onFalse = ZIO.fail(Exceptions.Unauthorized()),
+      )
 
   private object Jwt:
     private final val Issuer = "NepaliUS"
     private final val ClaimName = "userEmail"
 
     private final val algorithm: Algorithm = Algorithm.HMAC256(config.jwtSecret)
-    private final val verifier: JWTVerifier = JWT.require(algorithm).withIssuer(Issuer).build()
+    private final val verifier: JWTVerifier =
+      JWT.require(algorithm).withIssuer(Issuer).build()
 
     def generate(email: String): IO[Exception, String] = {
       val now: Instant = Instant.now()
@@ -56,14 +75,15 @@ case class AuthService(config: AuthConfig):
           .sign(algorithm),
       ) match {
         case Success(createdJwt) => ZIO.succeed(createdJwt)
-        case _                   => ZIO.fail(RuntimeException("Problem with JWT generation!"))
+        case _ => ZIO.fail(RuntimeException("Problem with JWT generation!"))
       }
     }
 
     def verify(jwtToken: String): IO[Exception, String] =
       Try(verifier.verify(jwtToken)) match {
-        case Success(decodedJwt) => ZIO.succeed(decodedJwt.getClaim(ClaimName).asString())
-        case _                   => ZIO.fail(Unauthorized("Invalid token!"))
+        case Success(decodedJwt) =>
+          ZIO.succeed(decodedJwt.getClaim(ClaimName).asString())
+        case _ => ZIO.fail(Unauthorized("Invalid token!"))
       }
 
 object AuthService:

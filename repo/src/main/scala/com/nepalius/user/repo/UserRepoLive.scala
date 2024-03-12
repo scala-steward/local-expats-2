@@ -18,7 +18,8 @@ case class UserRow(
     lastName: String,
     passwordHash: String,
 ) {
-  def toUser: User = User(id, UserData(email, firstName, lastName, passwordHash))
+  def toUser: User =
+    User(id, UserData(email, firstName, lastName, passwordHash))
 }
 
 case class UserRepoLive(
@@ -51,7 +52,8 @@ case class UserRepoLive(
         ),
       )
 
-  override def findUserByEmail(email: String): ZIO[Any, SQLException, Option[User]] =
+  override def findUserByEmail(email: String)
+      : ZIO[Any, SQLException, Option[User]] =
     run {
       queryUser
         .filter(_.email == lift(email))
@@ -68,7 +70,13 @@ case class UserRepoLive(
       .map(row => row.map(_.toUser))
 
   override def update(id: UserId, userData: UserData): Task[User] = {
-    val user = UserRow(id, userData.email, userData.firstName, userData.lastName, userData.passwordHash)
+    val user = UserRow(
+      id,
+      userData.email,
+      userData.firstName,
+      userData.lastName,
+      userData.passwordHash,
+    )
     run {
       queryUser
         .filter(_.id == lift(id))

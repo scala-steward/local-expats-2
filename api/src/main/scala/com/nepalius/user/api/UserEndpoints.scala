@@ -12,25 +12,49 @@ import java.util.UUID
 
 case class UserEndpoints(base: BaseEndpoints):
 
-  val registerEndPoint: Endpoint[Unit, UserRegisterPayload, ErrorInfo, UserWithAuthTokenResponse, Any] =
+  val registerEndPoint: Endpoint[
+    Unit,
+    UserRegisterPayload,
+    ErrorInfo,
+    UserWithAuthTokenResponse,
+    Any,
+  ] =
     base.publicEndpoint
       .tag("Users")
       .summary("Register User")
       .post
       .in("api" / "users")
       .in(jsonBody[UserRegisterPayload].example(Examples.userRegisterPayload))
-      .out(jsonBody[UserWithAuthTokenResponse].example(Examples.userWithAuthTokenResponse))
+      .out(jsonBody[UserWithAuthTokenResponse].example(
+        Examples.userWithAuthTokenResponse,
+      ))
 
-  val loginEndpoint: Endpoint[Unit, UserLoginPayload, ErrorInfo, UserWithAuthTokenResponse, Any] =
+  val loginEndpoint: Endpoint[
+    Unit,
+    UserLoginPayload,
+    ErrorInfo,
+    UserWithAuthTokenResponse,
+    Any,
+  ] =
     base.publicEndpoint
       .tag("Users")
       .summary("Log In User")
       .post
       .in("api" / "users" / "login")
       .in(jsonBody[UserLoginPayload].example(Examples.userLoginPayload))
-      .out(jsonBody[UserWithAuthTokenResponse].example(Examples.userWithAuthTokenResponse))
+      .out(jsonBody[UserWithAuthTokenResponse].example(
+        Examples.userWithAuthTokenResponse,
+      ))
 
-  val getCurrentUserEndpoint: ZPartialServerEndpoint[Any, String, UserSession, Unit, ErrorInfo, UserResponse, Any] =
+  val getCurrentUserEndpoint: ZPartialServerEndpoint[
+    Any,
+    String,
+    UserSession,
+    Unit,
+    ErrorInfo,
+    UserResponse,
+    Any,
+  ] =
     base.secureEndpoint
       .tag("Current User")
       .summary("Get Current User")
@@ -38,7 +62,15 @@ case class UserEndpoints(base: BaseEndpoints):
       .in("api" / "user")
       .out(jsonBody[UserResponse].example(Examples.getUserResponse))
 
-  val updateUserEndpoint: ZPartialServerEndpoint[Any, String, UserSession, UserUpdatePayload, ErrorInfo, UserResponse, Any] =
+  val updateUserEndpoint: ZPartialServerEndpoint[
+    Any,
+    String,
+    UserSession,
+    UserUpdatePayload,
+    ErrorInfo,
+    UserResponse,
+    Any,
+  ] =
     base.secureEndpoint
       .tag("Current User")
       .summary("Update Current User")
@@ -67,11 +99,12 @@ case class UserEndpoints(base: BaseEndpoints):
       lastName = "Last",
     )
 
-    val userWithAuthTokenResponse: UserWithAuthTokenResponse = UserWithAuthTokenResponse(
-      user = getUserResponse,
-      authToken =
-        "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJTb2Z0d2FyZU1pbGwiLCJ1c2VyRW1haWwiOiJ1c2VyMTIzQGVtYWlsLmNvbSIsImV4cCI6MTY4MjU4MzY0NCwiaWF0IjoxNjgyNTgwMDQ0LCJqdGkiOiJkMmEzYThjZC1mNmFhLTQwNzgtYTk4Ni1jZmIwNTg5NTAxYmEifQ.SwY-ynkmR3-uYZU0K2cI0NY7Cs8oSgCU8RUVUagOAok",
-    )
+    val userWithAuthTokenResponse: UserWithAuthTokenResponse =
+      UserWithAuthTokenResponse(
+        user = getUserResponse,
+        authToken =
+          "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJTb2Z0d2FyZU1pbGwiLCJ1c2VyRW1haWwiOiJ1c2VyMTIzQGVtYWlsLmNvbSIsImV4cCI6MTY4MjU4MzY0NCwiaWF0IjoxNjgyNTgwMDQ0LCJqdGkiOiJkMmEzYThjZC1mNmFhLTQwNzgtYTk4Ni1jZmIwNTg5NTAxYmEifQ.SwY-ynkmR3-uYZU0K2cI0NY7Cs8oSgCU8RUVUagOAok",
+      )
 
     val userUpdatePayload: UserUpdatePayload = UserUpdatePayload(
       email = Some("new@email.com"),

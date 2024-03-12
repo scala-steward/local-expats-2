@@ -18,7 +18,7 @@ case class Server(
       .serverLog(
         ZioHttpServerOptions
           .defaultServerLog
-          .logWhenReceived(true)
+          .logWhenReceived(true),
       )
       .options,
   )

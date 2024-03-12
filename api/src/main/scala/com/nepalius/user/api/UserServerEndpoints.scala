@@ -11,7 +11,11 @@ import zio.*
 
 import scala.util.chaining.*
 
-case class UserServerEndpoints(userEndpoints: UserEndpoints, userService: UserService, authService: AuthService):
+case class UserServerEndpoints(
+    userEndpoints: UserEndpoints,
+    userService: UserService,
+    authService: AuthService,
+):
 
   private val registerServerEndpoints: ZServerEndpoint[Any, Any] =
     userEndpoints
@@ -56,7 +60,13 @@ case class UserServerEndpoints(userEndpoints: UserEndpoints, userService: UserSe
             mayBeNewPassword <- payload.password
               .map(authService.encryptPassword(_).asSome)
               .getOrElse(ZIO.succeed(None))
-            userUpdateData = UserUpdateData(session.userId, payload.email, mayBeNewPassword, payload.firstName, payload.lastName)
+            userUpdateData = UserUpdateData(
+              session.userId,
+              payload.email,
+              mayBeNewPassword,
+              payload.firstName,
+              payload.lastName,
+            )
             updatedUser <- userService.updateUser(userUpdateData)
           yield UserResponse(updatedUser))
             .logError
@@ -67,7 +77,8 @@ case class UserServerEndpoints(userEndpoints: UserEndpoints, userService: UserSe
             },
       )
 
-  private def registerUser(user: UserRegisterPayload): Task[UserWithAuthTokenResponse] =
+  private def registerUser(user: UserRegisterPayload)
+      : Task[UserWithAuthTokenResponse] =
     for
       passwordHash <- authService.encryptPassword(user.password)
       userWithPasswordHash = user.copy(password = passwordHash)
@@ -75,11 +86,15 @@ case class UserServerEndpoints(userEndpoints: UserEndpoints, userService: UserSe
       token <- authService.generateJwt(user.data.email)
     yield UserWithAuthTokenResponse(UserResponse(user), token)
 
-  private def loginUser(userCredentials: UserLoginPayload): Task[UserWithAuthTokenResponse] =
+  private def loginUser(userCredentials: UserLoginPayload)
+      : Task[UserWithAuthTokenResponse] =
     for
       maybeUser <- userService.findUserByEmail(userCredentials.email)
       user <- ZIO.fromOption(maybeUser).orElseFail(Unauthorized())
-      _ <- authService.verifyPassword(userCredentials.password, user.data.passwordHash)
+      _ <- authService.verifyPassword(
+        userCredentials.password,
+        user.data.passwordHash,
+      )
       token <- authService.generateJwt(user.data.email)
     yield UserWithAuthTokenResponse(UserResponse(user), token)
 
@@ -91,5 +106,5 @@ case class UserServerEndpoints(userEndpoints: UserEndpoints, userService: UserSe
   )
 
 object UserServerEndpoints:
-  //noinspection TypeAnnotation
+  // noinspection TypeAnnotation
   val layer = ZLayer.fromFunction(UserServerEndpoints.apply)
