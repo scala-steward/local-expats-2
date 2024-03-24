@@ -5,5 +5,5 @@ import com.raquo.laminar.api.L.*
 def App(): Element =
   div(
     h1("NepaliUS"),
-    CounterButton(),
+    LocationSelect(),
   )
