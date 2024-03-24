@@ -5,4 +5,5 @@ addSbtPlugin("org.scalameta" % "sbt-scalafmt" % "2.5.2")
 addSbtPlugin("ch.epfl.scala" % "sbt-scalafix" % "0.12.0")
 addSbtPlugin("io.github.davidmweber" % "flyway-sbt" % "7.4.0")
 addSbtPlugin("com.github.sbt" % "sbt-native-packager" % "1.9.16")
+addSbtPlugin("org.scala-js" % "sbt-scalajs" % "1.15.0")
 addDependencyTreePlugin

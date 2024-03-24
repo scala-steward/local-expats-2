@@ -8,10 +8,12 @@ val V = new {
   val CommonsValidator = "1.8.0"
   val Flyway = "10.9.1"
   val Jwt = "4.4.0"
+  val Laminar = "16.0.0"
   val Logback = "1.5.3"
   val Password4J = "1.8.1"
   val Postgres = "42.7.2"
   val Quill = "4.8.1"
+  val ScalaJsDom = "2.8.0"
   val Slf4j = "2.0.12"
   val Tapir = "1.9.11"
   val Zio = "2.0.21"
@@ -53,6 +55,26 @@ lazy val api = project
       "com.softwaremill.sttp.tapir" %% "tapir-swagger-ui-bundle" % V.Tapir,
       "com.auth0" % "java-jwt" % V.Jwt,
       "com.password4j" % "password4j" % V.Password4J,
+    ),
+  )
+
+import org.scalajs.linker.interface.ModuleSplitStyle
+
+lazy val client = project
+  .enablePlugins(ScalaJSPlugin)
+  .settings(
+    scalaJSUseMainModuleInitializer := true,
+    scalaJSLinkerConfig ~= {
+      _.withModuleKind(ModuleKind.ESModule)
+        .withModuleSplitStyle(
+          ModuleSplitStyle.SmallModulesFor(List("com.nepalius.ui")),
+        )
+    },
+  )
+  .settings(
+    libraryDependencies ++= Seq(
+      "org.scala-js" %%% "scalajs-dom" % V.ScalaJsDom,
+      "com.raquo" %%% "laminar" % V.Laminar,
     ),
   )
 
