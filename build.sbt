@@ -14,11 +14,14 @@ val V = new {
   val Postgres = "42.7.3"
   val Quill = "4.8.3"
   val ScalaJsDom = "2.8.0"
+  val ScalaJsMacroTaskExecutor = "1.1.1"
   val Slf4j = "2.0.12"
+  val Sttp = "3.9.5"
   val Tapir = "1.10.0"
   val Zio = "2.0.21"
   val ZioConfig = "4.0.1"
   val ZioLogging = "2.2.2"
+  val ZioJson = "0.6.2"
 }
 
 lazy val domain = project
@@ -60,7 +63,7 @@ lazy val api = project
 
 import org.scalajs.linker.interface.ModuleSplitStyle
 
-lazy val client = project
+lazy val frontend = project
   .enablePlugins(ScalaJSPlugin)
   .settings(
     scalaJSUseMainModuleInitializer := true,
@@ -75,6 +78,9 @@ lazy val client = project
     libraryDependencies ++= Seq(
       "org.scala-js" %%% "scalajs-dom" % V.ScalaJsDom,
       "com.raquo" %%% "laminar" % V.Laminar,
+      "com.softwaremill.sttp.client3" %%% "core" % V.Sttp,
+      "dev.zio" %%% "zio-json" % V.ZioJson,
+      "org.scala-js" %%% "scala-js-macrotask-executor" % V.ScalaJsMacroTaskExecutor,
     ),
   )
 
