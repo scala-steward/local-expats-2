@@ -24,7 +24,7 @@ val V = new {
   val ZioJson = "0.6.2"
 }
 
-lazy val domain = project
+lazy val domain = (project in file("./backend/domain"))
   .settings(
     libraryDependencies ++= Seq(
       "dev.zio" %% "zio" % V.Zio,
@@ -32,7 +32,7 @@ lazy val domain = project
     ),
   )
 
-lazy val repo = project
+lazy val repo = (project in file("./backend/repo"))
   .dependsOn(domain)
   .settings(
     libraryDependencies ++= Seq(
@@ -49,7 +49,7 @@ lazy val repo = project
     flywayPassword := "postgres",
   )
 
-lazy val api = project
+lazy val api = (project in file("./backend/api"))
   .dependsOn(domain)
   .settings(
     libraryDependencies ++= Seq(
@@ -59,6 +59,28 @@ lazy val api = project
       "com.auth0" % "java-jwt" % V.Jwt,
       "com.password4j" % "password4j" % V.Password4J,
     ),
+  )
+
+lazy val backend = project
+  .aggregate(domain, repo, api)
+  .dependsOn(domain, repo, api)
+  .settings(reStart / aggregate := false)
+  .settings(
+    libraryDependencies ++= Seq(
+      "dev.zio" %% "zio-config" % V.ZioConfig,
+      "dev.zio" %% "zio-config-typesafe" % V.ZioConfig,
+      "dev.zio" %% "zio-config-magnolia" % V.ZioConfig,
+      "dev.zio" %% "zio-logging-slf4j2" % V.ZioLogging,
+      "ch.qos.logback" % "logback-classic" % V.Logback,
+    ),
+  )
+  .enablePlugins(JavaAppPackaging)
+  .enablePlugins(DockerPlugin)
+  .settings(
+    Docker / packageName := "nepalius",
+    dockerBaseImage := "eclipse-temurin:21",
+    dockerExposedPorts := Seq(9000),
+    dockerUpdateLatest := true,
   )
 
 import org.scalajs.linker.interface.ModuleSplitStyle
@@ -85,24 +107,5 @@ lazy val frontend = project
   )
 
 lazy val root = (project in file("."))
+  .aggregate(backend, frontend)
   .settings(name := "NepaliUS")
-  .aggregate(domain, repo, api)
-  .dependsOn(domain, repo, api)
-  .settings(reStart / aggregate := false)
-  .settings(
-    libraryDependencies ++= Seq(
-      "dev.zio" %% "zio-config" % V.ZioConfig,
-      "dev.zio" %% "zio-config-typesafe" % V.ZioConfig,
-      "dev.zio" %% "zio-config-magnolia" % V.ZioConfig,
-      "dev.zio" %% "zio-logging-slf4j2" % V.ZioLogging,
-      "ch.qos.logback" % "logback-classic" % V.Logback,
-    ),
-  )
-  .enablePlugins(JavaAppPackaging)
-  .enablePlugins(DockerPlugin)
-  .settings(
-    Docker / packageName := "nepalius",
-    dockerBaseImage := "eclipse-temurin:21",
-    dockerExposedPorts := Seq(9000),
-    dockerUpdateLatest := true,
-  )
