@@ -1,4 +1,4 @@
-package com.nepalius.common.api
+package com.nepalius.common
 
 import com.nepalius.common.*
 import zio.json.{DeriveJsonDecoder, DeriveJsonEncoder, JsonDecoder, JsonEncoder}

@@ -1,5 +1,6 @@
 package com.nepalius.ui
 
+import com.nepalius.location.LocationDto
 import com.raquo.laminar.api.L.*
 
 def LocationSelect(): HtmlElement =

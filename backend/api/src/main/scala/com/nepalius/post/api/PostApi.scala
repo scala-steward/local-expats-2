@@ -1,21 +1,24 @@
 package com.nepalius.post.api
 
-import com.nepalius.common.api.ErrorMapper.*
 import com.nepalius.common.Exceptions
+import com.nepalius.common.api.BaseApi
+import com.nepalius.common.api.ErrorMapper.*
+import com.nepalius.post.*
+import com.nepalius.post.api.PostMapper.*
 import com.nepalius.post.domain.Post.PostId
-import com.nepalius.post.domain.PostService
+import com.nepalius.post.domain.*
 import sttp.tapir.ztapir.*
 import zio.*
 
 import scala.util.chaining.*
 
-case class PostServerEndpoints(
-    postEndpoints: PostEndpoints,
+final case class PostApi(
     postService: PostService,
-):
+) extends BaseApi
+    with PostEndpoints:
+
   private val getPostsServerEndpoint: ZServerEndpoint[Any, Any] =
-    postEndpoints
-      .getPostsEndpoint
+    getPostsEndpoint
       .zServerLogic(
         getPosts(_)
           .logError
@@ -23,8 +26,7 @@ case class PostServerEndpoints(
       )
 
   private val getPostServerEndpoint: ZServerEndpoint[Any, Any] =
-    postEndpoints
-      .getPostEndpoint
+    getPostEndpoint
       .zServerLogic(
         getOne(_)
           .logError
@@ -32,8 +34,7 @@ case class PostServerEndpoints(
       )
 
   private val createPostServerEndpoint: ZServerEndpoint[Any, Any] =
-    postEndpoints
-      .createPostEndpoint
+    createPostEndpoint
       .zServerLogic(
         createPost(_)
           .logError
@@ -41,8 +42,7 @@ case class PostServerEndpoints(
       )
 
   private val addCommentServerEndpoint: ZServerEndpoint[Any, Any] =
-    postEndpoints
-      .addCommentEndpoint
+    addCommentEndpoint
       .zServerLogic((postId, body) =>
         addComment(postId, body)
           .logError
@@ -52,36 +52,31 @@ case class PostServerEndpoints(
   private def getPosts(params: GetPostsParams): Task[List[PostDto]] =
     for
       posts <- postService.getAll(params.pageable, params.locationId)
-      dtos = posts.map(PostDto.make)
+      dtos = posts.map(toPostDto)
     yield dtos
 
   private def getOne(id: PostId): Task[PostWithCommentsDto] =
     for
       post <- postService.getOne(id)
-      dto = post.map(PostWithCommentsDto.make)
+      dto = post.map(toPostWithCommentsDto)
     yield dto.getOrElse(throw Exceptions.NotFound("Post not found for id: $id"))
 
-  private def createPost(dto: CreatePostDto) = {
-    for
-      createdPost <- postService.create(dto.toCreatePost)
-      postDto = PostDto.make(createdPost)
-    yield postDto
-  }
+  private def createPost(dto: CreatePostDto) =
+    for post <- postService.create(toCreatePost(dto))
+    yield toPostDto(post)
 
-  private def addComment(postId: PostId, dto: CreateCommentDto) = {
-    for
-      updatedPost <- postService.addComment(postId, dto.toCreateComment)
-      dto = PostWithCommentsDto.make(updatedPost)
-    yield dto
-  }
+  private def addComment(postId: PostId, dto: CreateCommentDto) =
+    for updatedPost <- postService.addComment(postId, toCreateComment(dto))
+    yield toPostWithCommentsDto(updatedPost)
 
-  val endpoints: List[ZServerEndpoint[Any, Any]] = List(
-    getPostsServerEndpoint,
-    getPostServerEndpoint,
-    createPostServerEndpoint,
-    addCommentServerEndpoint,
-  )
+  override val endpoints: List[ZServerEndpoint[Any, Any]] =
+    List(
+      getPostsServerEndpoint,
+      getPostServerEndpoint,
+      createPostServerEndpoint,
+      addCommentServerEndpoint,
+    )
 
-object PostServerEndpoints:
+object PostApi:
   // noinspection TypeAnnotation
-  val layer = ZLayer.fromFunction(PostServerEndpoints.apply)
+  val layer = ZLayer.fromFunction(PostApi.apply)

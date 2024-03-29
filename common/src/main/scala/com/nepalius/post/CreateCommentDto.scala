@@ -1,13 +1,11 @@
-package com.nepalius.post.api
+package com.nepalius.post
 
-import com.nepalius.post.domain.CreateComment
 import zio.json.{DeriveJsonDecoder, DeriveJsonEncoder, JsonDecoder, JsonEncoder}
 
 case class CreateCommentDto(
     message: String,
     image: Option[String],
-):
-  def toCreateComment: CreateComment = CreateComment(message, image)
+)
 
 object CreateCommentDto:
   given JsonEncoder[CreateCommentDto] = DeriveJsonEncoder.gen[CreateCommentDto]

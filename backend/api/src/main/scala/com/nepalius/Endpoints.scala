@@ -1,25 +1,22 @@
 package com.nepalius
 
-import com.nepalius.location.api.LocationServerEndpoints
-import com.nepalius.post.api.PostServerEndpoints
-import com.nepalius.user.api.UserServerEndpoints
+import com.nepalius.common.api.BaseApi
+import com.nepalius.location.api.LocationApi
+import com.nepalius.post.api.PostApi
+import com.nepalius.user.api.UserApi
 import sttp.tapir.swagger.bundle.SwaggerInterpreter
 import sttp.tapir.ztapir.*
 import zio.{Task, ZLayer}
 
-case class Endpoints(
-    userServerEndpoints: UserServerEndpoints,
-    postServerEndpoints: PostServerEndpoints,
-    locationServerEndpoints: LocationServerEndpoints,
+final case class Endpoints(
+    userApi: UserApi,
+    postApi: PostApi,
+    locationApi: LocationApi,
 ) {
-  val endpoints: List[ZServerEndpoint[Any, Any]] = {
-    val api =
-      userServerEndpoints.endpoints
-        ++ postServerEndpoints.endpoints
-        ++ locationServerEndpoints.endpoints
-    val docs = docsEndpoints(api)
-    api ++ docs
-  }
+  val endpoints: List[ZServerEndpoint[Any, Any]] =
+    val apis: List[BaseApi] = List(userApi, postApi, locationApi)
+    val apiEndpoints = apis.flatMap(_.endpoints)
+    apiEndpoints ++ docsEndpoints(apiEndpoints)
 
   private def docsEndpoints(
       apiEndpoints: List[ZServerEndpoint[Any, Any]],

@@ -1,4 +1,4 @@
-package com.nepalius.user.api
+package com.nepalius.user
 
 import sttp.tapir.Schema.annotations.validate
 import sttp.tapir.Validator

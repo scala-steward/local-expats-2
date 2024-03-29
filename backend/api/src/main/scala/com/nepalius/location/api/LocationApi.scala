@@ -1,20 +1,22 @@
 package com.nepalius.location.api
 
+import com.nepalius.common.api.BaseApi
 import com.nepalius.common.api.ErrorMapper.*
-import com.nepalius.location.LocationDto
+import com.nepalius.location.LocationMapper.toLocationDto
 import com.nepalius.location.domain.LocationService
+import com.nepalius.location.{LocationDto, LocationEndpoints, LocationMapper}
 import sttp.tapir.ztapir.*
 import zio.*
 
 import scala.util.chaining.*
 
-case class LocationServerEndpoints(
-    locationEndpoints: LocationEndpoints,
+final case class LocationApi(
     locationService: LocationService,
-):
+) extends BaseApi
+    with LocationEndpoints:
+
   private val getLocationsServerEndpoint: ZServerEndpoint[Any, Any] =
-    locationEndpoints
-      .getLocationsEndPoint
+    getLocationsEndPoint
       .zServerLogic(_ =>
         getLocations
           .logError
@@ -24,13 +26,14 @@ case class LocationServerEndpoints(
   private def getLocations: Task[List[LocationDto]] =
     for
       locations <- locationService.getAll
-      dtos = locations.map(LocationDto.make)
+      dtos = locations.map(toLocationDto)
     yield dtos
 
-  val endpoints: List[ZServerEndpoint[Any, Any]] = List(
-    getLocationsServerEndpoint,
-  )
+  override val endpoints: List[ZServerEndpoint[Any, Any]] =
+    List(
+      getLocationsServerEndpoint,
+    )
 
-object LocationServerEndpoints:
+object LocationApi:
   // noinspection TypeAnnotation
-  val layer = ZLayer.fromFunction(LocationServerEndpoints.apply)
+  val layer = ZLayer.fromFunction(LocationApi.apply)

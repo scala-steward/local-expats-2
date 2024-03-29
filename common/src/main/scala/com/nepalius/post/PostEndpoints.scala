@@ -1,18 +1,15 @@
-package com.nepalius.post.api
+package com.nepalius.post
 
-import com.nepalius.common.api.{BaseEndpoints, ErrorInfo}
-import com.nepalius.post.domain.Post.PostId
+import com.nepalius.common.{BaseEndpoints, ErrorInfo}
+import sttp.tapir.*
 import sttp.tapir.generic.auto.*
 import sttp.tapir.json.zio.jsonBody
-import sttp.tapir.ztapir.*
-import sttp.tapir.{EndpointInput, PublicEndpoint}
-import zio.ZLayer
 
-case class PostEndpoints(base: BaseEndpoints):
+trait PostEndpoints extends BaseEndpoints:
 
   val getPostsEndpoint
       : PublicEndpoint[GetPostsParams, ErrorInfo, List[PostDto], Any] =
-    base.publicEndpoint
+    publicEndpoint
       .tag("Posts")
       .name("Get Posts name")
       .summary("Get Posts")
@@ -22,17 +19,17 @@ case class PostEndpoints(base: BaseEndpoints):
       .out(jsonBody[List[PostDto]])
 
   val getPostEndpoint
-      : PublicEndpoint[PostId, ErrorInfo, PostWithCommentsDto, Any] =
-    base.publicEndpoint
+      : PublicEndpoint[Long, ErrorInfo, PostWithCommentsDto, Any] =
+    publicEndpoint
       .tag("Posts")
       .summary("Get Post")
       .get
-      .in("api" / "posts" / path[PostId]("id"))
+      .in("api" / "posts" / path[Long]("id"))
       .out(jsonBody[PostWithCommentsDto])
 
   val createPostEndpoint
       : PublicEndpoint[CreatePostDto, ErrorInfo, PostDto, Any] =
-    base.publicEndpoint
+    publicEndpoint
       .tag("Posts")
       .summary("Create Post")
       .post
@@ -41,19 +38,15 @@ case class PostEndpoints(base: BaseEndpoints):
       .out(jsonBody[PostDto])
 
   val addCommentEndpoint: PublicEndpoint[
-    (PostId, CreateCommentDto),
+    (Long, CreateCommentDto),
     ErrorInfo,
     PostWithCommentsDto,
     Any,
   ] =
-    base.publicEndpoint
+    publicEndpoint
       .tag("Posts")
       .summary("Add Comment")
       .post
-      .in("api" / "posts" / path[PostId]("id") / "comments")
+      .in("api" / "posts" / path[Long]("id") / "comments")
       .in(jsonBody[CreateCommentDto])
       .out(jsonBody[PostWithCommentsDto])
-
-object PostEndpoints:
-  // noinspection TypeAnnotation
-  val layer = ZLayer.fromFunction(PostEndpoints.apply)

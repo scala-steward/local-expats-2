@@ -1,7 +1,5 @@
-package com.nepalius.post.api
+package com.nepalius.post
 
-import com.nepalius.location.domain.Location.LocationId
-import com.nepalius.post.domain.Post.PostId
 import com.nepalius.util.Pageable
 import sttp.tapir.EndpointIO.annotations.query
 
@@ -9,9 +7,9 @@ case class GetPostsParams(
     @query
     pageSize: Option[Int],
     @query
-    lastId: Option[PostId],
+    lastId: Option[Long],
     @query
-    locationId: Option[LocationId],
+    locationId: Option[Long],
 ) {
 
   private val MaxPageSize = 100

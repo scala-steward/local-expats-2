@@ -1,9 +1,9 @@
-package com.nepalius.ui
+package com.nepalius.location
 
 import zio.json.*
 
 case class LocationDto(
-    id: Int,
+    id: Long,
     state: Option[String], // Using String because of max-inlines of 32 limit causing compilation error.
     city: Option[String],
 )

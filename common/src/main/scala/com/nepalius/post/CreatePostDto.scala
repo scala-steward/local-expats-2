@@ -1,18 +1,14 @@
-package com.nepalius.post.api
-import com.nepalius.location.domain.Location
-import com.nepalius.location.domain.Location.LocationId
-import com.nepalius.post.domain.CreatePost
+package com.nepalius.post
+
 import zio.*
 import zio.json.*
 
 case class CreatePostDto(
     title: String,
     message: Option[String],
-    locationId: LocationId,
+    locationId: Long,
     image: Option[String],
-):
-  def toCreatePost: CreatePost =
-    CreatePost(title, message, locationId, image)
+)
 
 object CreatePostDto:
   given JsonEncoder[CreatePostDto] = DeriveJsonEncoder.gen[CreatePostDto]

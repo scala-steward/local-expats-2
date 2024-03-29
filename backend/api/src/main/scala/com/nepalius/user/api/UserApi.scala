@@ -1,25 +1,28 @@
 package com.nepalius.user.api
 
 import com.nepalius.auth.AuthService
-import com.nepalius.common.Exceptions
-import com.nepalius.common.Exceptions.Unauthorized
 import com.nepalius.common.api.*
 import com.nepalius.common.api.ErrorMapper.*
+import com.nepalius.common.*
+import com.nepalius.user.*
+import com.nepalius.user.api.UserMapper.{toUserRegisterData, toUserResponse}
 import com.nepalius.user.domain.{UserService, UserUpdateData}
 import sttp.tapir.ztapir.*
 import zio.*
+import com.nepalius.auth.UserSession
+import com.nepalius.user.api.UserApi.UserWithEmailNotFoundMessage
+import com.nepalius.user.domain.User.UserId
 
 import scala.util.chaining.*
 
-case class UserServerEndpoints(
-    userEndpoints: UserEndpoints,
+final case class UserApi(
     userService: UserService,
     authService: AuthService,
-):
+) extends BaseApi
+    with UserEndpoints:
 
   private val registerServerEndpoints: ZServerEndpoint[Any, Any] =
-    userEndpoints
-      .registerEndPoint
+    registerEndPoint
       .zServerLogic(
         registerUser(_)
           .logError
@@ -27,8 +30,7 @@ case class UserServerEndpoints(
       )
 
   private val loginServerEndpoints: ZServerEndpoint[Any, Any] =
-    userEndpoints
-      .loginEndpoint
+    loginEndpoint
       .zServerLogic(
         loginUser(_)
           .logError
@@ -36,8 +38,8 @@ case class UserServerEndpoints(
       )
 
   private val getCurrentUserServerEndpoints: ZServerEndpoint[Any, Any] =
-    userEndpoints
-      .getCurrentUserEndpoint
+    getCurrentUserEndpoint
+      .zServerSecurityLogic[Any, UserSession](handleAuth)
       .serverLogic(session =>
         _ =>
           userService.get(session.userId)
@@ -47,13 +49,19 @@ case class UserServerEndpoints(
                 case e: Exceptions.NotFound => NotFound(e.message)
                 case _                      => InternalServerError()
               },
-              UserResponse.apply,
+              user =>
+                UserResponse(
+                  user.id,
+                  user.data.email,
+                  user.data.firstName,
+                  user.data.lastName,
+                ),
             ),
       )
 
   private val updateCurrentUserServerEndpoints: ZServerEndpoint[Any, Any] =
-    userEndpoints
-      .updateUserEndpoint
+    updateUserEndpoint
+      .zServerSecurityLogic[Any, UserSession](handleAuth)
       .serverLogic(session =>
         payload =>
           (for
@@ -68,7 +76,7 @@ case class UserServerEndpoints(
               payload.lastName,
             )
             updatedUser <- userService.updateUser(userUpdateData)
-          yield UserResponse(updatedUser))
+          yield toUserResponse(updatedUser))
             .logError
             .mapError {
               case e: Exceptions.NotFound     => NotFound(e.message)
@@ -82,29 +90,50 @@ case class UserServerEndpoints(
     for
       passwordHash <- authService.encryptPassword(user.password)
       userWithPasswordHash = user.copy(password = passwordHash)
-      user <- userService.register(userWithPasswordHash.toData)
+      user <- userService.register(toUserRegisterData(userWithPasswordHash))
       token <- authService.generateJwt(user.data.email)
-    yield UserWithAuthTokenResponse(UserResponse(user), token)
+    yield UserWithAuthTokenResponse(toUserResponse(user), token)
 
   private def loginUser(userCredentials: UserLoginPayload)
       : Task[UserWithAuthTokenResponse] =
     for
       maybeUser <- userService.findUserByEmail(userCredentials.email)
-      user <- ZIO.fromOption(maybeUser).orElseFail(Unauthorized())
+      user <- ZIO.fromOption(maybeUser).orElseFail(Exceptions.Unauthorized())
       _ <- authService.verifyPassword(
         userCredentials.password,
         user.data.passwordHash,
       )
       token <- authService.generateJwt(user.data.email)
-    yield UserWithAuthTokenResponse(UserResponse(user), token)
+    yield UserWithAuthTokenResponse(toUserResponse(user), token)
 
-  val endpoints: List[ZServerEndpoint[Any, Any]] = List(
-    registerServerEndpoints,
-    loginServerEndpoints,
-    getCurrentUserServerEndpoints,
-    updateCurrentUserServerEndpoints,
-  )
+  private def handleAuth(token: String): IO[ErrorInfo, UserSession] =
+    (for
+      userEmail <- authService.verifyJwt(token)
+      userId <- userIdByEmail(userEmail)
+    yield UserSession(userId))
+      .logError
+      .mapError {
+        case e: Exceptions.Unauthorized => Unauthorized(e.message)
+        case e: Exceptions.NotFound     => NotFound(e.message)
+        case _                          => InternalServerError()
+      }
 
-object UserServerEndpoints:
+  private def userIdByEmail(email: String): Task[UserId] =
+    userService.findUserByEmail(email)
+      .someOrFail(Exceptions.NotFound(UserWithEmailNotFoundMessage(email)))
+      .map(_.id)
+
+  override val endpoints: List[ZServerEndpoint[Any, Any]] =
+    List(
+      registerServerEndpoints,
+      loginServerEndpoints,
+      getCurrentUserServerEndpoints,
+      updateCurrentUserServerEndpoints,
+    )
+
+object UserApi:
   // noinspection TypeAnnotation
-  val layer = ZLayer.fromFunction(UserServerEndpoints.apply)
+  val layer = ZLayer.fromFunction(UserApi.apply)
+
+  private val UserWithEmailNotFoundMessage: String => String =
+    (email: String) => s"User with email $email doesn't exist"

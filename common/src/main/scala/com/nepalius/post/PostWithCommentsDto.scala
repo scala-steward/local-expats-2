@@ -1,6 +1,5 @@
-package com.nepalius.post.api
+package com.nepalius.post
 
-import com.nepalius.post.domain.PostWithComments
 import zio.json.*
 
 case class PostWithCommentsDto(post: PostDto, comments: List[CommentDto])
@@ -12,8 +11,3 @@ object PostWithCommentsDto:
   given JsonDecoder[PostWithCommentsDto] =
     DeriveJsonDecoder.gen[PostWithCommentsDto]
 
-  def make(postWithComments: PostWithComments): PostWithCommentsDto =
-    PostWithCommentsDto(
-      PostDto.make(postWithComments.post),
-      postWithComments.comments.map(CommentDto.make),
-    )

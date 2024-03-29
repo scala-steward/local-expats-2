@@ -50,11 +50,10 @@ lazy val repo = (project in file("./backend/repo"))
   )
 
 lazy val api = (project in file("./backend/api"))
-  .dependsOn(domain)
+  .dependsOn(domain, common)
   .settings(
     libraryDependencies ++= Seq(
       "com.softwaremill.sttp.tapir" %% "tapir-zio-http-server" % V.Tapir,
-      "com.softwaremill.sttp.tapir" %% "tapir-json-zio" % V.Tapir,
       "com.softwaremill.sttp.tapir" %% "tapir-swagger-ui-bundle" % V.Tapir,
       "com.auth0" % "java-jwt" % V.Jwt,
       "com.password4j" % "password4j" % V.Password4J,
@@ -86,13 +85,14 @@ lazy val backend = project
 import org.scalajs.linker.interface.ModuleSplitStyle
 
 lazy val frontend = project
+  .dependsOn(common)
   .enablePlugins(ScalaJSPlugin)
   .settings(
     scalaJSUseMainModuleInitializer := true,
     scalaJSLinkerConfig ~= {
       _.withModuleKind(ModuleKind.ESModule)
         .withModuleSplitStyle(
-          ModuleSplitStyle.SmallModulesFor(List("com.nepalius.ui")),
+          ModuleSplitStyle.SmallModulesFor(List("com.nepalius")),
         )
     },
   )
@@ -100,12 +100,21 @@ lazy val frontend = project
     libraryDependencies ++= Seq(
       "org.scala-js" %%% "scalajs-dom" % V.ScalaJsDom,
       "com.raquo" %%% "laminar" % V.Laminar,
-      "com.softwaremill.sttp.client3" %%% "core" % V.Sttp,
+      "com.softwaremill.sttp.tapir" %%% "tapir-sttp-client" % V.Tapir,
       "dev.zio" %%% "zio-json" % V.ZioJson,
       "org.scala-js" %%% "scala-js-macrotask-executor" % V.ScalaJsMacroTaskExecutor,
     ),
   )
 
+lazy val common = project
+  .enablePlugins(ScalaJSPlugin)
+  .settings(
+    libraryDependencies ++= Seq(
+      "com.softwaremill.sttp.tapir" %% "tapir-core" % V.Tapir,
+      "com.softwaremill.sttp.tapir" %% "tapir-json-zio" % V.Tapir,
+    ),
+  )
+
 lazy val root = (project in file("."))
-  .aggregate(backend, frontend)
+  .aggregate(backend, frontend, common)
   .settings(name := "NepaliUS")

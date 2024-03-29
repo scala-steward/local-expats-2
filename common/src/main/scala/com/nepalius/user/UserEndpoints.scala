@@ -1,25 +1,21 @@
-package com.nepalius.user.api
+package com.nepalius.user
 
-import com.nepalius.auth.UserSession
-import com.nepalius.common.api.{BaseEndpoints, ErrorInfo}
-import sttp.tapir.Endpoint
+import com.nepalius.common.{BaseEndpoints, ErrorInfo}
+import sttp.tapir.*
 import sttp.tapir.generic.auto.*
 import sttp.tapir.json.zio.jsonBody
-import sttp.tapir.ztapir.*
-import zio.ZLayer
 
 import java.util.UUID
 
-case class UserEndpoints(base: BaseEndpoints):
+trait UserEndpoints extends BaseEndpoints:
 
-  val registerEndPoint: Endpoint[
-    Unit,
+  val registerEndPoint: PublicEndpoint[
     UserRegisterPayload,
     ErrorInfo,
     UserWithAuthTokenResponse,
     Any,
   ] =
-    base.publicEndpoint
+    publicEndpoint
       .tag("Users")
       .summary("Register User")
       .post
@@ -29,14 +25,13 @@ case class UserEndpoints(base: BaseEndpoints):
         Examples.userWithAuthTokenResponse,
       ))
 
-  val loginEndpoint: Endpoint[
-    Unit,
+  val loginEndpoint: PublicEndpoint[
     UserLoginPayload,
     ErrorInfo,
     UserWithAuthTokenResponse,
     Any,
   ] =
-    base.publicEndpoint
+    publicEndpoint
       .tag("Users")
       .summary("Log In User")
       .post
@@ -46,32 +41,18 @@ case class UserEndpoints(base: BaseEndpoints):
         Examples.userWithAuthTokenResponse,
       ))
 
-  val getCurrentUserEndpoint: ZPartialServerEndpoint[
-    Any,
-    String,
-    UserSession,
-    Unit,
-    ErrorInfo,
-    UserResponse,
-    Any,
-  ] =
-    base.secureEndpoint
+  val getCurrentUserEndpoint
+      : SecureEndpoint[Unit, ErrorInfo, UserResponse, Any] =
+    secureEndpoint
       .tag("Current User")
       .summary("Get Current User")
       .get
       .in("api" / "user")
       .out(jsonBody[UserResponse].example(Examples.getUserResponse))
 
-  val updateUserEndpoint: ZPartialServerEndpoint[
-    Any,
-    String,
-    UserSession,
-    UserUpdatePayload,
-    ErrorInfo,
-    UserResponse,
-    Any,
-  ] =
-    base.secureEndpoint
+  val updateUserEndpoint
+      : SecureEndpoint[UserUpdatePayload, ErrorInfo, UserResponse, Any] =
+    secureEndpoint
       .tag("Current User")
       .summary("Update Current User")
       .put
@@ -119,7 +100,3 @@ case class UserEndpoints(base: BaseEndpoints):
       firstName = userUpdatePayload.firstName,
       lastName = userUpdatePayload.lastName,
     )
-
-object UserEndpoints:
-  // noinspection TypeAnnotation
-  val layer = ZLayer.fromFunction(UserEndpoints.apply)

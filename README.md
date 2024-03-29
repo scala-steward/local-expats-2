@@ -12,35 +12,40 @@ Install [PostgreSQL](https://www.postgresql.org/download/)
 
 Create a database named `nepalius` (configurable in `application.conf`)
 
-### API
+### Backend
 
 Start up sbt:
 
-```bash
+```shell
 ./sbt
 ```
 
 Once sbt has loaded, you can start up the application
 
 ```sbtshell
-> ~reStart
+> ~backend/reStart
 ```
 
 This uses revolver which automatically rebuilds the application when you make code changes.
 
-To stop the app in sbt, hit the `Enter` key and then type:
+### Frontend
 
-```sbtshell
-> reStop
+Run Dev Server
+
+```shell
+cd frontend
+npm run dev
 ```
 
-### UI
+Compile the frontend ScalaJS to JavaScript
 
-Run NextJS Dev Server
+```shell
+./sbt
+```
+Once sbt has loaded
 
-```bash
-cd mui
-npm run dev
+```sbtshell
+> ~frontend/fastLinkJS
 ```
 
 ### Tech Stacks
@@ -51,6 +56,8 @@ npm run dev
 - [ZIO-Quill](https://getquill.io/) for compile-time SQL query generation
 - [Flyway](https://flywaydb.org/) for database migration
 - [PostgreSQL](https://www.postgresql.org/) as database
+- [ScalaJS](https://www.scala-js.org/) for frontend
+- [Laminar](https://laminar.dev/) for reactive frontend
 - [NextJS](https://nextjs.org/) as frontend framework
 - [React](https://reactjs.org/) for building user interfaces
 - [MUI](https://mui.com/) for UI components
