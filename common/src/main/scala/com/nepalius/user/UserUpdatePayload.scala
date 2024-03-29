@@ -12,7 +12,5 @@ case class UserUpdatePayload(
 )
 
 object UserUpdatePayload:
-  given JsonEncoder[UserUpdatePayload] =
-    DeriveJsonEncoder.gen[UserUpdatePayload]
-  given JsonDecoder[UserUpdatePayload] =
-    DeriveJsonDecoder.gen[UserUpdatePayload]
+  given JsonEncoder[UserUpdatePayload] = DeriveJsonEncoder.gen
+  given JsonDecoder[UserUpdatePayload] = DeriveJsonDecoder.gen

@@ -15,6 +15,6 @@ case class PostDto(
 )
 
 object PostDto {
-  given JsonEncoder[PostDto] = DeriveJsonEncoder.gen[PostDto]
-  given JsonDecoder[PostDto] = DeriveJsonDecoder.gen[PostDto]
+  given JsonEncoder[PostDto] = DeriveJsonEncoder.gen
+  given JsonDecoder[PostDto] = DeriveJsonDecoder.gen
 }

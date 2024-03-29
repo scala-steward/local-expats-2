@@ -8,5 +8,5 @@ case class CreateCommentDto(
 )
 
 object CreateCommentDto:
-  given JsonEncoder[CreateCommentDto] = DeriveJsonEncoder.gen[CreateCommentDto]
-  given JsonDecoder[CreateCommentDto] = DeriveJsonDecoder.gen[CreateCommentDto]
+  given JsonEncoder[CreateCommentDto] = DeriveJsonEncoder.gen
+  given JsonDecoder[CreateCommentDto] = DeriveJsonDecoder.gen

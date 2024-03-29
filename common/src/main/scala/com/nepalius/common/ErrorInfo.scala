@@ -1,7 +1,7 @@
 package com.nepalius.common
 
 import com.nepalius.common.*
-import zio.json.{DeriveJsonDecoder, DeriveJsonEncoder, JsonDecoder, JsonEncoder}
+import zio.json.*
 
 sealed trait ErrorInfo
 case class BadRequest(error: String = "Bad request.") extends ErrorInfo
@@ -14,27 +14,17 @@ case class InternalServerError(error: String = "Internal server error.")
     extends ErrorInfo
 
 object ErrorInfo:
-  given badRequestEncoder: JsonEncoder[BadRequest] =
-    DeriveJsonEncoder.gen[BadRequest]
-  given badRequestDecoder: JsonDecoder[BadRequest] =
-    DeriveJsonDecoder.gen[BadRequest]
-  given forbiddenEncoder: JsonEncoder[Forbidden] =
-    DeriveJsonEncoder.gen[Forbidden]
-  given forbiddenDecoder: JsonDecoder[Forbidden] =
-    DeriveJsonDecoder.gen[Forbidden]
-  given notFoundEncoder: JsonEncoder[NotFound] = DeriveJsonEncoder.gen[NotFound]
-  given notFoundDecoder: JsonDecoder[NotFound] = DeriveJsonDecoder.gen[NotFound]
-  given conflictEncoder: JsonEncoder[Conflict] = DeriveJsonEncoder.gen[Conflict]
-  given conflictDecoder: JsonDecoder[Conflict] = DeriveJsonDecoder.gen[Conflict]
-  given unauthorizedEncoder: JsonEncoder[Unauthorized] =
-    DeriveJsonEncoder.gen[Unauthorized]
-  given unauthorizedDecoder: JsonDecoder[Unauthorized] =
-    DeriveJsonDecoder.gen[Unauthorized]
-  given validationFailedEncoder: JsonEncoder[ValidationFailed] =
-    DeriveJsonEncoder.gen[ValidationFailed]
-  given validationFailedDecoder: JsonDecoder[ValidationFailed] =
-    DeriveJsonDecoder.gen[ValidationFailed]
-  given internalServerErrorEncoder: JsonEncoder[InternalServerError] =
-    DeriveJsonEncoder.gen[InternalServerError]
-  given internalServerErrorDecoder: JsonDecoder[InternalServerError] =
-    DeriveJsonDecoder.gen[InternalServerError]
+  given JsonEncoder[BadRequest] = DeriveJsonEncoder.gen
+  given JsonDecoder[BadRequest] = DeriveJsonDecoder.gen
+  given JsonEncoder[Forbidden] = DeriveJsonEncoder.gen
+  given JsonDecoder[Forbidden] = DeriveJsonDecoder.gen
+  given JsonEncoder[NotFound] = DeriveJsonEncoder.gen
+  given JsonDecoder[NotFound] = DeriveJsonDecoder.gen
+  given JsonEncoder[Conflict] = DeriveJsonEncoder.gen
+  given JsonDecoder[Conflict] = DeriveJsonDecoder.gen
+  given JsonEncoder[Unauthorized] = DeriveJsonEncoder.gen
+  given JsonDecoder[Unauthorized] = DeriveJsonDecoder.gen
+  given JsonEncoder[ValidationFailed] = DeriveJsonEncoder.gen
+  given JsonDecoder[ValidationFailed] = DeriveJsonDecoder.gen
+  given JsonEncoder[InternalServerError] = DeriveJsonEncoder.gen
+  given JsonDecoder[InternalServerError] = DeriveJsonDecoder.gen

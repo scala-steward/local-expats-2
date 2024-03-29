@@ -9,5 +9,5 @@ case class LocationDto(
 )
 
 object LocationDto:
-  given JsonEncoder[LocationDto] = DeriveJsonEncoder.gen[LocationDto]
-  given JsonDecoder[LocationDto] = DeriveJsonDecoder.gen[LocationDto]
+  given JsonEncoder[LocationDto] = DeriveJsonEncoder.gen
+  given JsonDecoder[LocationDto] = DeriveJsonDecoder.gen

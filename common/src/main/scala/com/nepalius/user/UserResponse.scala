@@ -12,5 +12,5 @@ case class UserResponse(
 )
 
 object UserResponse:
-  given JsonEncoder[UserResponse] = DeriveJsonEncoder.gen[UserResponse]
-  given JsonDecoder[UserResponse] = DeriveJsonDecoder.gen[UserResponse]
+  given JsonEncoder[UserResponse] = DeriveJsonEncoder.gen
+  given JsonDecoder[UserResponse] = DeriveJsonDecoder.gen
