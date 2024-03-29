@@ -1,7 +1,5 @@
 package com.nepalius.location
 
-import com.nepalius.location.domain.*
-
 object LocationMapper:
   def toLocationDto(location: Location) =
     LocationDto(

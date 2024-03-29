@@ -1,16 +1,11 @@
 package com.nepalius
 
 import com.nepalius.auth.AuthService
+import com.nepalius.common.Endpoints
 import com.nepalius.config.*
-import com.nepalius.location.domain.LocationServiceLive
-import com.nepalius.location.LocationRepoLive
-import com.nepalius.location.api.LocationApi
-import com.nepalius.post.api.PostApi
-import com.nepalius.post.domain.PostServiceLive
-import com.nepalius.post.repo.PostRepoLive
-import com.nepalius.user.api.UserApi
-import com.nepalius.user.domain.UserService
-import com.nepalius.user.repo.UserRepoLive
+import com.nepalius.location.{LocationApi, LocationRepoLive, LocationServiceLive}
+import com.nepalius.post.{PostApi, PostRepoLive, PostServiceLive}
+import com.nepalius.user.{UserApi, UserRepoLive, UserService}
 import zio.*
 import zio.logging.backend.SLF4J
 
