@@ -1,6 +1,6 @@
 package com.nepalius.user
 
-import User.UserId
+import com.nepalius.user.User.UserId
 
 import java.util.UUID
 

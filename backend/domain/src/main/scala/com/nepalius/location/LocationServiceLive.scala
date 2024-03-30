@@ -7,5 +7,4 @@ case class LocationServiceLive private (locationRepo: LocationRepo)
   override def getAll: Task[List[Location]] = locationRepo.getAll
 
 object LocationServiceLive:
-  // noinspection TypeAnnotation
   val layer = ZLayer.fromFunction(LocationServiceLive.apply)

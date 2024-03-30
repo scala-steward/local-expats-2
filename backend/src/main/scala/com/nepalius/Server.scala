@@ -1,7 +1,7 @@
 package com.nepalius
 
-import com.nepalius.util.Endpoints
 import com.nepalius.config.{DatabaseMigration, ServerConfig}
+import com.nepalius.util.Endpoints
 import sttp.tapir.server.ziohttp.{ZioHttpInterpreter, ZioHttpServerOptions}
 import zio.*
 import zio.Console.printLine
@@ -36,5 +36,4 @@ case class Server(
       .provide(HttpServer.defaultWithPort(serverConfig.port))
 
 object Server:
-  // noinspection TypeAnnotation
   val layer = ZLayer.fromFunction(Server.apply)

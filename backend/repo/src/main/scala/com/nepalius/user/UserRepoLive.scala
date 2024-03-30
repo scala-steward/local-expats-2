@@ -1,7 +1,7 @@
 package com.nepalius.user
 
 import com.nepalius.config.QuillContext
-import User.UserId
+import com.nepalius.user.User.UserId
 import io.getquill.*
 import io.getquill.extras.*
 import io.getquill.jdbczio.Quill
@@ -25,8 +25,6 @@ case class UserRepoLive(
     quill: QuillContext,
 ) extends UserRepo:
   import quill.*
-
-  private inline def queryUser = quote(querySchema[UserRow]("users"))
 
   override def create(user: UserRegisterData): ZIO[Any, SQLException, User] =
     run {
@@ -84,6 +82,7 @@ case class UserRepoLive(
       .as(user.toUser)
   }
 
+  private inline def queryUser = quote(querySchema[UserRow]("users"))
+
 object UserRepoLive:
-  // noinspection TypeAnnotation
   val layer = ZLayer.fromFunction(UserRepoLive.apply)

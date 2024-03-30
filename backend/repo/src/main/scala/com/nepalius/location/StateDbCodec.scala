@@ -1,6 +1,7 @@
 package com.nepalius.location
 
 import io.getquill.MappedEncoding
+
 import scala.language.adhocExtensions
 
 object StateDbCodec:

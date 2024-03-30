@@ -1,7 +1,7 @@
 package com.nepalius.post
 
-import Comment.CommentId
-import Post.PostId
+import com.nepalius.post.Comment.CommentId
+import com.nepalius.post.Post.PostId
 
 import java.time.ZonedDateTime
 import scala.Option

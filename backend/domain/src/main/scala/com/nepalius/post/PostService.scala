@@ -1,8 +1,8 @@
 package com.nepalius.post
 
-import com.nepalius.util.Pageable
 import com.nepalius.location.Location.LocationId
-import Post.PostId
+import com.nepalius.post.Post.PostId
+import com.nepalius.util.Pageable
 import zio.*
 
 import java.time.ZonedDateTime

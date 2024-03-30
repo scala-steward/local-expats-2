@@ -1,21 +1,13 @@
 package com.nepalius.user
 
+import com.nepalius.user.User.UserId
+import com.nepalius.user.UserService.{InvalidEmailMessage, UserWithEmailAlreadyInUseMessage, UserWithIdNotFoundMessage}
 import com.nepalius.util.Exceptions
 import com.nepalius.util.Exceptions.{AlreadyInUse, BadRequest}
-import User.UserId
-import UserService.{
-  InvalidEmailMessage,
-  UserWithEmailAlreadyInUseMessage,
-  UserWithIdNotFoundMessage,
-}
 import org.apache.commons.validator.routines.EmailValidator
 import zio.{Task, ZIO, ZLayer}
 
 case class UserService(userRepo: UserRepo) {
-
-  def get(userId: UserId): Task[User] =
-    userRepo.findUserById(userId)
-      .someOrFail(Exceptions.NotFound(UserWithIdNotFoundMessage(userId)))
 
   def register(user: UserRegisterData): Task[User] = {
     val emailClean = user.email.toLowerCase.trim()
@@ -34,6 +26,19 @@ case class UserService(userRepo: UserRepo) {
       user <- userRepo.create(userDataClean)
     } yield user
   }
+
+  private def validateEmail(email: String): Task[Unit] =
+    if EmailValidator.getInstance().isValid(email)
+    then ZIO.unit
+    else ZIO.fail(BadRequest(InvalidEmailMessage(email)))
+
+  private def checkUserDoesNotExistByEmail(email: String): Task[Unit] =
+    for {
+      maybeUserByEmail <- userRepo.findUserByEmail(email)
+      _ <- ZIO
+        .fail(AlreadyInUse(UserWithEmailAlreadyInUseMessage(email)))
+        .when(maybeUserByEmail.isDefined)
+    } yield ()
 
   def updateUser(user: UserUpdateData): Task[User] = {
     val emailCleanOpt = user.email.map(_.toLowerCase.trim())
@@ -56,21 +61,9 @@ case class UserService(userRepo: UserRepo) {
     yield updatedUser
   }
 
-  def findUserByEmail(email: String): Task[Option[User]] =
-    userRepo.findUserByEmail(email.toLowerCase.trim())
-
-  private def validateEmail(email: String): Task[Unit] =
-    if EmailValidator.getInstance().isValid(email)
-    then ZIO.unit
-    else ZIO.fail(BadRequest(InvalidEmailMessage(email)))
-
-  private def checkUserDoesNotExistByEmail(email: String): Task[Unit] =
-    for {
-      maybeUserByEmail <- userRepo.findUserByEmail(email)
-      _ <- ZIO
-        .fail(AlreadyInUse(UserWithEmailAlreadyInUseMessage(email)))
-        .when(maybeUserByEmail.isDefined)
-    } yield ()
+  def get(userId: UserId): Task[User] =
+    userRepo.findUserById(userId)
+      .someOrFail(Exceptions.NotFound(UserWithIdNotFoundMessage(userId)))
 
   private def checkUserDoesNotExistByEmail(
       email: String,
@@ -83,10 +76,12 @@ case class UserService(userRepo: UserRepo) {
         .when(maybeUserByEmail.isDefined && maybeUserByEmail.exists(_.id != id))
     } yield ()
 
+  def findUserByEmail(email: String): Task[Option[User]] =
+    userRepo.findUserByEmail(email.toLowerCase.trim())
+
 }
 
 object UserService:
-  // noinspection TypeAnnotation
   val layer = ZLayer.fromFunction(UserService.apply)
 
   private val UserWithIdNotFoundMessage: UserId => String =

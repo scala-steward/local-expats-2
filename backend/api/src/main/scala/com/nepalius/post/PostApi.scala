@@ -1,10 +1,10 @@
 package com.nepalius.post
 
-import com.nepalius.util.{BaseApi, Exceptions}
-import com.nepalius.util.ErrorMapper.*
 import com.nepalius.post.*
-import PostMapper.*
 import com.nepalius.post.Post.PostId
+import com.nepalius.post.PostMapper.*
+import com.nepalius.util.ErrorMapper.*
+import com.nepalius.util.{BaseApi, Exceptions}
 import sttp.tapir.ztapir.*
 import zio.*
 
@@ -14,6 +14,13 @@ final case class PostApi(
     postService: PostService,
 ) extends BaseApi
     with PostEndpoints:
+
+  override def endpoints = List(
+    getPostsServerEndpoint,
+    getPostServerEndpoint,
+    createPostServerEndpoint,
+    addCommentServerEndpoint,
+  )
 
   private val getPostsServerEndpoint: ZServerEndpoint[Any, Any] =
     getPostsEndpoint
@@ -67,14 +74,5 @@ final case class PostApi(
     for updatedPost <- postService.addComment(postId, toCreateComment(dto))
     yield toPostWithCommentsDto(updatedPost)
 
-  override val endpoints: List[ZServerEndpoint[Any, Any]] =
-    List(
-      getPostsServerEndpoint,
-      getPostServerEndpoint,
-      createPostServerEndpoint,
-      addCommentServerEndpoint,
-    )
-
 object PostApi:
-  // noinspection TypeAnnotation
   val layer = ZLayer.fromFunction(PostApi.apply)

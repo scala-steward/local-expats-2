@@ -1,8 +1,8 @@
 package com.nepalius.post
 
-import com.nepalius.location.Location.LocationId
-import Post.PostId
 import com.nepalius.location.Location
+import com.nepalius.location.Location.LocationId
+import com.nepalius.post.Post.PostId
 
 import java.time.ZonedDateTime
 

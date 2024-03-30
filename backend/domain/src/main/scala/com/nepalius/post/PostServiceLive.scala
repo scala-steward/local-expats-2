@@ -1,16 +1,13 @@
 package com.nepalius.post
 
-import com.nepalius.util.Pageable
 import com.nepalius.location.Location.{DefaultLocationId, LocationId}
-import Post.PostId
+import com.nepalius.post.Post.PostId
+import com.nepalius.util.Pageable
 import zio.*
 
 import java.time.ZonedDateTime
 
 case class PostServiceLive(postRepo: PostRepo) extends PostService:
-
-  override def getOne(id: PostId): Task[Option[PostWithComments]] =
-    postRepo.getOne(id)
 
   override def getAll(
       pageable: Pageable,
@@ -35,6 +32,8 @@ case class PostServiceLive(postRepo: PostRepo) extends PostService:
       post <- getOne(postId)
     yield post.get
 
+  override def getOne(id: PostId): Task[Option[PostWithComments]] =
+    postRepo.getOne(id)
+
 object PostServiceLive:
-  // noinspection TypeAnnotation
   val layer = ZLayer.fromFunction(PostServiceLive.apply)

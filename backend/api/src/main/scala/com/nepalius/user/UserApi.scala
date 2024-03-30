@@ -1,16 +1,15 @@
 package com.nepalius.user
 
-import com.nepalius.auth.AuthService
+import com.nepalius.auth.{AuthService, UserSession}
+import com.nepalius.user
+import com.nepalius.user.*
+import com.nepalius.user.User.UserId
+import com.nepalius.user.UserApi.UserWithEmailNotFoundMessage
+import com.nepalius.user.UserMapper.{toUserRegisterData, toUserResponse}
 import com.nepalius.util.*
 import com.nepalius.util.ErrorMapper.*
-import com.nepalius.user.*
-import UserMapper.{toUserRegisterData, toUserResponse}
 import sttp.tapir.ztapir.*
 import zio.*
-import com.nepalius.auth.UserSession
-import UserApi.UserWithEmailNotFoundMessage
-import com.nepalius.user
-import com.nepalius.user.User.UserId
 
 import scala.util.chaining.*
 
@@ -20,6 +19,14 @@ final case class UserApi(
 ) extends BaseApi
     with UserEndpoints:
 
+  override def endpoints =
+    List(
+      registerServerEndpoints,
+      loginServerEndpoints,
+      getCurrentUserServerEndpoints,
+      updateCurrentUserServerEndpoints,
+    )
+    
   private val registerServerEndpoints: ZServerEndpoint[Any, Any] =
     registerEndPoint
       .zServerLogic(
@@ -27,7 +34,6 @@ final case class UserApi(
           .logError
           .pipe(defaultErrorsMappings),
       )
-
   private val loginServerEndpoints: ZServerEndpoint[Any, Any] =
     loginEndpoint
       .zServerLogic(
@@ -35,7 +41,6 @@ final case class UserApi(
           .logError
           .pipe(defaultErrorsMappings),
       )
-
   private val getCurrentUserServerEndpoints: ZServerEndpoint[Any, Any] =
     getCurrentUserEndpoint
       .zServerSecurityLogic[Any, UserSession](handleAuth)
@@ -57,7 +62,6 @@ final case class UserApi(
                 ),
             ),
       )
-
   private val updateCurrentUserServerEndpoints: ZServerEndpoint[Any, Any] =
     updateUserEndpoint
       .zServerSecurityLogic[Any, UserSession](handleAuth)
@@ -122,16 +126,7 @@ final case class UserApi(
       .someOrFail(Exceptions.NotFound(UserWithEmailNotFoundMessage(email)))
       .map(_.id)
 
-  override val endpoints: List[ZServerEndpoint[Any, Any]] =
-    List(
-      registerServerEndpoints,
-      loginServerEndpoints,
-      getCurrentUserServerEndpoints,
-      updateCurrentUserServerEndpoints,
-    )
-
 object UserApi:
-  // noinspection TypeAnnotation
   val layer = ZLayer.fromFunction(UserApi.apply)
 
   private val UserWithEmailNotFoundMessage: String => String =

@@ -14,13 +14,6 @@ case class AppConfig(
 case class ServerConfig(port: Int)
 
 object AppConfig:
-  private def readAppConfig: IO[Config.Error, AppConfig] =
-    read(
-      deriveConfig[AppConfig].from(
-        TypesafeConfigProvider.fromResourcePath().nested("nepalius"),
-      ),
-    )
-
   val layer
       : ZLayer[Any, Config.Error, DatabaseConfig & ServerConfig & AuthConfig] =
     ZLayer {
@@ -29,3 +22,10 @@ object AppConfig:
         ++ ZLayer.succeed(appConfig.server)
         ++ ZLayer.succeed(appConfig.auth)
     }.flatten
+
+  private def readAppConfig: IO[Config.Error, AppConfig] =
+    read(
+      deriveConfig[AppConfig].from(
+        TypesafeConfigProvider.fromResourcePath().nested("nepalius"),
+      ),
+    )

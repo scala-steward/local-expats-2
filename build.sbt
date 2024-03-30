@@ -118,3 +118,9 @@ lazy val common = project
 lazy val root = (project in file("."))
   .aggregate(backend, frontend, common)
   .settings(name := "NepaliUS")
+
+
+// Run the frontend development loop (also run vite: `cd frontend; npm run dev`)
+addCommandAlias("fe", ";~frontend/fastLinkJS")
+// Start the backend server, and make sure to stop it afterwards
+addCommandAlias("be", ";backend/reStop ;~backend/reStart ;backend/reStop")

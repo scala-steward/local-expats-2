@@ -1,9 +1,9 @@
 package com.nepalius.config
 
-import javax.sql.DataSource
-
-import zio.*
 import org.flywaydb.core.Flyway
+import zio.*
+
+import javax.sql.DataSource
 
 case class DatabaseMigration(dataSource: DataSource):
   def migrate(): Task[Unit] = ZIO.attempt {
@@ -16,5 +16,4 @@ case class DatabaseMigration(dataSource: DataSource):
   }
 
 object DatabaseMigration:
-  // noinspection TypeAnnotation
   val layer = ZLayer.fromFunction(DatabaseMigration.apply)

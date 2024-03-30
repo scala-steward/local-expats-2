@@ -4,10 +4,22 @@ import com.nepalius.post.*
 
 object PostMapper:
 
-  def toPostDto(post: Post): PostDto =
+  def toCreatePost(dto: CreatePostDto) =
+    CreatePost(dto.title, dto.message, dto.locationId, dto.image)
+
+  def toCreateComment(dto: CreateCommentDto) =
+    CreateComment(dto.message, dto.image)
+
+  def toPostWithCommentsDto(postWithComments: PostWithComments) =
+    PostWithCommentsDto(
+      toPostDto(postWithComments.post),
+      postWithComments.comments.map(toCommentDto),
+    )
+
+  def toPostDto(post: Post) =
     toPostDto(PostView.fromPost(post, 0))
 
-  def toPostDto(post: PostView): PostDto =
+  def toPostDto(post: PostView) =
     PostDto(
       post.id,
       post.title,
@@ -18,24 +30,11 @@ object PostMapper:
       post.noOfComments,
     )
 
-  def toCreatePost(dto: CreatePostDto): CreatePost =
-    CreatePost(dto.title, dto.message, dto.locationId, dto.image)
-
-  def toCreateComment(dto: CreateCommentDto): CreateComment =
-    CreateComment(dto.message, dto.image)
-
-  def toCommentDto(comment: Comment): CommentDto =
+  private def toCommentDto(comment: Comment) =
     CommentDto(
       comment.id,
       comment.postId,
       comment.message,
       comment.image,
       comment.createdAt,
-    )
-
-  def toPostWithCommentsDto(postWithComments: PostWithComments)
-      : PostWithCommentsDto =
-    PostWithCommentsDto(
-      toPostDto(postWithComments.post),
-      postWithComments.comments.map(toCommentDto),
     )

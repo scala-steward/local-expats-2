@@ -29,6 +29,13 @@ case class PostRepoLive(
     }
       .map(convertToPostWithComments)
 
+  private def convertToPostWithComments(
+      postWithCommentRows: List[(Post, Option[Comment])],
+  ): Option[PostWithComments] =
+    val post = postWithCommentRows.headOption.map(_._1)
+    val comments = postWithCommentRows.flatMap(_._2.toList)
+    post.map(PostWithComments(_, comments))
+
   override def getAll(
       pageable: Pageable,
       locationId: LocationId,
@@ -118,14 +125,5 @@ case class PostRepoLive(
         ),
       )
 
-  private def convertToPostWithComments(
-      postWithCommentRows: List[(Post, Option[Comment])],
-  ): Option[PostWithComments] = {
-    val post = postWithCommentRows.headOption.map(_._1)
-    val comments = postWithCommentRows.flatMap(_._2.toList)
-    post.map(PostWithComments(_, comments))
-  }
-
 object PostRepoLive:
-  // noinspection TypeAnnotation
   val layer = ZLayer.fromFunction(PostRepoLive.apply)

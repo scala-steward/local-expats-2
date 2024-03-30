@@ -25,5 +25,4 @@ final case class Endpoints(
 }
 
 object Endpoints:
-  // noinspection TypeAnnotation
   val layer = ZLayer.fromFunction(Endpoints.apply)

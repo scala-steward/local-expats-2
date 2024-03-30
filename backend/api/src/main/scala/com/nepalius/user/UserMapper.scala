@@ -9,7 +9,7 @@ object UserMapper:
       payload.password,
     )
 
-  def toUserResponse(user: User): UserResponse =
+  def toUserResponse(user: User) =
     UserResponse(
       user.id,
       user.data.email,
