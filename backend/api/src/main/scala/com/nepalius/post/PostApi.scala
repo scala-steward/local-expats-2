@@ -1,7 +1,7 @@
 package com.nepalius.post
 
-import com.nepalius.common.{BaseApi, Exceptions}
-import com.nepalius.common.ErrorMapper.*
+import com.nepalius.util.{BaseApi, Exceptions}
+import com.nepalius.util.ErrorMapper.*
 import com.nepalius.post.*
 import PostMapper.*
 import com.nepalius.post.Post.PostId

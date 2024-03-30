@@ -1,7 +1,7 @@
 package com.nepalius
 
 import com.nepalius.auth.AuthService
-import com.nepalius.common.Endpoints
+import com.nepalius.util.Endpoints
 import com.nepalius.config.*
 import com.nepalius.location.{LocationApi, LocationRepoLive, LocationServiceLive}
 import com.nepalius.post.{PostApi, PostRepoLive, PostServiceLive}

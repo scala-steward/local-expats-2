@@ -1,7 +1,7 @@
 package com.nepalius.user
 
-import com.nepalius.common.Exceptions
-import com.nepalius.common.Exceptions.{AlreadyInUse, BadRequest}
+import com.nepalius.util.Exceptions
+import com.nepalius.util.Exceptions.{AlreadyInUse, BadRequest}
 import User.UserId
 import UserService.{
   InvalidEmailMessage,

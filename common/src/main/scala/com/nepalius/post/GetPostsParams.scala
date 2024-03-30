@@ -1,6 +1,6 @@
 package com.nepalius.post
 
-import com.nepalius.common.Pageable
+import com.nepalius.util.Pageable
 import sttp.tapir.EndpointIO.annotations.query
 
 case class GetPostsParams(

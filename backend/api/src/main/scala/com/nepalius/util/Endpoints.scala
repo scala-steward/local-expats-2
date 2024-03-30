@@ -1,4 +1,4 @@
-package com.nepalius.common
+package com.nepalius.util
 
 import com.nepalius.location.LocationApi
 import com.nepalius.post.PostApi

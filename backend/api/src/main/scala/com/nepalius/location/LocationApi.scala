@@ -1,7 +1,7 @@
 package com.nepalius.location
 
-import com.nepalius.common.BaseApi
-import com.nepalius.common.ErrorMapper.*
+import com.nepalius.util.BaseApi
+import com.nepalius.util.ErrorMapper.*
 import com.nepalius.location.LocationMapper.toLocationDto
 import sttp.tapir.ztapir.*
 import zio.*

@@ -1,10 +1,10 @@
 package com.nepalius.post
 
-import com.nepalius.common.Pageable
 import com.nepalius.config.QuillContext
-import com.nepalius.location.Location.LocationId
-import Post.PostId
 import com.nepalius.location.Location
+import com.nepalius.location.Location.LocationId
+import com.nepalius.post.Post.PostId
+import com.nepalius.util.Pageable
 import io.getquill.*
 import io.getquill.extras.*
 import io.getquill.jdbczio.Quill

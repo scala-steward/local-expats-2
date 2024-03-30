@@ -1,4 +1,4 @@
-package com.nepalius.common
+package com.nepalius.util
 
 object Exceptions:
 

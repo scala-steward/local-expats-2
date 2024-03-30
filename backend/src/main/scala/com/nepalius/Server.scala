@@ -1,6 +1,6 @@
 package com.nepalius
 
-import com.nepalius.common.Endpoints
+import com.nepalius.util.Endpoints
 import com.nepalius.config.{DatabaseMigration, ServerConfig}
 import sttp.tapir.server.ziohttp.{ZioHttpInterpreter, ZioHttpServerOptions}
 import zio.*

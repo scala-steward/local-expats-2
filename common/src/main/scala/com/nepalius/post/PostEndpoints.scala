@@ -1,6 +1,6 @@
 package com.nepalius.post
 
-import com.nepalius.common.{BaseEndpoints, ErrorInfo}
+import com.nepalius.util.{BaseEndpoints, ErrorInfo}
 import sttp.tapir.*
 import sttp.tapir.generic.auto.*
 import sttp.tapir.json.zio.jsonBody

@@ -1,8 +1,8 @@
 package com.nepalius.user
 
 import com.nepalius.auth.AuthService
-import com.nepalius.common.*
-import com.nepalius.common.ErrorMapper.*
+import com.nepalius.util.*
+import com.nepalius.util.ErrorMapper.*
 import com.nepalius.user.*
 import UserMapper.{toUserRegisterData, toUserResponse}
 import sttp.tapir.ztapir.*

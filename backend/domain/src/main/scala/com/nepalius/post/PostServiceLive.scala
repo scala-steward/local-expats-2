@@ -1,6 +1,6 @@
 package com.nepalius.post
 
-import com.nepalius.common.Pageable
+import com.nepalius.util.Pageable
 import com.nepalius.location.Location.{DefaultLocationId, LocationId}
 import Post.PostId
 import zio.*

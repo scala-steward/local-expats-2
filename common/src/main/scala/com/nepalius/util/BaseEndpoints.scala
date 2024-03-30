@@ -1,6 +1,6 @@
-package com.nepalius.common
+package com.nepalius.util
 
-import com.nepalius.common.BaseEndpoints.defaultErrorOutputs
+import com.nepalius.util.BaseEndpoints.defaultErrorOutputs
 import sttp.model.StatusCode
 import sttp.tapir.generic.auto.*
 import sttp.tapir.json.zio.jsonBody
