@@ -16,13 +16,14 @@ case class PostView(
 )
 
 object PostView {
-  def fromPost(post: Post, noOfComments: Int): PostView = PostView(
-    post.id,
-    post.title,
-    post.message,
-    post.locationId,
-    post.createdAt,
-    post.image,
-    noOfComments,
-  )
+  def fromPost(post: Post, noOfComments: Int) =
+    PostView(
+      post.id,
+      post.title,
+      post.message,
+      post.locationId,
+      post.createdAt,
+      post.image,
+      noOfComments,
+    )
 }

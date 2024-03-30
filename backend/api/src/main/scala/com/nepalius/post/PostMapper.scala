@@ -16,7 +16,7 @@ object PostMapper:
       postWithComments.comments.map(toCommentDto),
     )
 
-  def toPostDto(post: Post) =
+  def toPostDto(post: Post): PostDto =
     toPostDto(PostView.fromPost(post, 0))
 
   def toPostDto(post: PostView) =
