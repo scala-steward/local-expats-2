@@ -1,11 +1,10 @@
 package com.nepalius.user
 
 import com.nepalius.auth.{AuthService, UserSession}
-import com.nepalius.user
 import com.nepalius.user.*
 import com.nepalius.user.User.UserId
 import com.nepalius.user.UserApi.UserWithEmailNotFoundMessage
-import com.nepalius.user.UserMapper.{toUserRegisterData, toUserResponse}
+import com.nepalius.user.UserMapper.*
 import com.nepalius.util.*
 import com.nepalius.util.ErrorMapper.*
 import sttp.tapir.ztapir.*
@@ -26,7 +25,7 @@ final case class UserApi(
       getCurrentUserServerEndpoints,
       updateCurrentUserServerEndpoints,
     )
-    
+
   private val registerServerEndpoints: ZServerEndpoint[Any, Any] =
     registerEndPoint
       .zServerLogic(
@@ -34,6 +33,7 @@ final case class UserApi(
           .logError
           .pipe(defaultErrorsMappings),
       )
+    
   private val loginServerEndpoints: ZServerEndpoint[Any, Any] =
     loginEndpoint
       .zServerLogic(
@@ -41,6 +41,7 @@ final case class UserApi(
           .logError
           .pipe(defaultErrorsMappings),
       )
+    
   private val getCurrentUserServerEndpoints: ZServerEndpoint[Any, Any] =
     getCurrentUserEndpoint
       .zServerSecurityLogic[Any, UserSession](handleAuth)
@@ -62,6 +63,7 @@ final case class UserApi(
                 ),
             ),
       )
+    
   private val updateCurrentUserServerEndpoints: ZServerEndpoint[Any, Any] =
     updateUserEndpoint
       .zServerSecurityLogic[Any, UserSession](handleAuth)
@@ -71,7 +73,7 @@ final case class UserApi(
             mayBeNewPassword <- payload.password
               .map(authService.encryptPassword(_).asSome)
               .getOrElse(ZIO.succeed(None))
-            userUpdateData = user.UserUpdateData(
+            userUpdateData = UserUpdateData(
               session.userId,
               payload.email,
               mayBeNewPassword,
