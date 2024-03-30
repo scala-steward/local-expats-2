@@ -11,7 +11,6 @@ import {post} from "../util/Fetch";
 import {LocationId} from "../location/SelectedLocation";
 import {LocationSelect} from "../location/LocationSelect";
 import {usePostBookmarks} from "./PostBookmarks";
-import {ImageUpload} from "./ImageUpload";
 
 type CreatePostDto = {
     title: string,
@@ -66,17 +65,6 @@ export const CreatePost: FC = () => {
                             fullWidth
                             label="Message"
                             {...register('message')}
-                        />
-                    </Grid>
-                    <Grid item xs={12}>
-                        <Controller
-                            name="image"
-                            control={control}
-                            render={({field: {onChange}}) =>
-                                <ImageUpload onUpload={(link) => {
-                                    onChange(link);
-                                }}/>
-                            }
                         />
                     </Grid>
                     <Grid item xs={12}>

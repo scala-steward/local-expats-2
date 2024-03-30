@@ -7,7 +7,6 @@ import Box from "@mui/material/Box";
 import {PostWithCommentsDto} from "./PostWithCommentsDto";
 import {post} from "../util/Fetch";
 import {usePostBookmarks} from "./PostBookmarks";
-import {ImageUpload} from "./ImageUpload";
 
 type AddCommentDto = {
     message: string;
@@ -47,18 +46,6 @@ export const AddComment: FC<AddCommentProps> = ({postId, onCommentedAdded}) => {
                         error={!!errors.message}
                     />
                 </Grid>
-                <Grid item xs={12}>
-                    <Controller
-                        name="image"
-                        control={control}
-                        render={({field: {onChange}}) =>
-                            <ImageUpload onUpload={(link) => {
-                                onChange(link);
-                            }}/>
-                        }
-                    />
-                </Grid>
-
                 <Grid item xs={12} sx={{mb: 2}}>
                     <Button
                         type="submit"
