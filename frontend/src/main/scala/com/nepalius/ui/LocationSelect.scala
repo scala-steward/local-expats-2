@@ -4,7 +4,8 @@ import com.nepalius.location.LocationDto
 import com.raquo.laminar.api.L.*
 
 def LocationSelect(): HtmlElement =
-  val locations$ = Fetch.get[List[LocationDto]]("locations")
+
+  val locations$ = LocationApiClient.getLocations
   val locationsSorted$ = locations$.map(_.sortBy(l => (l.state, l.city)))
 
   def toOptionLabel(location: LocationDto) =
