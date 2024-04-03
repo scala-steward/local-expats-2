@@ -1,6 +1,6 @@
 package com.nepalius.user
 
-import com.nepalius.util.{BaseEndpoints, ErrorInfo}
+import com.nepalius.util.*
 import sttp.tapir.*
 import sttp.tapir.generic.auto.*
 import sttp.tapir.json.zio.jsonBody

@@ -2,21 +2,20 @@ package com.nepalius.util
 
 import com.nepalius.util.BaseEndpoints.defaultErrorOutputs
 import sttp.model.StatusCode
+import sttp.tapir.*
 import sttp.tapir.generic.auto.*
 import sttp.tapir.json.zio.jsonBody
-import sttp.tapir.*
-import sttp.tapir.{Endpoint, EndpointOutput, PublicEndpoint}
+
+type SecureEndpoint[INPUT, ERROR_OUTPUT, OUTPUT, -R] =
+  Endpoint[String, INPUT, ERROR_OUTPUT, OUTPUT, R]
 
 trait BaseEndpoints:
-
-  type SecureEndpoint[INPUT, ERROR_OUTPUT, OUTPUT, -R] =
-    Endpoint[String, INPUT, ERROR_OUTPUT, OUTPUT, R]
 
   val publicEndpoint: PublicEndpoint[Unit, ErrorInfo, Unit, Any] =
     endpoint
       .errorOut(defaultErrorOutputs)
 
-  val secureEndpoint: SecureEndpoint[Unit, ErrorInfo, Unit, Any] =
+  val secureEndpoint: Endpoint[String, Unit, ErrorInfo, Unit, Any] =
     endpoint
       .errorOut(defaultErrorOutputs)
       .securityIn(auth.bearer[String]())
