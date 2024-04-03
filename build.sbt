@@ -13,7 +13,6 @@ val V = new {
   val Password4J = "1.8.1"
   val Postgres = "42.7.3"
   val Quill = "4.8.3"
-  val ScalaJsDom = "2.8.0"
   val ScalaJsMacroTaskExecutor = "1.1.1"
   val Slf4j = "2.0.12"
   val Sttp = "3.9.5"
@@ -23,6 +22,38 @@ val V = new {
   val ZioLogging = "2.2.2"
   val ZioJson = "0.6.2"
 }
+
+lazy val common = crossProject(JSPlatform, JVMPlatform)
+  .crossType(CrossType.Pure)
+  .in(file("./common"))
+  .settings(
+    libraryDependencies ++= Seq(
+      "com.softwaremill.sttp.tapir" %%% "tapir-json-zio" % V.Tapir,
+      "dev.zio" %%% "zio-json" % V.ZioJson,
+    ),
+  )
+
+import org.scalajs.linker.interface.ModuleSplitStyle
+
+lazy val frontend = project
+  .dependsOn(common.js)
+  .enablePlugins(ScalaJSPlugin)
+  .settings(
+    scalaJSUseMainModuleInitializer := true,
+    scalaJSLinkerConfig ~= {
+      _.withModuleKind(ModuleKind.ESModule)
+        .withModuleSplitStyle(
+          ModuleSplitStyle.SmallModulesFor(List("com.nepalius")),
+        )
+    },
+  )
+  .settings(
+    libraryDependencies ++= Seq(
+      "com.raquo" %%% "laminar" % V.Laminar,
+      "com.softwaremill.sttp.tapir" %%% "tapir-sttp-client" % V.Tapir,
+      "org.scala-js" %%% "scala-js-macrotask-executor" % V.ScalaJsMacroTaskExecutor,
+    ),
+  )
 
 lazy val domain = (project in file("./backend/domain"))
   .settings(
@@ -50,7 +81,7 @@ lazy val repo = (project in file("./backend/repo"))
   )
 
 lazy val api = (project in file("./backend/api"))
-  .dependsOn(domain, common)
+  .dependsOn(domain, common.jvm)
   .settings(
     libraryDependencies ++= Seq(
       "com.softwaremill.sttp.tapir" %% "tapir-zio-http-server" % V.Tapir,
@@ -82,45 +113,11 @@ lazy val backend = project
     dockerUpdateLatest := true,
   )
 
-import org.scalajs.linker.interface.ModuleSplitStyle
-
-lazy val frontend = project
-  .dependsOn(common)
-  .enablePlugins(ScalaJSPlugin)
-  .settings(
-    scalaJSUseMainModuleInitializer := true,
-    scalaJSLinkerConfig ~= {
-      _.withModuleKind(ModuleKind.ESModule)
-        .withModuleSplitStyle(
-          ModuleSplitStyle.SmallModulesFor(List("com.nepalius")),
-        )
-    },
-  )
-  .settings(
-    libraryDependencies ++= Seq(
-      "org.scala-js" %%% "scalajs-dom" % V.ScalaJsDom,
-      "com.raquo" %%% "laminar" % V.Laminar,
-      "com.softwaremill.sttp.tapir" %%% "tapir-sttp-client" % V.Tapir,
-      "dev.zio" %%% "zio-json" % V.ZioJson,
-      "org.scala-js" %%% "scala-js-macrotask-executor" % V.ScalaJsMacroTaskExecutor,
-    ),
-  )
-
-lazy val common = project
-  .enablePlugins(ScalaJSPlugin)
-  .settings(
-    libraryDependencies ++= Seq(
-      "com.softwaremill.sttp.tapir" %% "tapir-core" % V.Tapir,
-      "com.softwaremill.sttp.tapir" %% "tapir-json-zio" % V.Tapir,
-    ),
-  )
-
 lazy val root = (project in file("."))
-  .aggregate(backend, frontend, common)
+  .aggregate(backend, frontend)
   .settings(name := "NepaliUS")
 
-
-// Run the frontend development loop (also run vite: `cd frontend; npm run dev`)
-addCommandAlias("fe", ";~frontend/fastLinkJS")
 // Start the backend server, and make sure to stop it afterwards
 addCommandAlias("be", ";backend/reStop ;~backend/reStart ;backend/reStop")
+// Run the frontend development loop (also run vite: `cd frontend; npm run dev`)
+addCommandAlias("fe", ";~frontend/fastLinkJS")
