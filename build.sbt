@@ -6,7 +6,7 @@ Global / onChangedBuildSource := ReloadOnSourceChanges
 
 val V = new {
   val CommonsValidator = "1.8.0"
-  val Flyway = "10.10.0"
+  val Flyway = "10.11.0"
   val Jwt = "4.4.0"
   val Laminar = "16.0.0"
   val Logback = "1.5.3"
@@ -16,7 +16,7 @@ val V = new {
   val ScalaJsMacroTaskExecutor = "1.1.1"
   val Slf4j = "2.0.12"
   val Sttp = "3.9.5"
-  val Tapir = "1.10.0"
+  val Tapir = "1.10.3"
   val Zio = "2.0.21"
   val ZioConfig = "4.0.1"
   val ZioLogging = "2.2.2"
@@ -117,7 +117,55 @@ lazy val root = (project in file("."))
   .aggregate(backend, frontend)
   .settings(name := "NepaliUS")
 
+val buildFrontend = taskKey[Unit]("Build frontend")
+
+import scala.sys.process.Process
+
+buildFrontend := {
+  (frontend / Compile / fullLinkJS).value
+
+  val npmCiExitCode =
+    Process("npm ci", cwd = (frontend / baseDirectory).value).!
+  if (npmCiExitCode > 0) {
+    throw new IllegalStateException(s"npm ci failed. See above for reason")
+  }
+
+  val buildExitCode =
+    Process("npm run build", cwd = (frontend / baseDirectory).value).!
+  if (buildExitCode > 0) {
+    throw new IllegalStateException(
+      s"Building frontend failed. See above for reason",
+    )
+  }
+
+  IO.copyDirectory(
+    source = (frontend / baseDirectory).value / "dist",
+    target =
+      (backend / baseDirectory).value / "src" / "main" / "resources" / "static",
+  )
+}
+
+// Always build the frontend first before packaging the application in a fat jar
+(backend / assembly) := (backend / assembly).dependsOn(buildFrontend).value
+
+val packageApplication =
+  taskKey[File]("Package the whole application into a fat jar")
+
+packageApplication := {
+  /*
+  To package the whole application into a fat jar, we do the following things:
+  - call sbt assembly to make the fat jar for us (config in the server sub-module settings)
+  - we move it to the ./dist folder so that the Dockerfile can be independent of Scala versions and other details
+   */
+  val fatJar = (backend / assembly).value
+  val target = baseDirectory.value / "dist" / "app.jar"
+  IO.copyFile(fatJar, target)
+  target
+}
+
 // Start the backend server, and make sure to stop it afterwards
 addCommandAlias("be", ";backend/reStop ;~backend/reStart ;backend/reStop")
 // Run the frontend development loop (also run vite: `cd frontend; npm run dev`)
 addCommandAlias("fe", ";~frontend/fastLinkJS")
+// Package the application into a jar. Run the jar with: `java -jar dist/app.jar`
+addCommandAlias("jar", ";packageApplication")
