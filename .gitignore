@@ -9,4 +9,4 @@ metals.sbt
 .bsp
 .vscode
 backend/src/main/resources/static
-dist/app.jar
+dist/*
