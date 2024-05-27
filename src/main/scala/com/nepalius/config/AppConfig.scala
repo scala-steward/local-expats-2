@@ -23,9 +23,11 @@ object AppConfig:
 
   val layer
       : ZLayer[Any, Config.Error, DatabaseConfig & ServerConfig & AuthConfig] =
-    ZLayer {
-      for appConfig <- readAppConfig
-      yield ZLayer.succeed(appConfig.database)
-        ++ ZLayer.succeed(appConfig.server)
-        ++ ZLayer.succeed(appConfig.auth)
-    }.flatten
+    ZLayer.fromZIOEnvironment(
+      readAppConfig.map(config =>
+        ZEnvironment.empty
+          .add(config.database)
+          .add(config.server)
+          .add(config.auth),
+      ),
+    )

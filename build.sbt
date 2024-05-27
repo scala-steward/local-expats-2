@@ -14,9 +14,9 @@ val V = new {
   val Quill = "4.8.4"
   val Slf4j = "2.0.12"
   val Tapir = "1.10.7"
-  val Zio = "2.0.22"
+  val Zio = "2.1.1"
   val ZioConfig = "4.0.2"
-  val ZioLogging = "2.2.3"
+  val ZioLogging = "2.2.4"
 }
 
 lazy val domain = project
