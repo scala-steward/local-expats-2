@@ -1,25 +1,25 @@
 ThisBuild / organization := "com.nepalius"
-ThisBuild / scalaVersion := "3.4.0"
+ThisBuild / scalaVersion := "3.4.1"
 ThisBuild / version := "0.0.1-SNAPSHOT"
 
 Global / onChangedBuildSource := ReloadOnSourceChanges
 
 val V = new {
   val CommonsValidator = "1.8.0"
-  val Flyway = "10.11.0"
+  val Flyway = "10.13.0"
   val Jwt = "4.4.0"
   val Laminar = "16.0.0"
-  val Logback = "1.5.3"
-  val Password4J = "1.8.1"
+  val Logback = "1.5.6"
+  val Password4J = "1.8.2"
   val Postgres = "42.7.3"
-  val Quill = "4.8.3"
+  val Quill = "4.8.4"
   val ScalaJsMacroTaskExecutor = "1.1.1"
   val Slf4j = "2.0.12"
   val Sttp = "3.9.5"
-  val Tapir = "1.10.3"
-  val Zio = "2.0.21"
-  val ZioConfig = "4.0.1"
-  val ZioLogging = "2.2.2"
+  val Tapir = "1.10.7"
+  val Zio = "2.1.1"
+  val ZioConfig = "4.0.2"
+  val ZioLogging = "2.2.4"
   val ZioJson = "0.6.2"
 }
 
