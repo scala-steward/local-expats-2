@@ -1,5 +1,5 @@
 ThisBuild / organization := "com.nepalius"
-ThisBuild / scalaVersion := "3.4.1"
+ThisBuild / scalaVersion := "3.4.2"
 ThisBuild / version := "0.0.1-SNAPSHOT"
 
 Global / onChangedBuildSource := ReloadOnSourceChanges
