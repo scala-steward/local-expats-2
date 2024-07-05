@@ -1,6 +1,5 @@
-NepaliUS
+Scala 3 ZIO Tapir Laminar Playground
 ==============
-Connect with local Nepali communities in the US
 
 ## Contributing
 
