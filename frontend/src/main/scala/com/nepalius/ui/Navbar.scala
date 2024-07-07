@@ -4,13 +4,18 @@ import com.raquo.laminar.api.L.*
 import tailwind.*
 
 def Navbar(): HtmlElement =
-  navTag(
-    tw.h_8,
+  div(
+    tw.h_8.bg_blue_500,
     div(
-      tw.flex.justify_between.items_center.h_full,
-      a(href := "/", "NepaliUS"),
+      tw.max_w_lg.mx_auto
+        .h_full
+        .flex.justify_between.items_center,
+      a(tw.float_left, href := "/", "NepaliUS"),
       LocationSelect(),
-      a(href := "/new", "New"),
-      a(href := "/login", "Login"),
+      div(
+        tw.float_right.flex.justify_between,
+        a(tw.px_2, href := "/new", "New"),
+        a(tw.px_2, href := "/login", "Login"),
+      ),
     ),
   )
