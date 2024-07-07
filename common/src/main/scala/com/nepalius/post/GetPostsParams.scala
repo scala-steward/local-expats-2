@@ -5,11 +5,11 @@ import sttp.tapir.EndpointIO.annotations.query
 
 case class GetPostsParams(
     @query
-    pageSize: Option[Int],
+    pageSize: Option[Int] = None,
     @query
-    lastId: Option[Long],
+    lastId: Option[Long] = None,
     @query
-    locationId: Option[Long],
+    locationId: Option[Long] = None,
 ) {
 
   private val MaxPageSize = 100

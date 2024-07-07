@@ -5,7 +5,7 @@ import tailwind.*
 
 def Navbar(): HtmlElement =
   navTag(
-    tw.max_w_3xl.mx_auto,
-    a(tw.mx_4, href := "/", "NepaliUS"),
+    tw.max_w_3xl.mx_auto.px_2,
+    a(tw.mr_4, href := "/", "NepaliUS"),
     LocationSelect(),
   )
