@@ -7,7 +7,7 @@
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview",
-    "postinstall": "scalawind generate -f laminar -o src/main/scala/tailwind/tailwind.scala -p tailwind"
+    "postinstall": "scalawind generate --framework laminar -o src/main/scala/tailwind/tailwind.scala -p tailwind"
   },
   "devDependencies": {
     "@scala-js/vite-plugin-scalajs": "^1.0.0",
