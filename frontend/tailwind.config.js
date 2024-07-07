@@ -3,11 +3,7 @@
 export default {
     content: [
         'index.html',
-        'src/main/scala/**/*.scala',
-    ],
-    theme: {
-        extend: {},
-    },
-    plugins: [],
+        'target/*/frontend-*/*.js',
+    ]
 }
 

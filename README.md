@@ -30,6 +30,7 @@ Run Dev Server
 
 ```shell
 cd frontend
+npm install
 npm run dev
 ```
 

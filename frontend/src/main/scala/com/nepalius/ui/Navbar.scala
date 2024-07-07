@@ -1,12 +1,13 @@
 package com.nepalius.ui
 
 import com.raquo.laminar.api.L.*
+import tailwind.*
 
 def Navbar(): HtmlElement =
   navTag(
-    cls("h-8"),
+    tw.h_8,
     div(
-      cls("flex justify-between items-center h-full"),
+      tw.flex.justify_between.items_center.h_full,
       a(href := "/", "NepaliUS"),
       LocationSelect(),
       a(href := "/new", "New"),
