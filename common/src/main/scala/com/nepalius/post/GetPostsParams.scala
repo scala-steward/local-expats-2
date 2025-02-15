@@ -1,6 +1,6 @@
 package com.nepalius.post
 
-import com.nepalius.util.Pageable
+import com.nepalius.util.PageableDto
 import sttp.tapir.EndpointIO.annotations.query
 
 case class GetPostsParams(
@@ -14,7 +14,7 @@ case class GetPostsParams(
 
   private val MaxPageSize = 100
 
-  def pageable: Pageable = Pageable(
+  def pageable = PageableDto(
     pageSize.getOrElse(MaxPageSize).min(MaxPageSize),
     lastId.getOrElse(Long.MaxValue),
   )

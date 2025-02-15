@@ -3,7 +3,8 @@ package com.nepalius.post
 import com.nepalius.post.Post.PostId
 import com.nepalius.post.PostMapper.*
 import com.nepalius.util.ErrorMapper.*
-import com.nepalius.util.{BaseApi, Exceptions}
+import com.nepalius.util.PageableMapper.toPageable
+import com.nepalius.util.{BaseApi, Exceptions, PageableMapper}
 import sttp.tapir.ztapir.*
 import zio.*
 
@@ -55,7 +56,8 @@ final case class PostApi(
 
   private def getPosts(params: GetPostsParams): Task[List[PostDto]] =
     for
-      posts <- postService.getAll(params.pageable, params.locationId)
+      posts <-
+        postService.getAll(toPageable(params.pageable), params.locationId)
       dtos = posts.map(toPostDto)
     yield dtos
 
