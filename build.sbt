@@ -120,8 +120,10 @@ lazy val root = (project in file("."))
 ThisBuild / assemblyMergeStrategy := {
   case "deriving.conf"                         => MergeStrategy.concat
   case "META-INF/io.netty.versions.properties" => MergeStrategy.first
-  case ps if ps.endsWith("module-info.class")  => MergeStrategy.discard
-  case ps if ps.startsWith("io/getquill")      => MergeStrategy.first
+  // https://tapir.softwaremill.com/en/latest/docs/openapi.html#using-swaggerui-with-sbt-assembly
+  case ps if ps.contains("swagger-ui")        => MergeStrategy.singleOrError
+  case ps if ps.endsWith("module-info.class") => MergeStrategy.discard
+  case ps if ps.startsWith("io/getquill")     => MergeStrategy.first
   case x => (ThisBuild / assemblyMergeStrategy).value(x)
 }
 
