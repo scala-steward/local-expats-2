@@ -1,7 +1,6 @@
 package com.nepalius.post
 
 import com.nepalius.config.QuillContext
-import com.nepalius.location.Location
 import com.nepalius.location.Location.LocationId
 import com.nepalius.post.Post.PostId
 import com.nepalius.util.Pageable

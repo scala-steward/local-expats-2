@@ -1,6 +1,5 @@
 package com.nepalius.post
 
-import com.nepalius.post.*
 
 object PostMapper:
 

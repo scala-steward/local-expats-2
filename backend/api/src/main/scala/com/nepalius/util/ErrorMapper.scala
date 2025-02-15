@@ -1,6 +1,5 @@
 package com.nepalius.util
 
-import com.nepalius.util.*
 import zio.IO
 
 object ErrorMapper:
