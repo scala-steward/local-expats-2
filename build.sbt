@@ -117,6 +117,12 @@ lazy val root = (project in file("."))
   .aggregate(backend, frontend)
   .settings(name := "NepaliUS")
 
+ThisBuild / assemblyMergeStrategy := {
+  case PathList("META-INF", "versions", "9", "module-info.class") =>
+    MergeStrategy.discard
+  case x => (ThisBuild / assemblyMergeStrategy).value(x)
+}
+
 val buildFrontend = taskKey[Unit]("Build frontend")
 
 import scala.sys.process.Process
