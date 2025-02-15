@@ -118,8 +118,10 @@ lazy val root = (project in file("."))
   .settings(name := "NepaliUS")
 
 ThisBuild / assemblyMergeStrategy := {
-  case ps if ps.endsWith("module-info.class") => MergeStrategy.discard
-  case PathList("io", "getquill", _*)         => MergeStrategy.first
+  case "deriving.conf"                         => MergeStrategy.concat
+  case "META-INF/io.netty.versions.properties" => MergeStrategy.first
+  case ps if ps.endsWith("module-info.class")  => MergeStrategy.discard
+  case ps if ps.startsWith("io/getquill")      => MergeStrategy.first
   case x => (ThisBuild / assemblyMergeStrategy).value(x)
 }
 
