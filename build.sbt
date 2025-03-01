@@ -158,24 +158,24 @@ buildFrontend := {
 // Always build the frontend first before packaging the application in a fat jar
 (backend / assembly) := (backend / assembly).dependsOn(buildFrontend).value
 
-val packageApplication =
+val packageApp =
   taskKey[File]("Package the whole application into a fat jar")
 
-packageApplication := {
+packageApp := {
   /*
   To package the whole application into a fat jar, we do the following things:
   - call sbt assembly to make the fat jar for us (config in the server sub-module settings)
   - we move it to the ./dist folder so that the Dockerfile can be independent of Scala versions and other details
    */
   val fatJar = (backend / assembly).value
-  val target = baseDirectory.value / "dist" / "app.jar"
+  val target = baseDirectory.value / "dist" / "nepalius.jar"
   IO.copyFile(fatJar, target)
   target
 }
 
-// Start the backend server, and make sure to stop it afterwards
+// Start the backend server, and make sure to stop it afterward
 addCommandAlias("be", ";backend/reStop ;~backend/reStart ;backend/reStop")
 // Run the frontend development loop (also run vite: `cd frontend; npm run dev`)
 addCommandAlias("fe", ";~frontend/fastLinkJS")
 // Package the application into a jar. Run the jar with: `java -jar dist/app.jar`
-addCommandAlias("jar", ";packageApplication")
+addCommandAlias("jar", ";packageApp")
