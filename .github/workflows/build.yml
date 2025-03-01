@@ -15,8 +15,8 @@ jobs:
             distribution: 'zulu'
             java-version: '21'
 
-        - name: Set up sbt launcher
-          uses: sbt/setup-sbt@v1
+        - name: npm clean install
+          run: ./sbt npmInstall
 
         - name: Run tests
           run: ./sbt test

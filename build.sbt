@@ -127,19 +127,19 @@ ThisBuild / assemblyMergeStrategy := {
   case x => (ThisBuild / assemblyMergeStrategy).value(x)
 }
 
-val buildFrontend = taskKey[Unit]("Build frontend")
-
 import scala.sys.process.Process
 
-buildFrontend := {
-  (frontend / Compile / fullLinkJS).value
-
+val npmInstall = taskKey[Unit]("Run npm ci")
+npmInstall := {
   val npmCiExitCode =
     Process("npm ci", cwd = (frontend / baseDirectory).value).!
   if (npmCiExitCode > 0) {
     throw new IllegalStateException(s"npm ci failed. See above for reason")
   }
+}
 
+val npmBuild = taskKey[Unit]("npm build")
+npmBuild := {
   val buildExitCode =
     Process("npm run build", cwd = (frontend / baseDirectory).value).!
   if (buildExitCode > 0) {
@@ -147,6 +147,13 @@ buildFrontend := {
       s"Building frontend failed. See above for reason",
     )
   }
+}
+
+val buildFrontend = taskKey[Unit]("Build frontend")
+buildFrontend := {
+  npmInstall.value
+  (frontend / Compile / fullLinkJS).value
+  npmBuild.value
 
   IO.copyDirectory(
     source = (frontend / baseDirectory).value / "dist",
