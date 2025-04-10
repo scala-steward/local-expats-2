@@ -6,7 +6,7 @@ Global / onChangedBuildSource := ReloadOnSourceChanges
 
 val V = new {
   val CommonsValidator = "1.9.0"
-  val Flyway = "11.5.0"
+  val Flyway = "11.6.0"
   val Jwt = "4.5.0"
   val Laminar = "17.2.1"
   val Logback = "1.5.18"
@@ -17,7 +17,7 @@ val V = new {
   val Slf4j = "2.0.12"
   val Sttp = "3.9.5"
   val Tapir = "1.11.23"
-  val Zio = "2.1.15"
+  val Zio = "2.1.17"
   val ZioConfig = "4.0.3"
   val ZioLogging = "2.4.0"
   val ZioJson = "0.7.0"
