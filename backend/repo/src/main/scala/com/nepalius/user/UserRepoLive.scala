@@ -3,8 +3,6 @@ package com.nepalius.user
 import com.nepalius.config.QuillContext
 import com.nepalius.user.User.UserId
 import io.getquill.*
-import io.getquill.extras.*
-import io.getquill.jdbczio.Quill
 import zio.*
 
 import java.sql.SQLException

@@ -5,8 +5,6 @@ import com.nepalius.location.Location.LocationId
 import com.nepalius.post.Post.PostId
 import com.nepalius.util.Pageable
 import io.getquill.*
-import io.getquill.extras.*
-import io.getquill.jdbczio.Quill
 import zio.*
 
 import java.sql.SQLException

@@ -4,7 +4,7 @@ import com.nepalius.post.Post.PostId
 import com.nepalius.post.PostMapper.*
 import com.nepalius.util.ErrorMapper.*
 import com.nepalius.util.PageableMapper.toPageable
-import com.nepalius.util.{BaseApi, Exceptions, PageableMapper}
+import com.nepalius.util.{BaseApi, Exceptions}
 import sttp.tapir.ztapir.*
 import zio.*
 

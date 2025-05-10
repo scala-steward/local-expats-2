@@ -5,7 +5,7 @@ import com.nepalius.util.Endpoints
 import sttp.tapir.server.ziohttp.{ZioHttpInterpreter, ZioHttpServerOptions}
 import zio.*
 import zio.Console.printLine
-import zio.http.{Server as HttpServer, *}
+import zio.http.Server as HttpServer
 
 case class Server(
     serverConfig: ServerConfig,

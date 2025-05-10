@@ -1,6 +1,5 @@
 package com.nepalius.util
 
-import com.nepalius.util.*
 import zio.json.*
 
 sealed trait ErrorInfo
