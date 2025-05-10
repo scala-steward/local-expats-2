@@ -46,6 +46,9 @@ jobs:
     needs:
       - build
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
     steps:
       - name: Merge scala-steward PR
         uses: desbo/merge-pr-action@v0
