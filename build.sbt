@@ -5,7 +5,7 @@ ThisBuild / version := "0.0.1-SNAPSHOT"
 Global / onChangedBuildSource := ReloadOnSourceChanges
 
 val V = new {
-  val CommonsValidator = "1.9.0"
+  val CommonsValidator = "1.10.0"
   val Flyway = "11.8.2"
   val Jwt = "4.5.0"
   val Laminar = "17.2.1"
@@ -124,8 +124,8 @@ ThisBuild / assemblyMergeStrategy := {
   case ps if ps.contains("swagger-ui")        => MergeStrategy.singleOrError
   case ps if ps.endsWith("module-info.class") => MergeStrategy.discard
   case ps if ps.startsWith("io/getquill")     => MergeStrategy.first
-  case ps if ps.endsWith("unroll.tasty")     => MergeStrategy.last
-  case ps if ps.endsWith("unroll.class")     => MergeStrategy.last
+  case ps if ps.endsWith("unroll.tasty")      => MergeStrategy.last
+  case ps if ps.endsWith("unroll.class")      => MergeStrategy.last
   case x => (ThisBuild / assemblyMergeStrategy).value(x)
 }
 
